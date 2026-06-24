@@ -1,0 +1,72 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Build backend
+        working-directory: backend
+        run: npm run build
+
+      # ====================================================
+      # Deployment targets — uncomment and configure as needed
+      # ====================================================
+
+      # --- Firebase Hosting + Cloud Functions ---
+      # - name: Deploy to Firebase
+      #   uses: FirebaseExtended/action-hosting-deploy@v0
+      #   with:
+      #     repoToken: ${{ secrets.GITHUB_TOKEN }}
+      #     firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      #     channelId: live
+      #     projectId: your-firebase-project-id
+
+      # --- Google Play Store (Android) ---
+      # - name: Deploy to Google Play
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT }}
+      #     packageName: com.adminx.app
+      #     releaseFiles: frontend/android/app/build/outputs/bundle/release/app-release.aab
+      #     track: production
+
+      # --- Docker / Cloud Run ---
+      # - name: Build and push Docker image
+      #   run: |
+      #     docker build -t adminx:latest .
+      #     docker tag adminx:latest gcr.io/${{ secrets.GCP_PROJECT }}/adminx:latest
+      #     docker push gcr.io/${{ secrets.GCP_PROJECT }}/adminx:latest
+
+      # - name: Deploy to Cloud Run
+      #   run: |
+      #     gcloud run deploy adminx \
+      #       --image gcr.io/${{ secrets.GCP_PROJECT }}/adminx:latest \
+      #       --region us-central1 \
+      #       --platform managed
+
+      - name: Deploy complete
+        run: echo "Deployment pipeline configured. Enable target steps above for production deployment."
