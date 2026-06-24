@@ -1,0 +1,288 @@
+================================================================================
+DOCUMENT 7: User_Manual.txt
+================================================================================
+
+# ADMINX — User Manual
+
+**Version:** 1.0  
+**Date:** June 2026  
+**Document Type:** User Manual
+
+---
+
+## 1. Introduction
+
+Welcome to AdminX — your all-in-one business management app. This manual will help you get started and make the most of AdminX's features.
+
+---
+
+## 2. Getting Started
+
+### 2.1 Installation
+
+| Platform | Where to Download |
+| :--- | :--- |
+| Android | Google Play Store -> Search "AdminX" |
+| iOS | Apple App Store -> Search "AdminX" |
+| Web | Visit app.adminx.app |
+| Desktop (Windows) | Download from adminx.app/download |
+| Desktop (macOS) | Download from adminx.app/download |
+
+### 2.2 Registration
+
+1. Open the app.
+2. Tap "Sign Up".
+3. Enter your email and phone number.
+4. Create a password.
+5. Verify your phone number via OTP.
+6. Set up your business profile (name, GST, address).
+7. You're ready to go!
+
+### 2.3 Login
+
+- Enter your email/phone and password.
+- Or use the "Login with Google" option (if enabled).
+- For multi-device, log in with the same credentials to sync data.
+
+---
+
+## 3. Core Features
+
+### 3.1 Dashboard
+
+The Dashboard gives you an instant snapshot of your business:
+
+- Total Sales: Revenue in the last 30 days.
+- Outstanding Balance: Total amount owed by customers.
+- Low Stock Alerts: Products below reorder level.
+- Recent Activity: Latest transactions and invoices.
+- Quick Actions: "New Invoice", "Add Customer", "Record Payment".
+
+### 3.2 Customers (Khata)
+
+#### Add a Customer
+1. Go to Customers tab.
+2. Tap the "+" button.
+3. Enter name, phone, email (optional), address.
+4. Save -> customer appears in your list.
+
+#### Record a Transaction
+1. Tap a customer -> Ledger.
+2. Tap "+" or "Add Transaction".
+3. Select Credit (money received) or Debit (money given/outstanding).
+4. Enter amount and description.
+5. Save -> balance updates instantly.
+
+#### Send Payment Reminder
+1. From the customer's ledger, tap "Send Reminder".
+2. Choose WhatsApp or SMS.
+3. The message is automatically drafted; you can edit it before sending.
+
+### 3.3 Invoicing
+
+#### Create an Invoice
+1. Go to Invoices -> "+".
+2. Select a customer (or create a new one).
+3. Add items: search existing products or add custom items.
+4. Specify quantity and price.
+5. GST is auto-calculated based on your business settings.
+6. Review total and tap "Create Invoice".
+
+#### Share an Invoice
+- After creating, tap "Share".
+- Choose WhatsApp, Email, or SMS.
+- The invoice will be sent as a PDF or link.
+
+#### Recurring Invoices
+- In the invoice creation screen, toggle "Recurring".
+- Set frequency (daily, weekly, monthly) and end date.
+- Invoices will be generated automatically.
+
+#### Progress Invoices (for services)
+- Enable "Progress Invoicing" in settings.
+- When creating an invoice, specify milestone percentage (e.g., 50%).
+- The invoice will show progress and remaining balance.
+
+### 3.4 Inventory
+
+#### Add a Product
+1. Go to Products -> "+".
+2. Enter name, SKU (auto-generated or custom), price, cost (optional).
+3. Set initial quantity and reorder level.
+4. You can generate a barcode by tapping "Generate Barcode".
+5. Save.
+
+#### Scan Barcode
+- In the invoice or product screen, tap the scan icon.
+- Point your camera at the barcode.
+- The product will be added automatically.
+
+#### Low Stock Alerts
+- When quantity falls below reorder level, a notification appears on the dashboard and as a push alert.
+
+#### Expiry Tracking
+- For products with expiry dates (e.g., food, medicine), enter the date.
+- You'll receive an alert 30 days before expiry.
+
+### 3.5 Expenses & Accounting
+
+#### Record an Expense
+1. Go to Expenses -> "+".
+2. Enter amount, category (e.g., Rent, Utilities, Salaries), and description.
+3. Optionally attach a receipt photo.
+4. Save.
+
+#### AI Auto-Categorization
+- When you type a description, AI suggests a category.
+- You can accept or change it.
+
+#### Bank Reconciliation
+1. Go to Accounting -> Reconciliation.
+2. Upload your bank statement (CSV/Excel).
+3. AdminX will match transactions automatically.
+4. Unmatched ones are highlighted for manual review.
+
+#### Cash Flow Forecast
+- Available if you have at least 6 months of data.
+- The AI predicts your income and expenses for the next 3 months.
+- Helps you plan for lean periods.
+
+#### Reserve Fund
+1. Go to Settings -> Reserve Fund.
+2. Set a target amount (e.g., Rs 50,000).
+3. AdminX tracks contributions and restricts withdrawals until target is met.
+
+### 3.6 Employees
+
+#### Add Employee
+1. Go to Employees -> "+".
+2. Enter name, role (e.g., Sales, Admin), phone, email.
+3. Assign permissions (e.g., view-only, edit, admin).
+
+#### Track Attendance
+- Employees can mark attendance from their login.
+- View attendance reports by date or employee.
+
+#### Payroll
+1. Go to Payroll.
+2. Select month.
+3. AdminX calculates salaries based on attendance and salary data.
+4. Generate payslips as PDFs.
+
+### 3.7 Reports
+
+#### Available Reports
+- Dashboard (summary metrics)
+- Profit & Loss Statement
+- Balance Sheet
+- GST Reports (GSTR-1, GSTR-3B, GSTR-9)
+- Sales Reports (by customer, product, date)
+- Expense Reports (by category)
+
+#### Export Reports
+- On any report screen, tap "Export".
+- Choose PDF (for sharing) or Excel/CSV (for analysis).
+
+### 3.8 AI Chat Assistant
+
+- Look for the AI chat icon (floating button).
+- Tap to open the chat.
+- Type questions like:
+  - "How much is Ramesh's pending balance?"
+  - "What were my sales last week?"
+  - "Show my top 5 customers"
+  - "When is the next GST filing due?"
+- The AI uses your local data to answer instantly.
+- Privacy guarantee: No data is sent to the cloud.
+
+---
+
+## 4. Multi-Device & Sync
+
+- Login with the same credentials on all your devices (phone, tablet, desktop).
+- Data is synced automatically when you're online.
+- You can work offline — changes are queued and synced when you reconnect.
+
+### Conflict Resolution
+- If you edit the same customer on two devices, AdminX uses intelligent conflict resolution (CRDT) to merge changes without data loss.
+
+---
+
+## 5. Data Backup & Security
+
+### Automatic Backup
+- Your data is backed up daily to the cloud (encrypted).
+- You can also manually create a backup: Settings -> Backup -> Create Backup.
+
+### Restore Backup
+- Settings -> Backup -> Restore.
+- Select a backup from the list.
+- Your current data will be replaced.
+
+### Privacy
+- All sensitive data is encrypted on your device.
+- AI runs entirely on-device — your data never leaves your control.
+- You can delete all your data at any time (Settings -> Delete Account).
+
+---
+
+## 6. Settings
+
+### Business Profile
+- Update business name, GST number, address, bank details.
+
+### Invoice Preferences
+- Choose default invoice template, tax rate, currency.
+
+### Notifications
+- Toggle reminders for payments, low stock, and invoice follow-ups.
+
+### Language
+- Choose from English, Hindi, Tamil, Telugu, and more.
+
+### Dark Mode
+- Enable/disable or follow system settings.
+
+### Role Management (for admins)
+- Assign roles to employees: View only, Editor, Admin.
+- Admins have full access; others are restricted.
+
+---
+
+## 7. Troubleshooting
+
+### App Crashes
+- Update to the latest version.
+- Clear cache (Settings -> Clear Cache).
+- If problem persists, contact support.
+
+### Sync Issues
+- Check internet connection.
+- Force sync: Settings -> Sync -> Force Sync.
+- Log out and log back in.
+
+### AI Not Responding
+- Ensure you have the AI model downloaded (Settings -> AI -> Model Download).
+- For slower devices, some complex queries may take longer.
+
+### Payment Reminders Not Sending
+- Verify WhatsApp/SMS gateway settings (ask your admin).
+- Ensure customer phone numbers are correct (with country code).
+
+---
+
+## 8. Support
+
+- Email: support@adminx.app
+- Help Center: adminx.app/help
+- In-app Chat: Tap the help icon in the bottom right of the web version.
+
+We're here to help you grow your business smarter with AdminX!
+
+---
+
+## 9. Changelog
+
+| Version | Date | New Features |
+| :--- | :--- | :--- |
+| 1.0.0 | July 2026 | Initial release |

@@ -1,0 +1,17 @@
+flowchart TD
+    A[Start: User opens App] --> B[Dashboard]
+    B --> C[Click 'Create Invoice']
+    C --> D{Select Customer}
+    D -->|Existing| E[Search/Select Customer]
+    D -->|New| F[Add New Customer]
+    E --> G[Add Items]
+    F --> G
+    G --> H[System calculates GST/Total]
+    H --> I[Review Invoice]
+    I --> J{Action}
+    J -->|Save Draft| K[Saved to Drafts]
+    J -->|Finalize| L[Generate Invoice PDF]
+    L --> M[Share Options]
+    M --> N[WhatsApp/Email/SMS]
+    N --> O[Customer receives invoice]
+    O --> P[Invoice marked as 'Sent']

@@ -1,0 +1,297 @@
+================================================================================
+DOCUMENT 10: DevOps_Guide.txt
+================================================================================
+
+ADMINX — Developer Operations & Project Plan (DevOps + Roadmap)
+
+Version: 1.0
+Date: June 2026
+Document Type: Development Setup, Roadmap, & Standards
+
+
+1. PROJECT OVERVIEW
+
+AdminX is a cross-platform (Android, iOS, Web, Desktop) business management application built with Kotlin Multiplatform (KMP). This document provides everything a developer needs to set up their local environment, understand the codebase structure, and follow project standards.
+
+1.1 Key Technologies
+
+Component               | Technology
+------------------------|-------------------------------------
+Core Language           | Kotlin 1.9.24
+UI Framework            | Compose Multiplatform 1.6.11
+Async                   | Kotlin Coroutines 1.8.1
+Database                | SQLDelight 2.0.2 (SQLite)
+DI                      | Koin 3.5.6
+Auth/Sync               | Firebase (Auth, Firestore, FCM)
+AI Inference            | ONNX Runtime 1.19.2
+Payments                | Razorpay SDK
+PDF Generation          | Apache PDFBox 3.0.3
+Barcodes                | ZXing 3.5.3
+Testing                 | JUnit 5.10.2
+Linting                 | Detekt 1.23.6
+
+
+2. PROJECT FILE STRUCTURE
+
+adminx/
+├── shared/                          # Shared KMP code (ALL platforms)
+│   ├── src/
+│   │   ├── commonMain/kotlin/       # Platform-agnostic code
+│   │   │   ├── data/                # Data models & repositories
+│   │   │   │   ├── models/          # Entity classes (User, Customer, etc.)
+│   │   │   │   ├── repositories/    # Repository interfaces & impls
+│   │   │   │   └── dao/             # Database access objects
+│   │   │   ├── domain/              # Business logic & use cases
+│   │   │   │   ├── usecases/        # Single responsibility use cases
+│   │   │   │   └── validators/      # Validation logic
+│   │   │   ├── ai/                  # On-device AI integration
+│   │   │   │   ├── AIService.kt     # AI interface
+│   │   │   │   ├── OnDeviceAIService.kt # ONNX Runtime impl
+│   │   │   │   └── Tokenizer.kt     # Tokenization utilities
+│   │   │   ├── sync/                # Sync engine
+│   │   │   │   ├── SyncEngine.kt    # Main sync orchestrator
+│   │   │   │   ├── ConflictResolver.kt # CRDT merge logic
+│   │   │   │   └── SyncQueue.kt     # Offline queue
+│   │   │   ├── utils/               # Utilities
+│   │   │   │   ├── EncryptionManager.kt # AES-256 encryption
+│   │   │   │   ├── DateUtils.kt     # Date formatting
+│   │   │   │   └── Logger.kt        # Logging
+│   │   │   └── di/                  # Dependency Injection
+│   │   │       └── KoinModules.kt   # Koin module definitions
+│   │   ├── androidMain/             # Android-specific implementations
+│   │   ├── iosMain/                 # iOS-specific implementations
+│   │   └── desktopMain/             # Desktop-specific implementations
+│   └── build.gradle.kts             # Shared module build
+│
+├── mobile/                          # Mobile app module
+│   ├── androidApp/                  # Android application
+│   │   ├── src/main/
+│   │   │   ├── java/                # Android-specific UI (Compose)
+│   │   │   ├── res/                 # Resources (drawables, values)
+│   │   │   └── AndroidManifest.xml
+│   │   └── build.gradle.kts
+│   └── iosApp/                      # iOS application (Xcode project)
+│       ├── iosApp/
+│       │   ├── MainViewController.swift
+│       │   ├── Info.plist
+│       │   └── Assets.xcassets/
+│       └── iosApp.xcworkspace
+│
+├── desktop/                         # Desktop app module
+│   ├── src/main/kotlin/
+│   │   └── Main.kt                  # Desktop entry point
+│   └── build.gradle.kts
+│
+├── web/                             # Web app module
+│   ├── src/main/kotlin/
+│   │   └── Main.kt                  # Web entry point (Kotlin/JS)
+│   ├── src/main/resources/
+│   │   └── index.html               # HTML entry point
+│   └── build.gradle.kts
+│
+├── backend/                         # Cloud backend services
+│   ├── auth/                        # Firebase Auth integration
+│   ├── sync/                        # Sync service (Firestore)
+│   ├── backup/                      # Backup service (GCS)
+│   └── notifications/               # Notification service
+│
+├── models/                          # AI models
+│   └── phi-3-mini-4bit/             # Quantized SLM (~2GB)
+│       ├── model.onnx
+│       └── tokenizer.json
+│
+├── build.gradle.kts                 # Root build file
+├── settings.gradle.kts              # Gradle settings
+├── gradle.properties                # Gradle properties
+├── .env.example                     # Environment variables template
+├── .gitignore                       # Git ignore rules
+├── README.md                        # Project overview
+├── CONTRIBUTING.md                  # Contribution guidelines
+└── LICENSE                          # License file
+
+
+3. LOCAL DEVELOPMENT SETUP
+
+3.1 Prerequisites
+
+Tool                    | Version     | Download/Install
+------------------------|-------------|------------------------------------------
+JDK                     | 17+         | Adoptium (https://adoptium.net/)
+Android Studio          | Hedgehog+   | https://developer.android.com/studio
+Xcode                   | 15+ (macOS) | Mac App Store
+KMP Plugin              | Latest      | Android Studio > Plugins
+Node.js                 | 18+         | https://nodejs.org/
+Git                     | Latest      | https://git-scm.com/
+Firebase CLI            | Latest      | npm install -g firebase-tools
+
+3.2 Clone & Build
+
+Step 1: Clone the repository
+git clone https://github.com/your-org/adminx.git
+cd adminx
+
+Step 2: Set up environment variables (copy from .env.example)
+cp .env.example .env
+Edit .env with your Firebase keys
+
+Step 3: Build the shared KMP library
+./gradlew build
+
+Step 4: Run Android App (Android Studio or CLI)
+./gradlew :androidApp:installDebug
+
+Step 5: Run iOS App (macOS only - open in Xcode)
+open iosApp/iosApp.xcworkspace
+Click Run button in Xcode
+
+Step 6: Run Desktop App (Windows/macOS)
+./gradlew :desktop:run
+
+Step 7: Run Web App (Development server)
+./gradlew :web:run
+Open http://localhost:8080
+
+3.3 Firebase Configuration
+
+1. Create a project in Firebase Console (https://console.firebase.google.com/).
+2. Enable Authentication (Email/Password + Phone).
+3. Enable Firestore and set up security rules (see firestore.rules in repo).
+4. Download google-services.json (Android) and GoogleService-Info.plist (iOS).
+5. Place them in the respective app/ folders.
+6. Enable Firebase Cloud Messaging (for push notifications).
+7. Enable Google Cloud Storage (for backups).
+
+
+4. CODING STANDARDS & LINTING
+
+4.1 Kotlin (Shared, Android, Desktop)
+
+- Style: Follow the official Kotlin Coding Conventions.
+- Naming:
+  - Classes/Interfaces: PascalCase (e.g., CustomerRepository)
+  - Functions/Variables: camelCase (e.g., getOutstandingBalance)
+  - Constants: UPPER_SNAKE_CASE (e.g., MAX_RETRY_COUNT)
+  - Suspend Functions: Name should indicate async (e.g., fetchCustomers)
+- Linting: Use Detekt
+  Command: ./gradlew detekt
+- Formatting: Use Ktlint
+  Command: ./gradlew ktlintFormat
+- Rule of Thumb: Maximum line length = 120 characters.
+
+4.2 Swift (iOS specific)
+
+- Follow Swift API Design Guidelines.
+- Use let for constants, var for variables.
+- Mark public only for exposed KMP interfaces.
+
+4.3 TypeScript/JavaScript (Web specific)
+
+- Use ESLint with Airbnb base config.
+- Use Prettier for automatic formatting.
+- React components must follow functional component structure with hooks.
+
+
+5. ENVIRONMENT VARIABLES TEMPLATE (.env.example)
+
+Copy this to .env locally and fill in the values. Never commit the actual .env file to Git.
+
+========================================================================
+ADMINX ENVIRONMENT VARIABLES (DO NOT COMMIT)
+========================================================================
+
+Firebase (Found in Firebase Console > Project Settings > General)
+FIREBASE_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX
+FIREBASE_AUTH_DOMAIN=adminx-app.firebaseapp.com
+FIREBASE_PROJECT_ID=adminx-app
+FIREBASE_STORAGE_BUCKET=adminx-app.appspot.com
+FIREBASE_MESSAGING_SENDER_ID=123456789012
+FIREBASE_APP_ID=1:123456789012:web:abcdef123456
+
+Authentication (JWT Secret for local testing)
+JWT_SECRET=your_super_secret_jwt_key_here
+
+External APIs
+WhatsApp Business API (Meta)
+WHATSAPP_PHONE_NUMBER_ID=123456789012345
+WHATSAPP_ACCESS_TOKEN=EAAXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Twilio SMS
+TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+TWILIO_AUTH_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+TWILIO_PHONE_NUMBER=+12345678901
+
+Razorpay (Payment Gateway)
+RAZORPAY_KEY_ID=rzp_test_XXXXXXXXXXXXXXXXXX
+RAZORPAY_KEY_SECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Sentry (Error Tracking)
+SENTRY_DSN=https://xxxxxxxxxxxxxxxxxx@o123456.ingest.sentry.io/1234567
+
+Feature Flags (Toggle features on/off)
+ENABLE_AI_MODEL=true
+ENABLE_PAYROLL=true
+ENABLE_MULTI_BUSINESS=false
+
+
+6. TROUBLESHOOTING GUIDE
+
+Issue                                           | Cause                                    | Solution
+------------------------------------------------|------------------------------------------|----------------------------------------------------
+Gradle build fails on macOS                     | Missing Xcode command line tools         | Run xcode-select --install
+Android Emulator won't start                    | Intel HAXM missing or virtualization     | Enable VT-x in BIOS. Install HAXM.
+iOS build fails: "No such module"               | CocoaPods not installed or outdated      | Run sudo gem install cocoapods and pod install in iosApp folder.
+Web build stuck at 80%                          | Node.js memory limit reached             | Run export NODE_OPTIONS="--max-old-space-size=4096"
+Firebase Auth returns "Network Error"           | Missing google-services.json or plist    | Ensure files are correctly placed in androidApp/app/ and iosApp/.
+AI Model crashes on startup                     | Insufficient RAM to load 2GB model       | Use smaller Llama 3.2 1B for testing on low-RAM devices.
+Sync conflicts are not resolving                | Server timestamp vs local timestamp      | Check if version field is incrementing correctly.
+WhatsApp message fails to send                  | Invalid phone number format              | Ensure number includes country code (e.g., +91 for India).
+
+
+7. DEPENDENCY VERSION LIST (MASTER LIST)
+
+Dependency                      | Version        | Purpose
+--------------------------------|----------------|------------------------------------------
+Kotlin                          | 1.9.24         | Core language
+Compose Multiplatform           | 1.6.11         | UI framework
+Kotlin Coroutines               | 1.8.1          | Async operations
+SQLDelight                      | 2.0.2          | SQLite ORM (KMP)
+Koin                            | 3.5.6          | Dependency Injection
+Firebase Auth                   | 23.0.0 (Android) / 10.28.0 (iOS) | User authentication
+Firebase Firestore              | 25.0.0 (Android) / 11.0.0 (iOS) | Cloud sync DB
+ONNX Runtime                    | 1.19.2         | AI model inference
+Razorpay                        | 1.5.0 (Android) / 1.2.0 (iOS) | Payment gateway
+Apache PDFBox                   | 3.0.3          | Invoice PDF generation
+ZXing (Barcode)                 | 3.5.3          | Barcode scanning & generation
+Detekt                          | 1.23.6         | Kotlin linting
+JUnit                           | 5.10.2         | Unit testing
+
+
+8. PRE-COMMIT HOOKS (GIT HOOKS)
+
+To enforce code quality before pushing, set up pre-commit hooks.
+
+Step 1: Add to build.gradle.kts
+tasks.register("preCommit") {
+    dependsOn("ktlintFormat", "detekt", "test")
+}
+
+Step 2: Run manually before push
+./gradlew preCommit
+
+Optional: Husky Setup (for automatic hooks)
+npm install --save-dev husky
+npx husky install
+npx husky add .husky/pre-commit "./gradlew preCommit"
+
+
+9. FINAL CHECKLIST FOR PRODUCTION LAUNCH
+
+[ ] Security Audit: OWASP Top 10 compliance verified.
+[ ] Performance Testing: App startup < 2s, AI inference < 500ms.
+[ ] Play Store Assets: Screenshots, App Icon, Feature Graphic, Description.
+[ ] App Store Assets: Screenshots, App Icon, Description, Privacy Policy URL.
+[ ] Privacy Policy & Terms of Service legally reviewed and linked in app.
+[ ] Crash Reporting (Firebase/Sentry) configured and tested.
+[ ] In-App Rating Prompt configured to trigger after 5 successful sessions.
+[ ] Analytics (Firebase Analytics) events tracked for key user actions.
+[ ] Support Email (support@adminx.app) active and monitored.

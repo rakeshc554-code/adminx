@@ -1,0 +1,26 @@
+flowchart TD
+    A[📲 User Downloads App<br>Play Store / App Store / Web] --> B[🎨 Splash Screen]
+    B --> C{Already Registered?}
+    
+    C -->|No| D[✍️ Sign Up]
+    C -->|Yes| E[🔐 Log In]
+    
+    D --> F[📱 Enter Mobile / Email]
+    F --> G[🔑 Set Password]
+    G --> H[📨 Verify OTP]
+    H --> I[📋 Business Profile Setup<br>Name, GST, Address, Logo]
+    
+    I --> J[📂 Data Import?]
+    J -->|Yes| K[📤 Upload CSV / Excel]
+    J -->|No| L[📊 Skip to Dashboard]
+    K --> L
+    
+    L --> M[🎯 Onboarding Tour (Optional)]
+    M --> N[⚙️ Download AI Model?]
+    N -->|Yes (Wi-Fi)| O[📥 Background Download<br>~2GB Phi-3 Model]
+    N -->|No| P[⏩ Use Basic Features Only]
+    O --> Q[🧠 Full AI Enabled]
+    P --> Q
+    Q --> R[🏆 Dashboard Ready!]
+    
+    style R fill:#81c784,stroke:#1b5e20

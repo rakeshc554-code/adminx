@@ -1,0 +1,43 @@
+flowchart TD
+    subgraph PRIMARY[✅ Primary Region: us-central1]
+        A[🌐 Live Traffic]
+        A --> B[🖥️ K8s Cluster Active]
+        B --> C[(🗄️ Primary DB)]
+        B --> D[(💾 Primary Backup Bucket)]
+        D -->|Continuous Replication<br>RPO: 15 minutes| F
+    end
+
+    subgraph SECONDARY[🔄 Secondary Region: asia-south1 (Standby)]
+        F[(🗄️ Replicated DB<br>Lag: < 1 min)]
+        G[🖥️ K8s Cluster Standby<br>Replicas: 0 (Scale from 0)]
+        H[(💾 Backup Bucket Read-Replica)]
+    end
+
+    subgraph MONITOR[🚨 Health Checks]
+        HC[📊 Cloud Monitoring]
+        HC -->|Checks every 30s| A
+    end
+
+    subgraph RUNBOOK[📖 Engineer Runbook Steps]
+        R1[1️⃣ Alert triggers: 'us-central1 DOWN']
+        R1 --> R2[2️⃣ Engineer acknowledges PagerDuty]
+        R2 --> R3[3️⃣ Run script: `./failover.sh asia-south1`]
+        R3 --> R4[4️⃣ Script promotes Standby DB to Primary]
+        R4 --> R5[5️⃣ Script scales K8s replicas: 0 → 3]
+        R5 --> R6[6️⃣ Script updates Cloud DNS:<br>adminx.app → asia-south1 IP]
+        R6 --> R7[7️⃣ Traffic routes to Secondary Region]
+        R7 --> R8[📱 Send 'All Clear' to Team Slack]
+    end
+
+    HC -->|Detects Failure| R1
+    
+    style PRIMARY fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    style SECONDARY fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style RUNBOOK fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
+    style MONITOR fill:#e3f2fd,stroke:#0d47a1,stroke-width:2px
+
+    note right of R8
+        ⏱️ Total RTO: < 15 minutes
+        🗄️ Data Loss: < 1 minute (RPO)
+        🔒 All Failover encrypted via KMS
+    end note

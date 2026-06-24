@@ -1,0 +1,29 @@
+flowchart TD
+    A[📦 Manager Logs In] --> B[🏠 Dashboard<br>Sees: Inventory, Stock Alerts, Team Activity]
+    
+    B --> C{Choose Action}
+    
+    C -->|Check Inventory| D1[📋 View Product List]
+    D1 --> D2{Stock Low?}
+    D2 -->|Yes| D3[🟠 Low Stock Badge Appears]
+    D3 --> D4[➕ Create Purchase Order (Vendor)]
+    D4 --> D5[🔄 Update Stock Quantity]
+    
+    C -->|Track Team| E1[👥 View Employee List]
+    E1 --> E2[📊 View Attendance / Performance]
+    E2 --> E3[📝 Assign Task to Sales Rep]
+    
+    D2 -->|No| F[✅ Continue Operations]
+    D5 --> F
+    E3 --> F
+    F --> G[🔚 End]
+    
+    note right of D4
+        ✅ Can View Product Costs
+        ❌ Cannot See Salaries
+        ❌ Cannot Delete Invoices
+        ❌ Cannot See P&L Reports
+    end note
+    
+    style D3 fill:#ffcdd2,stroke:#b71c1c
+    style E2 fill:#fff9c4,stroke:#f57f17

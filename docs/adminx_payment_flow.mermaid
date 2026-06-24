@@ -1,0 +1,46 @@
+sequenceDiagram
+    autonumber
+    participant User as 👤 Customer
+    participant App as 📱 AdminX App
+    participant Backend as ⚙️ AdminX Backend
+    participant Razorpay as 💳 Razorpay API
+    participant Webhook as 📨 Razorpay Webhook
+    participant InvoiceDB as 🗄️ Invoice Database
+
+    User->>App: 📄 Clicks "Pay Now" on Invoice
+    App->>Backend: 🚀 POST /payment/create-order<br>{invoiceId, amount, currency}
+    
+    Backend->>Backend: 🔐 Generate unique receipt_id
+    Backend->>Razorpay: 💳 POST /orders<br>{amount, currency, receipt}
+    Razorpay-->>Backend: ✅ Returns {order_id, key_id}
+    
+    Backend-->>App: 📦 Return order_id & key_id
+    App->>User: 📲 Opens Razorpay Checkout UI
+    
+    User->>Razorpay: 💵 Select payment method (UPI/Card/NB)
+    Razorpay->>User: 🔐 Redirects to Bank / UPI App
+    User->>Razorpay: ✅ Authorizes Payment
+    
+    Razorpay->>Webhook: 📨 POST /webhook/payment-confirmed<br>{order_id, payment_id, signature}
+    Note over Razorpay,Webhook: ⚠️ Critical: Signature verification
+    
+    Webhook->>Backend: 🔐 Verify webhook signature
+    Backend->>Backend: ✅ Validate payment_status == 'captured'
+    
+    Backend->>InvoiceDB: ✍️ UPDATE invoices SET status = 'PAID'
+    InvoiceDB-->>Backend: ✅ Status Updated
+    
+    Backend->>Razorpay: ✅ Acknowledge Webhook (200 OK)
+    
+    Razorpay->>User: 🔄 Redirect back to App (with success param)
+    User->>App: 📱 Return from Payment UI
+    
+    App->>Backend: 🔍 GET /payment/verify/{order_id}
+    Backend-->>App: ✅ Payment Verified & Invoice Paid
+    
+    App->>User: 🎉 Display "Payment Successful" screen
+    App->>User: 📨 Send digital receipt via WhatsApp/Email
+    
+    style Razorpay fill:#fce4ec,stroke:#b71c1c
+    style Webhook fill:#fff9c4,stroke:#f57f17
+    style InvoiceDB fill:#e8f5e9,stroke:#1b5e20

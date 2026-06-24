@@ -1,0 +1,733 @@
+================================================================================
+DOCUMENT 8: Architecture_Diagrams.txt
+================================================================================
+
+# ADMINX — Architecture Diagrams
+
+**Version:** 1.0  
+**Date:** June 2026  
+**Document Type:** System Architecture Diagrams
+
+---
+
+## 1. High-Level System Architecture
+
+graph TB
+    subgraph Presentation_Layer [Presentation Layer - Cross-Platform]
+        Mobile[📱 Android / iOS<br>Kotlin Multiplatform]
+        Web[🌐 Web Application<br>KMP / React]
+        Desktop[💻 Desktop (Win/Mac)<br>Kotlin Multiplatform]
+    end
+
+    subgraph Application_Layer [Shared Application Logic]
+        BizLogic[⚙️ Core Business Logic<br>Ledger / Inventory / Invoicing]
+        AIEngine[🧠 On-Device AI Engine<br>Inference & NLP]
+        SyncClient[🔄 Sync Client<br>Conflict Resolution (CRDT)]
+        AuthClient[🔐 Authentication Client]
+    end
+
+    subgraph Data_Layer [Local Data Layer]
+        LocalDB[(🗄️ SQLite Database<br>Room/KMM)]
+        AIModels[📦 SLM Models<br>Phi-3 3.8B / Llama 3.2]
+        FileStore[📁 Local File Storage<br>PDFs / Receipts]
+    end
+
+    subgraph Cloud_Layer [Cloud Infrastructure]
+        Firebase[🔥 Firebase Services<br>Auth / Firestore / FCM]
+        BackupStore[(☁️ Encrypted Backup<br>GCS / AWS S3)]
+        External[📨 External APIs<br>WhatsApp / Twilio / Razorpay]
+    end
+
+    Mobile --> BizLogic
+    Web --> BizLogic
+    Desktop --> BizLogic
+    
+    BizLogic --> LocalDB
+    BizLogic --> AIEngine
+    AIEngine --> AIModels
+    BizLogic --> FileStore
+    
+    SyncClient --> Firebase
+    SyncClient --> BackupStore
+    AuthClient --> Firebase
+    BizLogic --> External
+
+
+## 2. Offline-First Sync Flow
+
+sequenceDiagram
+    participant User
+    participant App
+    participant LocalDB
+    participant SyncQueue
+    participant Cloud
+
+    User->>App: 📝 Performs action (Add Invoice/Customer)
+    App->>LocalDB: ✍️ Write data locally (Immediate)
+    LocalDB-->>App: ✅ Success
+    App->>User: 🎉 Show success (Instant, offline)
+    
+    App->>SyncQueue: 📤 Add change to queue (with timestamp)
+    
+    Note over App,LocalDB: 🔌 USER IS OFFLINE (Works perfectly)
+
+    SyncQueue->>SyncQueue: ⏳ Waiting for network...
+    SyncQueue->>Cloud: 🌐 Internet detected - Upload changes
+    Cloud-->>SyncQueue: ✅ Acknowledge receipt
+    SyncQueue->>LocalDB: 📌 Mark changes as "synced"
+    LocalDB-->>App: Sync complete
+
+
+## 3. On-Device AI Processing (Privacy-First)
+
+sequenceDiagram
+    participant User
+    participant App
+    participant Router
+    participant LocalSLM as 🧠 Local SLM<br>(Phi-3/Llama)
+    participant LocalDB
+
+    User->>App: 💬 "Show Ramesh's pending balance"
+    App->>Router: Route query
+    Note over Router: 🔍 Analyzes: Simple lookup vs Complex reasoning?
+    
+    alt Simple Query (Data Retrieval)
+        Router->>LocalSLM: Execute local inference
+        LocalSLM->>LocalDB: Query database
+        LocalDB-->>LocalSLM: Return balance (₹15,000)
+        LocalSLM-->>App: Formatted response
+    end
+    
+    alt Complex Query (Forecasting)
+        Router->>LocalSLM: Execute complex inference
+        LocalSLM->>LocalDB: Fetch 6 months history
+        LocalSLM->>LocalSLM: Analyze & Predict
+        LocalSLM-->>App: 📈 "Cash flow may dip in July"
+    end
+    
+    App->>User: 📱 Display answer (0 server calls made!)
+    
+    Note over User,LocalDB: 🔒 Data stays on device. No API costs.
+
+
+## 4. Database ER Diagram (SQLite)
+
+erDiagram
+    USERS ||--o{ BUSINESSES : "manages"
+    USERS ||--o{ EMPLOYEES : "hires"
+    
+    BUSINESSES ||--o{ CUSTOMERS : "has"
+    BUSINESSES ||--o{ PRODUCTS : "sells"
+    BUSINESSES ||--o{ INVOICES : "generates"
+    BUSINESSES ||--o{ TRANSACTIONS : "records"
+    BUSINESSES ||--o{ EMPLOYEES : "employs"
+    
+    CUSTOMERS ||--o{ TRANSACTIONS : "has"
+    CUSTOMERS ||--o{ INVOICES : "receives"
+    
+    INVOICES ||--|{ INVOICE_ITEMS : "contains"
+    PRODUCTS ||--o{ INVOICE_ITEMS : "listed_in"
+    
+    CUSTOMERS {
+        string id PK
+        string business_id FK
+        string name
+        string phone
+        string email
+        string address
+        float balance
+        integer created_at
+        integer updated_at
+        boolean synced
+    }
+    
+    TRANSACTIONS {
+        string id PK
+        string customer_id FK
+        string business_id FK
+        float amount
+        string type "CREDIT or DEBIT"
+        string description
+        integer date
+        string invoice_id FK
+        boolean synced
+    }
+    
+    INVOICES {
+        string id PK
+        string business_id FK
+        string customer_id FK
+        string invoice_number UK
+        string items JSON
+        float subtotal
+        float gst
+        float total
+        string status "DRAFT/SENT/PAID/OVERDUE"
+        integer created_at
+        integer due_date
+        boolean synced
+    }
+    
+    INVOICE_ITEMS {
+        string id PK
+        string invoice_id FK
+        string product_id FK
+        string product_name "Snapshot at sale"
+        int quantity
+        float unit_price
+        float total_price
+        float tax_rate
+    }
+    
+    PRODUCTS {
+        string id PK
+        string business_id FK
+        string name
+        string sku UK
+        string barcode
+        float price
+        float cost
+        int quantity
+        int reorder_level
+        integer expiry_date
+        boolean synced
+    }
+    
+    EMPLOYEES {
+        string id PK
+        string business_id FK
+        string user_id FK
+        string name
+        string role
+        string phone
+        string email
+        string permissions JSON
+        integer salary
+        string attendance JSON
+        boolean synced
+    }
+    
+    BUSINESSES {
+        string id PK
+        string owner_id FK
+        string name
+        string gst
+        string address
+        string bank_details JSON
+        integer created_at
+        integer updated_at
+    }
+    
+    USERS {
+        string id PK
+        string name
+        string email UK
+        string phone UK
+        string business_id FK
+        integer created_at
+        integer updated_at
+    }
+
+
+## 5. CI/CD Deployment Pipeline
+
+flowchart TD
+    A[👨‍💻 Developer pushes code] --> B(GitHub / GitLab Repository)
+    
+    subgraph CI[Continuous Integration - GitHub Actions]
+        B --> C{Trigger: Push to Branch}
+        
+        C -->|Feature/Bugfix| D1[🛠️ Static Analysis<br>Detekt / SwiftLint]
+        D1 --> D2[🧪 Run Unit Tests<br>JUnit / Kotlin Test]
+        D2 --> D3[📦 Build Shared KMP Library]
+        D3 --> D4{All Checks Pass?}
+        D4 -->|No| D5[❌ Fail Build - Notify Dev]
+        D4 -->|Yes| D6[✅ Build Artifacts Stored]
+    end
+
+    subgraph CD[Continuous Delivery - Staging]
+        C -->|Release Branch / Main| E1[📱 Build Android AAB]
+        C -->|Release Branch / Main| E2[🍏 Build iOS IPA]
+        C -->|Release Branch / Main| E3[🌐 Build Web Static]
+        C -->|Release Branch / Main| E4[💻 Build Desktop MSI/DMG]
+        
+        E1 --> E5[🧪 Run UI/E2E Tests<br>Espresso / Appium / Cypress]
+        E2 --> E5
+        E3 --> E5
+        E4 --> E5
+        
+        E5 --> E6{All Tests Pass?}
+        E6 -->|No| E7[❌ Rollback Staging]
+        E6 -->|Yes| E8[🚀 Deploy to Staging Servers<br>Firebase Hosting / TestFlight / Internal Track]
+        
+        E8 --> E9[📊 Smoke Tests & Monitoring<br>Firebase Crashlytics / Performance]
+    end
+
+    subgraph PROD[Production Deployment - Manual Approval]
+        E9 --> F{Approval Required}
+        F --> G1[✅ Submit to Google Play<br>Production Track]
+        F --> G2[✅ Submit to App Store<br>Production]
+        F --> G3[✅ Deploy Web to Vercel/Netlify<br>Production]
+        F --> G4[✅ Upload Desktop Installers<br>Website / GitHub Releases]
+        
+        G1 --> H[📈 Monitor Live Metrics<br>Crash-free users > 98%]
+        G2 --> H
+        G3 --> H
+        G4 --> H
+    end
+    
+    style CI fill:#e3f2fd,stroke:#0d47a1
+    style CD fill:#f1f8e9,stroke:#1b5e20
+    style PROD fill:#fff3e0,stroke:#e65100
+
+
+## 6. Invoice State Diagram
+
+stateDiagram-v2
+    [*] --> Draft: 🆕 Create Invoice
+    
+    Draft --> Sent: ✉️ Share / Send Invoice
+    Draft --> Cancelled: 🗑️ User Deletes Draft
+    
+    Sent --> Paid: ✅ Payment Received (Full Amount)
+    Sent --> Overdue: ⏰ Due Date Passes (Auto-Transition)
+    Sent --> Cancelled: 🗑️ User Cancels Sent Invoice
+    
+    Overdue --> Paid: 💵 Partial/Late Payment Received
+    Overdue --> Overdue_Reminder: 🔔 Reminder Sent (Auto)
+    Overdue_Reminder --> Overdue: ⏳ No Action (Loop)
+    Overdue_Reminder --> Paid: 💵 Payment Made
+    
+    Paid --> Paid_Partial: 💸 Partial Payment Received
+    Paid_Partial --> Paid: ✅ Remaining Amount Received
+    Paid_Partial --> Overdue: ⏰ Balance Due Date Passes
+    
+    Cancelled --> [*]: 🗑️ End of Life
+    
+    note right of Draft
+        🧠 AI Suggests items & prices
+        💾 Auto-saved locally
+    end note
+    
+    note right of Sent
+        📨 WhatsApp/Email sent to customer
+        📊 Added to outstanding balance
+    end note
+    
+    note right of Overdue
+        🔔 Auto-sends reminders at 3, 7, 15 days
+        📈 Shows in dashboard alerts
+    end note
+    
+    note right of Paid
+        ✅ Removed from outstanding balance
+        📄 E-receipt auto-generated
+        🧾 GST return data updated
+    end note
+
+
+## 7. Microservices Architecture Breakdown
+
+flowchart TB
+    subgraph CLIENTS[Client Applications]
+        Mobile[📱 Mobile Apps<br>Android / iOS]
+        Web[🌐 Web App]
+        Desktop[💻 Desktop Apps]
+    end
+
+    subgraph GATEWAY[🚪 API Gateway / Load Balancer]
+        AuthGW[🔐 Authentication Gateway<br>JWT Validation / Rate Limiting]
+        Router[🔄 Request Router<br>Path-based Routing]
+    end
+
+    subgraph SERVICES[⚙️ Backend Microservices]
+        direction TB
+        
+        subgraph CORE[Core Services]
+            UserSvc[👤 User Service<br>Profiles / Roles / Permissions]
+            BizSvc[🏢 Business Service<br>Business Profiles / GST / Settings]
+        end
+
+        subgraph DATA[Data Services]
+            SyncSvc[🔄 Sync Service<br>CRDT Merge / Delta Sync]
+            BackupSvc[💾 Backup Service<br>Encrypted Backups / Restore]
+            ExportSvc[📤 Export Service<br>PDF / Excel / CSV Generation]
+        end
+
+        subgraph COMM[Communication Services]
+            NotifSvc[🔔 Notification Service<br>Push / Email / In-App]
+            WhatsAppSvc[💬 WhatsApp Service<br>Template Messages / Status]
+            SMSSvc[✉️ SMS Service<br>OTP / Reminders]
+        end
+
+        subgraph PAY[Payment Services]
+            PaymentSvc[💳 Payment Service<br>Order Creation / Verification]
+            WebhookSvc[📨 Webhook Service<br>Razorpay / UPI Callbacks]
+        end
+
+        subgraph AI[AI & Analytics Services]
+            AISvc[🧠 AI Model Service<br>Model Updates / Distribution]
+            AnalyticsSvc[📊 Analytics Service<br>Usage Metrics / Insights]
+        end
+    end
+
+    subgraph STORAGE[🗄️ Data Storage Layer]
+        UserDB[(🗄️ User DB<br>Firestore)]
+        BackupDB[(💾 Backup Storage<br>GCS / S3)]
+        Cache[(⚡ Redis Cache<br>Session / Rate Limiting)]
+        Queue[(📨 Message Queue<br>RabbitMQ / PubSub)]
+    end
+
+    CLIENTS --> GATEWAY
+    GATEWAY --> SERVICES
+    
+    SyncSvc --> UserDB
+    SyncSvc --> Cache
+    BackupSvc --> BackupDB
+    UserSvc --> UserDB
+    
+    NotifSvc --> Queue
+    WhatsAppSvc --> Queue
+    SMSSvc --> Queue
+    
+    WebhookSvc --> PaymentSvc
+    PaymentSvc --> UserDB
+    
+    AISvc --> BackupDB
+    AnalyticsSvc --> UserDB
+
+
+## 8. Error Handling & Monitoring Flow
+
+flowchart TD
+    subgraph CLIENT[Client Application]
+        A[💥 Error Occurs<br>Crash / Network / Sync Failure]
+        A --> B{Error Type}
+        
+        B -->|Recoverable| C1[🔄 Retry Logic<br>Exponential Backoff]
+        C1 --> C2{Retry Success?}
+        C2 -->|Yes| C3[✅ Continue Operation]
+        C2 -->|No| C4[📱 Show User-Friendly Message<br>"Please try again later"]
+        
+        B -->|Non-Recoverable| C5[📝 Log Error Locally<br>With Stack Trace & Context]
+        C5 --> C6[📤 Upload to Monitoring Service<br>Firebase Crashlytics / Sentry]
+    end
+
+    subgraph MONITORING[☁️ Monitoring & Alerting Stack]
+        Crashlytics[🔥 Firebase Crashlytics<br>Crash Reports / Breadcrumbs]
+        Performance[📈 Firebase Performance<br>Slow Rendering / Network]
+        CustomLogs[📋 Custom Logging Service<br>Business Logic Errors]
+        
+        Aggregator[🧠 Log Aggregator<br>Error Grouping / Deduplication]
+        Dashboard[📊 Monitoring Dashboard<br>Grafana / Firebase Console]
+    end
+
+    subgraph ALERTS[🚨 Alerting & Response]
+        AlertRules{🚨 Alert Rules}
+        AlertRules -->|Critical > 5% crash rate| PagerDuty[📱 PagerDuty / Opsgenie<br>On-Call Engineer Notified]
+        AlertRules -->|High Severity| Slack[💬 Slack / Teams Channel<br>#alerts-critical]
+        AlertRules -->|Medium Severity| Email[📧 Email to Engineering Team]
+        AlertRules -->|Low Severity| Jira[📝 Auto-Create Jira Ticket<br>Backlog]
+    end
+
+    subgraph RESPONSE[🔧 Engineer Response]
+        PagerDuty --> Engineer[👨‍💻 On-Call Engineer]
+        Engineer --> Fix[🔨 Investigate & Fix]
+        Fix --> Deploy[🚀 Deploy Hotfix]
+        Deploy --> Resolve[✅ Issue Resolved]
+    end
+
+    C6 --> Crashlytics
+    C6 --> CustomLogs
+    
+    Crashlytics --> Aggregator
+    Performance --> Aggregator
+    CustomLogs --> Aggregator
+    
+    Aggregator --> Dashboard
+    Aggregator --> AlertRules
+    AlertRules --> Slack
+    AlertRules --> Email
+    AlertRules --> Jira
+    AlertRules --> PagerDuty
+
+
+## 9. Git Branching Strategy (GitFlow)
+
+flowchart TD
+    subgraph REPO[📦 Repository: adminx]
+        Main[🔵 main<br>Production-Ready Code]
+        Develop[🟢 develop<br>Integration Branch]
+        
+        subgraph FEATURES[🆕 Feature Branches]
+            F1[🌿 feature/invoicing-gst]
+            F2[🌿 feature/ai-chat]
+            F3[🌿 feature/offline-sync]
+        end
+        
+        subgraph RELEASES[📦 Release Branches]
+            R1[🌿 release/v1.0.0]
+            R2[🌿 release/v1.1.0]
+        end
+        
+        subgraph HOTFIXES[🔥 Hotfix Branches]
+            H1[🌿 hotfix/crash-on-startup]
+            H2[🌿 hotfix/sync-conflict]
+        end
+    end
+
+    F1 --> Develop
+    F2 --> Develop
+    F3 --> Develop
+    
+    Develop --> R1
+    R1 --> Main
+    R1 --> Develop
+    
+    Develop --> R2
+    R2 --> Main
+    R2 --> Develop
+    
+    Main --> H1
+    H1 --> Main
+    H1 --> Develop
+    
+    Main --> H2
+    H2 --> Main
+    H2 --> Develop
+
+
+## 10. Security & Encryption Flow
+
+flowchart TB
+    subgraph USER_DEVICE[📱 User Device — Secure Enclave]
+        A[👤 User Input<br>Data Entry / Transaction]
+        A --> B[🔐 In-Memory Encryption<br>Data encrypted in RAM]
+        B --> C[📝 Data at Rest<br>SQLite + AES-256-GCM]
+        C --> D[🔑 Key Management<br>Derived from Device ID + PIN]
+        D --> C
+    end
+
+    subgraph APP_LAYER[⚙️ Application Layer]
+        C --> E[📤 Sync Queue<br>Encrypted Data Staged]
+        E --> F[🔒 TLS 1.3 Tunnel<br>Secure Channel]
+    end
+
+    subgraph CLOUD[☁️ Cloud Infrastructure]
+        F --> G[🔐 Cloud Gateway<br>TLS Termination + JWT Validation]
+        G --> H{Data Classification}
+        
+        H -->|Sensitive Data<br>(Customer Names, Amounts)| I[📦 Encrypted Storage<br>Client-Side Encryption Key]
+        H -->|Non-Sensitive<br>(Reports, Aggregates)| J[📊 Firestore<br>Server-Side Encryption]
+        
+        I --> K[💾 Backup Bucket<br>AES-256 + Customer-Managed Key]
+        J --> L[🗄️ Firestore DB<br>Encrypted at Rest]
+    end
+
+    subgraph EXTERNAL[🌐 External APIs]
+        G --> M[📨 API Calls<br>WhatsApp / SMS / Razorpay]
+        M --> N[🔒 HTTPS + API Keys<br>Secure Transmission]
+        N --> O[📤 External Service]
+    end
+
+    subgraph COMPLIANCE[✅ Compliance & Audit]
+        L --> P[📋 Audit Logs<br>All Accesses Logged]
+        P --> Q[📊 Compliance Reports<br>DPDP Act / GDPR]
+        K --> R[🗑️ Data Retention<br>Auto-Delete after 30 days]
+    end
+
+
+## 11. Payment Gateway Sequence (Razorpay)
+
+sequenceDiagram
+    autonumber
+    participant User as 👤 Customer
+    participant App as 📱 AdminX App
+    participant Backend as ⚙️ AdminX Backend
+    participant Razorpay as 💳 Razorpay API
+    participant Webhook as 📨 Razorpay Webhook
+    participant InvoiceDB as 🗄️ Invoice Database
+
+    User->>App: 📄 Clicks "Pay Now" on Invoice
+    App->>Backend: 🚀 POST /payment/create-order<br>{invoiceId, amount, currency}
+    
+    Backend->>Backend: 🔐 Generate unique receipt_id
+    Backend->>Razorpay: 💳 POST /orders<br>{amount, currency, receipt}
+    Razorpay-->>Backend: ✅ Returns {order_id, key_id}
+    
+    Backend-->>App: 📦 Return order_id & key_id
+    App->>User: 📲 Opens Razorpay Checkout UI
+    
+    User->>Razorpay: 💵 Select payment method (UPI/Card/NB)
+    Razorpay->>User: 🔐 Redirects to Bank / UPI App
+    User->>Razorpay: ✅ Authorizes Payment
+    
+    Razorpay->>Webhook: 📨 POST /webhook/payment-confirmed<br>{order_id, payment_id, signature}
+    
+    Webhook->>Backend: 🔐 Verify webhook signature
+    Backend->>Backend: ✅ Validate payment_status == 'captured'
+    
+    Backend->>InvoiceDB: ✍️ UPDATE invoices SET status = 'PAID'
+    InvoiceDB-->>Backend: ✅ Status Updated
+    
+    Backend->>Razorpay: ✅ Acknowledge Webhook (200 OK)
+    
+    Razorpay->>User: 🔄 Redirect back to App (with success param)
+    User->>App: 📱 Return from Payment UI
+    
+    App->>Backend: 🔍 GET /payment/verify/{order_id}
+    Backend-->>App: ✅ Payment Verified & Invoice Paid
+    
+    App->>User: 🎉 Display "Payment Successful" screen
+    App->>User: 📨 Send digital receipt via WhatsApp/Email
+
+
+## 12. User Journey: Create & Share Invoice
+
+flowchart TD
+    A[🚀 Start: Open AdminX] --> B[📊 Dashboard]
+    B --> C{Choose Action}
+    C -->|Quick Action| D[➕ Click 'Create Invoice']
+    
+    D --> E[👤 Select Customer]
+    E --> F{Is Customer New?}
+    F -->|Yes| G[✍️ Add New Customer<br>Name, Phone, Address]
+    F -->|No| H[🔍 Search & Select]
+    
+    G --> I[📦 Add Items]
+    H --> I
+    
+    I --> J{Add Product Method}
+    J -->|Manual| K[🔢 Enter Name, Qty, Price]
+    J -->|Barcode| L[📷 Scan Barcode]
+    L --> K
+    
+    K --> M[🧠 AI Suggests Prices/Descriptions]
+    M --> N[💰 System Auto-Calculates<br>Subtotal + GST = Grand Total]
+    
+    N --> O[👀 Review Invoice]
+    O --> P{Action}
+    P -->|Save Draft| Q[📄 Saved to Drafts]
+    P -->|Finalize| R[✅ Generate Invoice PDF]
+    
+    R --> S[📨 Share Options]
+    S --> T[💬 WhatsApp / ✉️ Email / 📱 SMS]
+    T --> U[📱 Customer Receives Notification]
+    U --> V[💵 Invoice Marked as 'Sent'<br>Recorded in Ledger]
+
+
+## 13. User Journey: Registration & Onboarding
+
+flowchart TD
+    A[📲 User Downloads App<br>Play Store / App Store / Web] --> B[🎨 Splash Screen]
+    B --> C{Already Registered?}
+    
+    C -->|No| D[✍️ Sign Up]
+    C -->|Yes| E[🔐 Log In]
+    
+    D --> F[📱 Enter Mobile / Email]
+    F --> G[🔑 Set Password]
+    G --> H[📨 Verify OTP]
+    H --> I[📋 Business Profile Setup<br>Name, GST, Address, Logo]
+    
+    I --> J[📂 Data Import?]
+    J -->|Yes| K[📤 Upload CSV / Excel]
+    J -->|No| L[📊 Skip to Dashboard]
+    K --> L
+    
+    L --> M[🎯 Onboarding Tour (Optional)]
+    M --> N[⚙️ Download AI Model?]
+    N -->|Yes (Wi-Fi)| O[📥 Background Download<br>~2GB Phi-3 Model]
+    N -->|No| P[⏩ Use Basic Features Only]
+    O --> Q[🧠 Full AI Enabled]
+    P --> Q
+    Q --> R[🏆 Dashboard Ready!]
+
+
+## 14. Disaster Recovery (DR) Runbook
+
+flowchart TD
+    subgraph PRIMARY[✅ Primary Region: us-central1]
+        A[🌐 Live Traffic]
+        A --> B[🖥️ K8s Cluster Active]
+        B --> C[(🗄️ Primary DB)]
+        B --> D[(💾 Primary Backup Bucket)]
+        D -->|Continuous Replication<br>RPO: 15 minutes| F
+    end
+
+    subgraph SECONDARY[🔄 Secondary Region: asia-south1 (Standby)]
+        F[(🗄️ Replicated DB<br>Lag: < 1 min)]
+        G[🖥️ K8s Cluster Standby<br>Replicas: 0 (Scale from 0)]
+        H[(💾 Backup Bucket Read-Replica)]
+    end
+
+    subgraph MONITOR[🚨 Health Checks]
+        HC[📊 Cloud Monitoring]
+        HC -->|Checks every 30s| A
+    end
+
+    subgraph RUNBOOK[📖 Engineer Runbook Steps]
+        R1[1️⃣ Alert triggers: 'us-central1 DOWN']
+        R1 --> R2[2️⃣ Engineer acknowledges PagerDuty]
+        R2 --> R3[3️⃣ Run script: ./failover.sh asia-south1]
+        R3 --> R4[4️⃣ Script promotes Standby DB to Primary]
+        R4 --> R5[5️⃣ Script scales K8s replicas: 0 -> 3]
+        R5 --> R6[6️⃣ Script updates Cloud DNS:<br>adminx.app -> asia-south1 IP]
+        R6 --> R7[7️⃣ Traffic routes to Secondary Region]
+        R7 --> R8[📱 Send 'All Clear' to Team Slack]
+    end
+
+    HC -->|Detects Failure| R1
+
+    note right of R8
+        ⏱️ Total RTO: < 15 minutes
+        🗄️ Data Loss: < 1 minute (RPO)
+        🔒 All Failover encrypted via KMS
+    end note
+
+
+## 15. Database Migration Strategy
+
+flowchart TD
+    A[🚀 App Starts<br>Version 2.0.0] --> B[🔍 Check Local DB Version<br>PRAGMA user_version;]
+    
+    B --> C{Compare Versions}
+    
+    C -->|DB Version == App Version| D[✅ Load Database Normally<br>No Migration Needed]
+    
+    C -->|DB Version < App Version| E[⚙️ Start Migration Engine<br>with Room SQLiteOpenHelper]
+    
+    subgraph MIGRATION_PIPELINE[🛠️ Migration Pipeline]
+        direction TB
+        M1[📋 Get Current Version: v1]
+        M1 --> M2{Check Upgrade Path}
+        
+        M2 -->|v1 -> v2| Step1[🔧 Run: Migration_1_to_2]
+        M2 -->|v2 -> v3| Step2[🔧 Run: Migration_2_to_3]
+        M2 -->|v1 -> v3| Step3[🔧 Run: Migration_1_to_3<br>(Cumulative)]
+        
+        Step1 --> S1[📝 SQL: ALTER TABLE customers<br>ADD COLUMN credit_limit REAL DEFAULT 0;]
+        Step2 --> S2[📝 SQL: CREATE TABLE invoice_items<br>...; ALTER TABLE invoices ADD ...;]
+        Step3 --> S3[📝 Data Transformation<br>Java/Kotlin loop to populate new columns]
+        
+        S1 --> V1[📌 Update PRAGMA user_version = 2]
+        S2 --> V2[📌 Update PRAGMA user_version = 3]
+        S3 --> V3[📌 Update PRAGMA user_version = 3]
+    end
+    
+    D --> F[✅ Database Ready]
+    V1 --> F
+    V2 --> F
+    V3 --> F
+    
+    C -->|DB Version > App Version| E1[❌ Fatal Error<br>Downgrade not allowed<br>Must re-install or restore backup]
+
+    subgraph SAFETY_NET[🛡️ Safety / Rollback]
+        N1[📤 Before Migration:<br>Export full DB to /backups/]
+        N2[🧪 Run Migration in Transaction<br>BEGIN TRANSACTION; ...; COMMIT;]
+        N3[❌ If Exception occurs:<br>ROLLBACK; Restore from backup]
+    end
+
+    E -.-> N1
+    M1 -.-> N2
+    Step3 -.-> N3

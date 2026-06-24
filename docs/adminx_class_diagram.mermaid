@@ -1,0 +1,173 @@
+classDiagram
+    %% ==========================================
+    %% ENTITY MODELS (Abstract Base)
+    %% ==========================================
+    class BaseEntity {
+        <<abstract>>
+        +String id
+        +String businessId
+        +Long createdAt
+        +Long updatedAt
+        +Boolean synced
+        +Int version (Optimistic Locking)
+        +toJson() JSONObject
+        +validate() Boolean
+    }
+
+    %% ==========================================
+    %% CORE AGGREGATES
+    %% ==========================================
+    class Business {
+        +String name
+        +String gstNumber
+        +String address
+        +BankDetails bankDetails
+        +List~String~ supportedLanguages
+        +Double defaultGstRate
+        +addEmployee(Employee) Boolean
+        +generateGstReport(DateRange) GSTReport
+    }
+
+    class Customer {
+        +String name
+        +String phone (Unique per business)
+        +String email
+        +String address
+        +Double outstandingBalance (Derived)
+        +Double creditLimit
+        +sendReminder(ReminderType) Boolean
+        +getTransactionHistory(Int limit) List~Transaction~
+    }
+
+    class Transaction {
+        +String customerId (FK)
+        +String invoiceId (FK)
+        +TransactionType type (CREDIT, DEBIT)
+        +Double amount
+        +String description
+        +Long transactionDate
+        +updateBalance() Unit
+    }
+
+    class Invoice {
+        +String customerId (FK)
+        +String invoiceNumber (UK, generated)
+        +List~InvoiceItem~ items
+        +Double subtotal
+        +Double gstAmount
+        +Double totalAmount
+        +InvoiceStatus status (DRAFT, SENT, PAID, OVERDUE, PARTIAL)
+        +Long dueDate
+        +Map~PaymentMethod, Double~ paymentsReceived
+        +validateGstCompliance() Boolean
+        +applyPayment(Double amount, PaymentMethod method) Boolean
+        +calculatePenalty() Double (If overdue)
+        +generatePdf() ByteArray
+    }
+
+    class InvoiceItem {
+        +String productId (FK, Nullable for custom items)
+        +String productName (Snapshot at sale)
+        +Int quantity
+        +Double unitPrice
+        +Double totalPrice
+        +Double taxRate (HSN/SAC specific)
+    }
+
+    class Product {
+        +String name
+        +String sku (UK)
+        +String barcode (Generated)
+        +Double sellingPrice
+        +Double costPrice (Only for Admin roles)
+        +Int stockQuantity
+        +Int reorderLevel
+        +LocalDate expiryDate
+        +String batchNumber
+        +List~ProductVariant~ variants
+        +reduceStock(Int quantity) Boolean
+        +checkLowStock() Boolean
+        +generateBarcode() String
+    }
+
+    %% ==========================================
+    %% AI & SYNC ENGINE CLASSES (Interfaces/Impl)
+    %% ==========================================
+    class AIService {
+        <<interface>>
+        +suspend categorizeTransaction(String desc) Category
+        +suspend answerQuery(String query, String context) String
+        +suspend forecastCashFlow(List~Transaction~ history) Forecast
+        +suspend suggestProducts(String input) List~ProductSuggestion~
+    }
+
+    class OnDeviceAIService {
+        +InferenceSession session
+        +Tokenizer tokenizer
+        +suspend infer(String prompt) String
+        +loadModel(String path) Boolean
+        +unloadModel() Unit
+    }
+
+    class SyncEngine {
+        +SyncQueue queue
+        +ConflictResolver resolver (CRDT)
+        +EncryptionManager encryption
+        +syncNow() Boolean
+        +resolveConflicts(List~Change~) List~Change~
+        +encryptPayload(JSONObject) String
+    }
+
+    class SyncQueue {
+        +ConcurrentQueue~Change~ pendingChanges
+        +addChange(Change) Boolean
+        +pollChanges(Int batchSize) List~Change~
+        +markSynced(String changeId) Unit
+    }
+
+    class ConflictResolver {
+        +resolve(Change local, Change remote) Change (CRDT Merge)
+        +isConflict(Change a, Change b) Boolean
+    }
+
+    class LocalRepository~T~ {
+        <<interface>>
+        +suspend insert(T entity) Long
+        +suspend update(T entity) Int
+        +suspend delete(String id) Int
+        +suspend getById(String id) T?
+        +suspend getAll() List~T~
+    }
+
+    class CustomerRepository~Customer~ {
+        +suspend findByName(String name) List~Customer~
+        +suspend findByPhone(String phone) Customer?
+        +suspend getOutstandingBalances() Map~String, Double~
+    }
+
+    %% ==========================================
+    %% RELATIONSHIPS
+    %% ==========================================
+    BaseEntity <|-- Business
+    BaseEntity <|-- Customer
+    BaseEntity <|-- Product
+    BaseEntity <|-- Transaction
+    BaseEntity <|-- Invoice
+    
+    Business "1" -- "0..*" Customer : manages >
+    Business "1" -- "0..*" Product : sells >
+    Customer "1" -- "0..*" Transaction : makes >
+    Customer "1" -- "0..*" Invoice : receives >
+    Invoice "1" -- "1..*" InvoiceItem : contains >
+    Product "1" -- "0..*" InvoiceItem : listed_in >
+    
+    LocalRepository~Customer~ <|.. CustomerRepository : implements
+    
+    AIService <|.. OnDeviceAIService : implements
+    
+    SyncEngine *-- SyncQueue : manages
+    SyncEngine *-- ConflictResolver : uses
+    SyncEngine *-- EncryptionManager : uses
+
+    note for OnDeviceAIService "Runs entirely on-device.\nNo network calls. 0 API cost."
+    note for ConflictResolver "Uses Last-Write-Wins (LWW) + \nMulti-Value Register (MVR) for lists."

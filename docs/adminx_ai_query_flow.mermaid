@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant User
+    participant App
+    participant Router
+    participant LocalSLM
+    participant LocalDB
+
+    User->>App: Asks "Show Ramesh's balance"
+    App->>Router: Route query
+    Note over Router: Analyze query type
+    Router->>LocalSLM: Simple query - local processing
+    LocalSLM->>LocalDB: Query database
+    LocalDB->>LocalSLM: Return data
+    LocalSLM->>App: Generate response
+    App->>User: Display answer

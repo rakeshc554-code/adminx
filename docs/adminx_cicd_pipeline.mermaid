@@ -1,0 +1,48 @@
+flowchart TD
+    A[👨‍💻 Developer pushes code] --> B(GitHub / GitLab Repository)
+    
+    subgraph CI[Continuous Integration - GitHub Actions]
+        B --> C{Trigger: Push to Branch}
+        
+        C -->|Feature/Bugfix| D1[🛠️ Static Analysis<br>Detekt / SwiftLint]
+        D1 --> D2[🧪 Run Unit Tests<br>JUnit / Kotlin Test]
+        D2 --> D3[📦 Build Shared KMP Library]
+        D3 --> D4{All Checks Pass?}
+        D4 -->|No| D5[❌ Fail Build - Notify Dev]
+        D4 -->|Yes| D6[✅ Build Artifacts Stored]
+    end
+
+    subgraph CD[Continuous Delivery - Staging]
+        C -->|Release Branch / Main| E1[📱 Build Android AAB]
+        C -->|Release Branch / Main| E2[🍏 Build iOS IPA]
+        C -->|Release Branch / Main| E3[🌐 Build Web Static]
+        C -->|Release Branch / Main| E4[💻 Build Desktop MSI/DMG]
+        
+        E1 --> E5[🧪 Run UI/E2E Tests<br>Espresso / Appium / Cypress]
+        E2 --> E5
+        E3 --> E5
+        E4 --> E5
+        
+        E5 --> E6{All Tests Pass?}
+        E6 -->|No| E7[❌ Rollback Staging]
+        E6 -->|Yes| E8[🚀 Deploy to Staging Servers<br>Firebase Hosting / TestFlight / Internal Track]
+        
+        E8 --> E9[📊 Smoke Tests & Monitoring<br>Firebase Crashlytics / Performance]
+    end
+
+    subgraph PROD[Production Deployment - Manual Approval]
+        E9 --> F{Approval Required}
+        F --> G1[✅ Submit to Google Play<br>Production Track]
+        F --> G2[✅ Submit to App Store<br>Production]
+        F --> G3[✅ Deploy Web to Vercel/Netlify<br>Production]
+        F --> G4[✅ Upload Desktop Installers<br>Website / GitHub Releases]
+        
+        G1 --> H[📈 Monitor Live Metrics<br>Crash-free users > 98%]
+        G2 --> H
+        G3 --> H
+        G4 --> H
+    end
+    
+    style CI fill:#e3f2fd,stroke:#0d47a1
+    style CD fill:#f1f8e9,stroke:#1b5e20
+    style PROD fill:#fff3e0,stroke:#e65100

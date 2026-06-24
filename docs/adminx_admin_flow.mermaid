@@ -1,0 +1,32 @@
+flowchart TD
+    A[👑 Admin Logs In] --> B[🏠 Dashboard<br>Sees: ALL features + Settings menu]
+    
+    B --> C{Choose Action}
+    
+    C -->|Manage Users| D1[👥 Go to 'Manage Users']
+    D1 --> D2[➕ Invite New User<br>Enter Email / Phone]
+    D2 --> D3[🎯 Assign Role<br>Manager / Sales / Accountant]
+    D3 --> D4[📨 User Receives Invite]
+    
+    C -->|Run Payroll| E1[💰 Open Payroll Module]
+    E1 --> E2[📅 Select Month]
+    E2 --> E3[🧮 Calculate Salaries<br>Based on Attendance]
+    E3 --> E4[📄 Generate Payslips & Report]
+    
+    C -->|Backup Company| F1[💾 Open Settings > Backup]
+    F1 --> F2[☁️ Create Full Data Backup]
+    F2 --> F3[🗑️ Or Restore from Previous]
+    
+    D4 --> G[🔚 End]
+    E4 --> G
+    F3 --> G
+    
+    note right of D3
+        ✅ Full Read/Write Access
+        ✅ Can Delete everything
+        ✅ Can see ALL Reports
+        ⚠️ Irreversible actions require 2FA
+    end note
+    
+    style D3 fill:#e1f5fe,stroke:#01579b
+    style E3 fill:#fff59d,stroke:#f57f17

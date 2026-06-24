@@ -1,0 +1,54 @@
+# ADMINX — Architecture Diagrams
+
+**Version:** 1.0  
+**Date:** June 2026  
+**Document Type:** System Architecture Diagrams
+
+---
+
+## 1. High-Level System Architecture
+
+```mermaid
+graph TB
+    subgraph Presentation_Layer [Presentation Layer - Cross-Platform]
+        Mobile[📱 Android / iOS<br>Kotlin Multiplatform]
+        Web[🌐 Web Application<br>KMP / React]
+        Desktop[💻 Desktop (Win/Mac)<br>Kotlin Multiplatform]
+    end
+
+    subgraph Application_Layer [Shared Application Logic]
+        BizLogic[⚙️ Core Business Logic<br>Ledger / Inventory / Invoicing]
+        AIEngine[🧠 On-Device AI Engine<br>Inference & NLP]
+        SyncClient[🔄 Sync Client<br>Conflict Resolution (CRDT)]
+        AuthClient[🔐 Authentication Client]
+    end
+
+    subgraph Data_Layer [Local Data Layer]
+        LocalDB[(🗄️ SQLite Database<br>Room/KMM)]
+        AIModels[📦 SLM Models<br>Phi-3 3.8B / Llama 3.2]
+        FileStore[📁 Local File Storage<br>PDFs / Receipts]
+    end
+
+    subgraph Cloud_Layer [Cloud Infrastructure]
+        Firebase[🔥 Firebase Services<br>Auth / Firestore / FCM]
+        BackupStore[(☁️ Encrypted Backup<br>GCS / AWS S3)]
+        External[📨 External APIs<br>WhatsApp / Twilio / Razorpay]
+    end
+
+    Mobile --> BizLogic
+    Web --> BizLogic
+    Desktop --> BizLogic
+    
+    BizLogic --> LocalDB
+    BizLogic --> AIEngine
+    AIEngine --> AIModels
+    BizLogic --> FileStore
+    
+    SyncClient --> Firebase
+    SyncClient --> BackupStore
+    AuthClient --> Firebase
+    BizLogic --> External
+    
+    style Application_Layer fill:#e1f5fe,stroke:#01579b
+    style Data_Layer fill:#f1f8e9,stroke:#33691e
+    style Cloud_Layer fill:#fff3e0,stroke:#e65100

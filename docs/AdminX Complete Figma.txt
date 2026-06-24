@@ -1,0 +1,458 @@
+AdminX — Complete Figma Design Specification
+Design System Foundation
+
+Color Palette
+Color Role	Hex	Usage
+Primary	#2563EB	Primary buttons, active states, headers
+Primary Light	#3B82F6	Hover states, active navigation
+Primary Dark	#1D4ED8	Pressed states
+Secondary (Success)	#16A34A	Paid status, positive trends, success toasts
+Accent (Warning)	#F97316	Warnings, overdue alerts, attention actions
+Danger	#DC2626	Errors, critical alerts, delete actions
+Text Primary	#0F172A	Headlines, primary labels
+Text Secondary	#475569	Body text, descriptions
+Text Muted	#94A3B8	Placeholders, disabled text
+Border	#E2E8F0	Dividers, card borders
+Background	#F8FAFC	Page backgrounds
+Surface	#FFFFFF	Cards, modals, sheets
+Surface Hover	#F1F5F9	Hover states for cards/rows
+
+Typography
+Style	Font	Size	Weight	Line Height
+H1	Inter	28px	700	1.2
+H2	Inter	22px	600	1.3
+H3	Inter	18px	600	1.4
+Body Large	Inter	16px	400	1.5
+Body	Inter	14px	400	1.5
+Small	Inter	12px	400	1.4
+Button	Inter	14px	500	1.0
+Caption	Inter	11px	400	1.3
+
+Spacing Scale
+Token	Value
+xs	4px
+sm	8px
+md	12px
+base	16px
+lg	24px
+xl	32px
+2xl	48px
+3xl	64px
+
+Border Radius
+Token	Value
+sm	4px
+base	8px
+lg	12px
+xl	16px
+full	9999px
+
+Shadows
+Level	Value
+sm	0 1px 2px rgba(0,0,0,0.05)
+base	0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)
+md	0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06)
+lg	0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05)
+xl	0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04)
+📐 Desktop & Web Layout Grid
+
+Desktop Breakpoint: 1440px × 900px (minimum)
+text
+
++====================================================================+
+|  SIDEBAR  |  MAIN CONTENT AREA                                    |
+|  (240px)  |  (remaining width)                                    |
+|           |                                                       |
+|  Logo     |  +--------------------------------------------------+ |
+|  [AdminX] |  | TOP BAR (64px)                                   | |
+|           |  | [Page Title]          [Search] [Notif] [Avatar]  | |
+|           |  +--------------------------------------------------+ |
+|  Nav       |                                                       |
+|  ────────  |  +--------------------------------------------------+ |
+|  🏠 Dash   |  | PAGE CONTENT (fills remaining height)            | |
+|  👥 Cust   |  |                                                   | |
+|  📄 Invo   |  |  KPI Cards Grid (4 columns)                      | |
+|  📦 Stock  |  |  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐          | |
+|  📊 Rep    |  |  │Sales │ │O/S   │ │Stock │ │Profit│          | |
+|  👤 Emp    |  |  └──────┘ └──────┘ └──────┘ └──────┘          | |
+|  ⚙️ Set    |  |                                                   | |
+|           |  |  Charts + Activity (2-column grid)                 | |
+| ────────  |  |  ┌─────────────────────┐ ┌─────────────────────┐ | |
+| 🚪 Logout |  |  │  Sales Trend Chart   │ │  Recent Activity    │ | |
+|           |  |  └─────────────────────┘ └─────────────────────┘ | |
++====================================================================+
+
+Web Breakpoint: 1280px × 800px (minimum)
+
+Similar layout with slightly reduced spacing. Sidebar collapses to 64px (icon-only) on screens below 1024px.
+🖥️ Core Page Layouts
+Page 1: Dashboard (Default View for all roles)
+
+Desktop Layout (1440px)
+text
+
++====================================================================+
+|  [Sidebar - 240px]  |  +----------------------------------------+ |
+|                      |  | 🔍 Search...        🔔  [👤 Rajesh]  | |
+|  🏠 Dashboard        |  +----------------------------------------+ |
+|  👥 Customers        |                                            |
+|  📄 Invoices         |  +----------------------------------------+ |
+|  📦 Inventory        |  |  Good morning, Rajesh! 👋             | |
+|  📊 Reports          |  |  Your business is up 12% this month.  | |
+|  👤 Employees        |  +----------------------------------------+ |
+|  ⚙️ Settings         |                                            |
+|                      |  +-------+ +-------+ +-------+ +-------+ |
+|  ────────────────    |  | 💰     | | 💵     | | 📦     | | 📈     | |
+|  🚪 Logout           |  | Sales  | | O/S    | | Low    | | Profit | |
+|                      |  | ₹1.24L | | ₹32K   | | 4 items| | +12%  | |
+|                      |  +-------+ +-------+ +-------+ +-------+ |
+|                      |                                            |
+|                      |  +------------------------+ +------------+ |
+|                      |  | 📈 Sales Trend         | | 📋 Recent  | |
+|                      |  |  ████████░░░░░░░░░░   | | Activity   | |
+|                      |  |  ████████████░░░░░░   | | ▶️ Invoice | |
+|                      |  |  ████████████████░░   | | ▶️ Payment | |
+|                      |  |  ██████████████████   | | ▶️ Alert   | |
+|                      |  +------------------------+ +------------+ |
+|                      |                                            |
+|                      |  +----------------------------------------+ |
+|                      |  | 🤖 AI Insight: Ramesh's payment is   | |
+|                      |  |    3 days overdue. Send reminder?     | |
+|                      |  |              [Send] [Dismiss]         | |
+|                      |  +----------------------------------------+ |
++====================================================================+
+
+Component Details:
+Element	Specs
+Sidebar	Width: 240px. Background: #FFFFFF. Border-right: 1px solid #E2E8F0.
+Sidebar Logo	Height: 64px. Padding: 16px. Font: Inter 20px Bold #2563EB.
+Sidebar Nav Item	Height: 44px. Padding: 12px 16px. Border-radius: 8px. Active: #2563EB bg + white text. Hover: #F1F5F9.
+Top Bar	Height: 64px. Background: #FFFFFF. Border-bottom: 1px solid #E2E8F0.
+Search Bar	Width: 300px. Height: 36px. Border-radius: 8px. Border: 1px solid #E2E8F0. Icon: 🔍.
+KPI Cards	Height: 100px. Padding: 16px. Background: #FFFFFF. Border-radius: 12px. Shadow: md.
+Chart Card	Height: 280px. Padding: 16px. Background: #FFFFFF. Border-radius: 12px. Shadow: md.
+Activity Card	Height: 280px. Padding: 16px. Background: #FFFFFF. Border-radius: 12px. Shadow: md.
+AI Insight Card	Padding: 16px. Background: #EFF6FF (Primary Light with 20% opacity). Border-radius: 12px.
+Page 2: Customer List
+text
+
++====================================================================+
+|  [Sidebar]  |  +------------------------------------------------+ |
+|             |  | 👥 Customers       [🔍] [➕ Add Customer]      | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | 🔍 Search customers...                          | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | 🔻 Sort: By Balance  [All] [Due] [Paid]       | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | ▶️ Ramesh Gupta                                 | |
+|             |  |    📞 +91 98765 43210                          | |
+|             |  |    💰 ₹12,500 (Outstanding)   🔴 Badge        | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | ▶️ Priya Sharma                                 | |
+|             |  |    📞 +91 87654 32109                          | |
+|             |  |    💰 ₹0 (Cleared)        🟢 Badge            | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | ▶️ Amit Singh                                   | |
+|             |  |    📞 +91 76543 21098                          | |
+|             |  |    💰 -₹3,200 (Credit)     🟠 Badge           | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  [Showing 1-10 of 245 customers]  [1] [2] [3]... |
++====================================================================+
+
+Component Details:
+Element	Specs
+Page Header	Height: 56px. Title: 22px Semibold. Action buttons: Primary (#2563EB).
+Search Bar	Full width. Height: 40px. Border-radius: 8px. Border: 1px solid #E2E8F0.
+Filter Tabs	Height: 36px. Active tab: #2563EB text + bottom border. Inactive: #94A3B8.
+Customer Item	Height: 64px. Padding: 12px 16px. Border-bottom: 1px solid #F1F5F9. Hover: #F8FAFC.
+Status Badge	Padding: 2px 10px. Border-radius: 9999px. Font: 11px Medium. Colors: 🔴 #DC2626, 🟢 #16A34A, 🟠 #F97316.
+Pagination	Centered. Gap: 4px. Active: #2563EB bg + white text.
+Page 3: Customer Ledger
+text
+
++====================================================================+
+|  [Sidebar]  |  +------------------------------------------------+ |
+|             |  | ← Back to Customers        [🔔 Send Reminder]  | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | 👤 Ramesh Gupta                                 | |
+|             |  | 📞 +91 98765 43210                             | |
+|             |  | 💰 Balance: ₹12,500 (Outstanding)   🔴         | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | [📥 Send Reminder] [➕ Add Transaction]        | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | 📅 Date    Description          Amount    Type  | |
+|             |  | 12/06/26  Invoice #1023       -₹5,200  Debit  | |
+|             |  | 10/06/26  Payment received    +₹2,000  Credit | |
+|             |  | 08/06/26  Goods sold          -₹7,500  Debit  | |
+|             |  | 05/06/26  Opening balance     -₹2,000  Debit  | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  Total Outstanding: ₹12,500                        |
++====================================================================+
+
+Add Transaction Modal (Bottom Sheet / Modal):
+text
+
++--------------------------------------------------+
+|  ✕  Add Transaction                              |
+|                                                   |
+|  Amount                                           |
+|  [₹  ___________ ]                               |
+|                                                   |
+|  Type                                             |
+|  [● Credit]  [○ Debit]                           |
+|                                                   |
+|  Description (Optional)                           |
+|  [_____________________________]                  |
+|                                                   |
+|  [Cancel]  [💾 Save Transaction]                 |
++--------------------------------------------------+
+
+Page 4: Create Invoice (Wizard)
+text
+
++====================================================================+
+|  [Sidebar]  |  +------------------------------------------------+ |
+|             |  | 📄 New Invoice    [Cancel] [💾 Save Draft]     | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  [● Step 1] ─── [○ Step 2] ─── [○ Step 3]       |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  |  Step 1: Select Customer                       | |
+|             |  |  [Search or select customer...]                | |
+|             |  |  ▶️ Ramesh Gupta   📞 +91 98765 43210        | |
+|             |  |  [➕ New Customer]                             | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  |  Step 2: Add Items                             | |
+|             |  |  [Search product or add custom]                | |
+|             |  |  ▶️ Wheat Flour   5 kg   ₹200   ₹1,000  [✕]  | |
+|             |  |  ▶️ Sugar         2 kg   ₹80    ₹160    [✕]  | |
+|             |  |  [➕ Add Item]                                 | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  |  Step 3: Summary                               | |
+|             |  |  Subtotal: ₹1,160.00                          | |
+|             |  |  GST (12%): ₹139.20                           | |
+|             |  |  Total: ₹1,299.20                             | |
+|             |  |  [← Back]  [📨 Send Invoice]                  | |
+|             |  +------------------------------------------------+ |
++====================================================================+
+
+Add Item Row (inline):
+text
+
+[Product Name]  [Qty]  [Price]  [Tax %]  [Total]  [Add]
+
+Page 5: Invoice List
+text
+
++====================================================================+
+|  [Sidebar]  |  +------------------------------------------------+ |
+|             |  | 📄 Invoices          [🔍] [➕ New Invoice]     | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | 🔍 Search invoices...                           | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  [All] [Draft] [Sent] [Paid] [Overdue]            |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | INV-1023   Ramesh Gupta    ₹5,200  🟢 Paid    | |
+|             |  |            12/06/2026                          | |
+|             |  +------------------------------------------------+ |
+|             |  | INV-1022   Priya Sharma    ₹2,000  🟠 Sent    | |
+|             |  |            10/06/2026                          | |
+|             |  +------------------------------------------------+ |
+|             |  | INV-1021   Amit Singh      ₹7,500  🔴 Overdue | |
+|             |  |            08/06/2026                          | |
+|             |  +------------------------------------------------+ |
++====================================================================+
+
+Page 6: Inventory / Product List
+text
+
++====================================================================+
+|  [Sidebar]  |  +------------------------------------------------+ |
+|             |  | 📦 Inventory         [🔍] [➕ Add Product]     | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | 🔍 Search products...   [📷 Scan Barcode]     | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  [All] [Low Stock] [Expiring]                     |
+|             |                                                    |
+|             |  +------------------------------------------------+ |
+|             |  | ▶️ Wheat Flour       SKU: WF001               | |
+|             |  |    🏷️ ₹200/kg   📦 15 units  🔴 Low Stock   | |
+|             |  +------------------------------------------------+ |
+|             |  | ▶️ Sugar             SKU: SUG002              | |
+|             |  |    🏷️ ₹80/kg    📦 50 units  🟢 OK          | |
+|             |  +------------------------------------------------+ |
+|             |  | ▶️ Cooking Oil       SKU: OIL003              | |
+|             |  |    🏷️ ₹180/L    📦 8 units   🟠 Expires Soon| |
+|             |  +------------------------------------------------+ |
++====================================================================+
+
+Page 7: Reports
+text
+
++====================================================================+
+|  [Sidebar]  |  +------------------------------------------------+ |
+|             |  | 📊 Reports           [📤 Export]               | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  📅 01/06/2026  ──  30/06/2026  [Apply]           |
+|             |                                                    |
+|             |  +-------+ +-------+ +-------+ +-------+          |
+|             |  | Revenue| |Expense| |Profit | |Margin|          |
+|             |  | ₹1.24L| | ₹45K  | | ₹79K  | | 12%  |          |
+|             |  +-------+ +-------+ +-------+ +-------+          |
+|             |                                                    |
+|             |  [P&L] [Balance Sheet] [GST] [Sales] [Expenses]   |
+|             |                                                    |
+|             |  +----------------------------------------+       |
+|             |  |  📈 Revenue vs Expenses                |       |
+|             |  |  ████████████░░░░░░░░░░░░░░░░░░░░░░   |       |
+|             |  |  ████████████████████░░░░░░░░░░░░░░   |       |
+|             |  +----------------------------------------+       |
++====================================================================+
+
+Page 8: AI Chat Assistant (Floating Widget)
+text
+
+              +----------------------------------+
+              |  🤖 AI Assistant      [✕]       |
+              |  +------------------------------+ |
+              |  | Hello! I'm your business AI. | |
+              |  | Ask me anything about your   | |
+              |  | data.                        | |
+              |  +------------------------------+ |
+              |  +------------------------------+ |
+              |  | You: How much is Ramesh's   | |
+              |  |      balance?               | |
+              |  | AI: Ramesh has ₹12,500      | |
+              |  |     outstanding.             | |
+              |  +------------------------------+ |
+              |  [Type your question...] [📤]    |
+              +----------------------------------+
+
+Page 9: Settings
+text
+
++====================================================================+
+|  [Sidebar]  |  +------------------------------------------------+ |
+|             |  | ⚙️ Settings          [👤 Profile]              | |
+|             |  +------------------------------------------------+ |
+|             |                                                    |
+|             |  Account                                           |
+|             |  ▶️ Business Profile                              | |
+|             |  ▶️ Manage Users                                  | |
+|             |  ▶️ Backup & Restore                              | |
+|             |                                                    |
+|             |  Preferences                                       |
+|             |  ▶️ Invoice Settings                              | |
+|             |  ▶️ Notifications                                 | |
+|             |  ▶️ Language          [English ▼]                 | |
+|             |  ▶️ Dark Mode         [●] [○]                    | |
+|             |                                                    |
+|             |  AI & Privacy                                      |
+|             |  ▶️ AI Model Status   ✅ Downloaded (2.1GB)      | |
+|             |  ▶️ Privacy Settings                               | |
+|             |                                                    |
+|             |  Support                                           |
+|             |  ▶️ Help Center                                    | |
+|             |  ▶️ About AdminX                                   | |
+|             |                                                    |
+|             |  [🚪 Log Out]                                      |
++====================================================================+
+
+🧩 Key Components (Figma-ready)
+Button Variants
+Variant	Rest	Hover	Pressed	Disabled
+Primary	#2563EB	#3B82F6	#1D4ED8	#94A3B8
+Secondary	#FFFFFF border #E2E8F0	#F1F5F9	#E2E8F0	#F8FAFC
+Success	#16A34A	#22C55E	#15803D	#94A3B8
+Danger	#DC2626	#EF4444	#B91C1C	#94A3B8
+Ghost	transparent	#F1F5F9	#E2E8F0	transparent
+Form Inputs
+text
+
++--------------------------------------------------+
+|  Label (14px Medium #0F172A)                     |
+|  +--------------------------------------------+ |
+|  |  Placeholder text (14px #94A3B8)          | |
+|  +--------------------------------------------+ |
+|  Helper text (12px #475569)                     |
++--------------------------------------------------+
+
+States: Default (border #E2E8F0) → Focus (border #2563EB + ring #3B82F6 20%) → Error (border #DC2626 + message)
+Cards
+text
+
++--------------------------------------------------+
+|  +--------------------------------------------+ |
+|  |  Title (16px Semibold)      [Action]       | |
+|  |  Subtitle (14px #475569)                   | |
+|  |  ────────────────────────────────────────── | |
+|  |  Content area                              | |
+|  +--------------------------------------------+ |
++--------------------------------------------------+
+
+Data Tables
+text
+
++--------------------------------------------------+
+|  [Column 1]  [Column 2]  [Column 3]  [Action]    |
+|  ──────────────────────────────────────────────── |
+|  Data 1      Data 2      Data 3      [✎] [🗑]   |
+|  Data 1      Data 2      Data 3      [✎] [🗑]   |
++--------------------------------------------------+
+
+Empty States
+text
+
++--------------------------------------------------+
+|                                                    |
+|              [Illustration/Icon]                   |
+|                                                    |
+|          No customers yet                          |
+|          Start by adding your first customer.     |
+|                                                    |
+|          [➕ Add Customer]                         |
+|                                                    |
++--------------------------------------------------+
+
+🎯 Interaction States & Micro-interactions
+Element	Interaction	Duration	Easing
+Button	Ripple effect	300ms	ease-out
+Card	Lift on hover (shadow md → lg)	200ms	ease-in-out
+Sidebar Nav	Background color transition	150ms	ease
+Modal	Fade in + scale up	250ms	cubic-bezier(0.34, 1.56, 0.64, 1)
+Toast Notification	Slide in from top-right	300ms	ease-out
+Loading	Skeleton shimmer	1.5s	linear (infinite)
+Tab Switch	Underline slide	200ms	ease-in-out
+Dropdown	Expand/collapse	200ms	ease
+

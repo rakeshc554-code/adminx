@@ -1,0 +1,370 @@
+================================================================================
+DOCUMENT 12: TODO_List.txt
+================================================================================
+
+ADMINX — Complete To-Do List
+
+Version: 1.0
+Date: June 2026
+Document Type: Project Task Tracker
+
+
+PRIORITY LEGEND
+
+Icon   | Priority   | Description
+-------|------------|------------------------------------------
+🔴     | Critical   | Must complete before MVP launch (Blocks other tasks)
+🟠     | High       | Must complete for MVP launch
+🟡     | Medium     | Important but can be post-MVP
+🟢     | Low        | Nice to have / Future enhancement
+
+STATUS LEGEND
+
+Icon   | Status
+-------|------------
+⬜     | Not Started
+🔄     | In Progress
+✅     | Complete
+⚠️     | Blocked
+❌     | Cancelled
+
+
+1. PROJECT SETUP & INFRASTRUCTURE (Sprint 0)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+SET-001 | Create GitHub repository with README                           | 🔴       | ⬜     | DevOps
+SET-002 | Set up branch protection rules (main/develop)                  | 🔴       | ⬜     | DevOps
+SET-003 | Configure GitHub Actions CI/CD pipeline                        | 🔴       | ⬜     | DevOps
+SET-004 | Create Firebase project (Auth, Firestore, Storage)             | 🔴       | ⬜     | Backend
+SET-005 | Download and place Firebase config files                       | 🔴       | ⬜     | Backend
+SET-006 | Set up Kotlin Multiplatform project structure                  | 🔴       | ⬜     | Mobile Lead
+SET-007 | Configure Gradle build scripts                                 | 🔴       | ⬜     | Mobile Lead
+SET-008 | Create Figma design system file                                | 🟠       | ⬜     | Designer
+SET-009 | Design AdminX logo and brand assets                            | 🟠       | ⬜     | Designer
+SET-010 | Research and select quantized SLM model                        | 🟠       | ⬜     | ML Engineer
+SET-011 | Set up ONNX Runtime environment for AI inference               | 🟠       | ⬜     | ML Engineer
+SET-012 | Create .env.example file with all required variables           | 🟠       | ⬜     | DevOps
+SET-013 | Set up Firebase Crashlytics / Sentry for error tracking        | 🟠       | ⬜     | DevOps
+SET-014 | Configure Firebase Performance Monitoring                      | 🟡       | ⬜     | DevOps
+SET-015 | Set up Firebase Cloud Messaging for push notifications         | 🟡       | ⬜     | Backend
+
+
+2. AUTHENTICATION & USER MANAGEMENT (Sprint 1)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+AUTH-001| Implement User Registration (Email/Phone + OTP)                | 🔴       | ⬜     | Frontend
+AUTH-002| Implement User Login (Email/Phone + Password)                  | 🔴       | ⬜     | Frontend
+AUTH-003| Implement Password Reset flow                                  | 🟠       | ⬜     | Frontend
+AUTH-004| Implement "Forgot Password" feature                            | 🟠       | ⬜     | Frontend
+AUTH-005| Implement Session Management (Token storage, auto-login)       | 🔴       | ⬜     | Frontend
+AUTH-006| Implement Business Profile creation on first login             | 🔴       | ⬜     | Frontend
+AUTH-007| Implement Business Profile editing                              | 🟠       | ⬜     | Frontend
+AUTH-008| Implement Multi-Device Sync                                     | 🟠       | ⬜     | Backend
+AUTH-009| Implement Firebase Auth Integration (Android)                   | 🔴       | ⬜     | Android
+AUTH-010| Implement Firebase Auth Integration (iOS)                      | 🔴       | ⬜     | iOS
+AUTH-011| Implement Firebase Auth Integration (Web)                      | 🟠       | ⬜     | Web
+AUTH-012| Implement Firebase Auth Integration (Desktop)                  | 🟡       | ⬜     | Desktop
+
+
+3. CORE DATA LAYER & LOCAL DATABASE (Sprint 1)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+DB-001  | Design SQLite schema (all tables)                              | 🔴       | ⬜     | Backend
+DB-002  | Implement SQLite setup with SQLDelight (KMP)                   | 🔴       | ⬜     | Mobile Lead
+DB-003  | Implement Repository pattern for CRUD operations               | 🔴       | ⬜     | Backend
+DB-004  | Implement BaseEntity with versioning (for CRDT)                | 🔴       | ⬜     | Backend
+DB-005  | Implement Customer Repository                                  | 🔴       | ⬜     | Backend
+DB-006  | Implement Product Repository                                   | 🔴       | ⬜     | Backend
+DB-007  | Implement Transaction Repository                               | 🔴       | ⬜     | Backend
+DB-008  | Implement Invoice Repository                                   | 🔴       | ⬜     | Backend
+DB-009  | Implement Employee Repository                                  | 🟠       | ⬜     | Backend
+DB-010  | Implement Database migration system                            | 🟠       | ⬜     | Backend
+DB-011  | Implement Database indices for performance                     | 🟠       | ⬜     | Backend
+DB-012  | Implement Data encryption at rest (AES-256)                    | 🔴       | ⬜     | Security
+
+
+4. CUSTOMER MANAGEMENT (Sprint 2)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+CUST-001| Implement Customer List screen (Mobile)                        | 🔴       | ⬜     | Mobile
+CUST-002| Implement Customer List screen (Desktop)                       | 🟠       | ⬜     | Desktop
+CUST-003| Implement Customer List screen (Web)                           | 🟠       | ⬜     | Web
+CUST-004| Implement Add Customer form (Mobile)                           | 🔴       | ⬜     | Mobile
+CUST-005| Implement Add Customer form (Desktop/Web)                      | 🟠       | ⬜     | Desktop/Web
+CUST-006| Implement Edit Customer functionality                          | 🟠       | ⬜     | All
+CUST-007| Implement Delete Customer with confirmation                    | 🟠       | ⬜     | All
+CUST-008| Implement Customer Search (Name, Phone)                        | 🔴       | ⬜     | All
+CUST-009| Implement Customer Filter (All, Due, Paid)                     | 🟠       | ⬜     | All
+CUST-010| Implement Customer Sort (Balance, Name, Recent)                | 🟠       | ⬜     | All
+CUST-011| Implement Customer Ledger screen (Mobile)                      | 🔴       | ⬜     | Mobile
+CUST-012| Implement Customer Ledger screen (Desktop/Web)                 | 🟠       | ⬜     | Desktop/Web
+CUST-013| Implement Add Transaction (Credit/Debit)                       | 🔴       | ⬜     | All
+CUST-014| Implement Transaction List with running balance                | 🔴       | ⬜     | All
+CUST-015| Implement Send Payment Reminder (WhatsApp/SMS)                 | 🟠       | ⬜     | All
+CUST-016| Implement AI-powered customer search suggestions               | 🟡       | ⬜     | All
+
+
+5. INVOICING & BILLING (Sprint 3)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+INV-001 | Implement Invoice Creation Wizard (3-step)                     | 🔴       | ⬜     | All
+INV-002 | Implement Customer Selection in Invoice                        | 🔴       | ⬜     | All
+INV-003 | Implement Product Selection with Search                        | 🔴       | ⬜     | All
+INV-004 | Implement Add Custom Item (non-inventory)                      | 🟠       | ⬜     | All
+INV-005 | Implement GST Calculation Engine                               | 🔴       | ⬜     | Backend
+INV-006 | Implement Subtotal, GST, Grand Total calculation               | 🔴       | ⬜     | Backend
+INV-007 | Implement Invoice Number Auto-generation                       | 🔴       | ⬜     | Backend
+INV-008 | Implement Save Invoice as Draft                                | 🟠       | ⬜     | All
+INV-009 | Implement Send Invoice (WhatsApp/Email/SMS)                    | 🔴       | ⬜     | All
+INV-010 | Implement Invoice PDF Generation (2 templates)                 | 🟠       | ⬜     | Backend
+INV-011 | Implement Invoice List screen (Mobile)                         | 🔴       | ⬜     | Mobile
+INV-012 | Implement Invoice List screen (Desktop/Web)                    | 🟠       | ⬜     | Desktop/Web
+INV-013 | Implement Invoice Detail screen                                | 🔴       | ⬜     | All
+INV-014 | Implement Invoice Status Tabs                                  | 🟠       | ⬜     | All
+INV-015 | Implement Invoice Search                                       | 🟠       | ⬜     | All
+INV-016 | Implement Duplicate Invoice                                    | 🟡       | ⬜     | All
+INV-017 | Implement Delete Invoice with confirmation                     | 🟠       | ⬜     | All
+INV-018 | Implement Recurring Invoices                                   | 🟡       | ⬜     | Backend
+INV-019 | Implement Progress Invoicing                                   | 🟢       | ⬜     | Backend
+
+
+6. INVENTORY MANAGEMENT (Sprint 2)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+INV-001 | Implement Product List screen (Mobile)                         | 🔴       | ⬜     | Mobile
+INV-002 | Implement Product List screen (Desktop/Web)                    | 🟠       | ⬜     | Desktop/Web
+INV-003 | Implement Add Product form                                     | 🔴       | ⬜     | All
+INV-004 | Implement Edit Product functionality                           | 🟠       | ⬜     | All
+INV-005 | Implement Delete Product with confirmation                     | 🟠       | ⬜     | All
+INV-006 | Implement Product Search (Name, SKU, Barcode)                  | 🔴       | ⬜     | All
+INV-007 | Implement Product Filters (All, Low Stock, Expiring)           | 🟠       | ⬜     | All
+INV-008 | Implement Barcode Generation (ZXing)                           | 🟠       | ⬜     | Backend
+INV-009 | Implement Barcode Scanning (Camera integration)                | 🟠       | ⬜     | Mobile
+INV-010 | Implement Low Stock Alerts (Dashboard + Push)                  | 🟠       | ⬜     | All
+INV-011 | Implement Expiry Date Tracking & Alerts                        | 🟠       | ⬜     | All
+INV-012 | Implement Stock Quantity Update (Manual)                       | 🟠       | ⬜     | All
+INV-013 | Implement Batch Tracking (batch numbers)                       | 🟡       | ⬜     | Backend
+INV-014 | Implement AI-Powered Stock Forecasting                         | 🟢       | ⬜     | ML Engineer
+
+
+7. ACCOUNTING & EXPENSES (Sprint 4)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+ACC-001 | Implement Expense Tracking (Add Expense)                       | 🟠       | ⬜     | All
+ACC-002 | Implement Expense Categories                                   | 🟠       | ⬜     | Backend
+ACC-003 | Implement AI-Powered Expense Categorization                    | 🟡       | ⬜     | ML Engineer
+ACC-004 | Implement Bank Reconciliation (CSV upload)                     | 🟡       | ⬜     | Backend
+ACC-005 | Implement Cash Flow Forecasting (AI)                           | 🟢       | ⬜     | ML Engineer
+ACC-006 | Implement Reserve Fund Tracking                                | 🟢       | ⬜     | Backend
+
+
+8. AI & INTELLIGENCE FEATURES (Sprint 4)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+AI-001  | Bundle quantized SLM model with app                            | 🔴       | ⬜     | ML Engineer
+AI-002  | Implement ONNX Runtime inference engine                        | 🔴       | ⬜     | ML Engineer
+AI-003  | Implement AI Task Router                                       | 🟠       | ⬜     | ML Engineer
+AI-004  | Implement AI Chat Assistant UI                                 | 🟠       | ⬜     | All
+AI-005  | Implement Natural Language Query Processing                    | 🟠       | ⬜     | ML Engineer
+AI-006  | Implement Transaction Auto-Categorization                      | 🟡       | ⬜     | ML Engineer
+AI-007  | Implement Smart Product Suggestions in Invoice                 | 🟡       | ⬜     | ML Engineer
+AI-008  | Implement Cash Flow Forecasting                                | 🟢       | ⬜     | ML Engineer
+AI-009  | Implement Progressive Model Loading                            | 🟡       | ⬜     | Mobile
+AI-010  | Implement Model Download Status UI                             | 🟠       | ⬜     | All
+
+
+9. REPORTS & ANALYTICS (Sprint 5)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+REP-001 | Implement Profit & Loss Statement                              | 🔴       | ⬜     | Backend
+REP-002 | Implement Balance Sheet                                        | 🟠       | ⬜     | Backend
+REP-003 | Implement GST Reports (GSTR-1, GSTR-3B, GSTR-9)               | 🔴       | ⬜     | Backend
+REP-004 | Implement Sales Reports                                        | 🟠       | ⬜     | Backend
+REP-005 | Implement Expense Reports                                      | 🟠       | ⬜     | Backend
+REP-006 | Implement Dashboard KPI Cards                                  | 🔴       | ⬜     | All
+REP-007 | Implement Dashboard Sales Trend Chart                          | 🟠       | ⬜     | All
+REP-008 | Implement Dashboard Recent Activity Feed                       | 🔴       | ⬜     | All
+REP-009 | Implement Dashboard AI Insight Card                            | 🟠       | ⬜     | All
+REP-010 | Implement Report Date Range Filter                             | 🟠       | ⬜     | All
+REP-011 | Implement Export Reports (PDF, Excel, CSV)                     | 🟠       | ⬜     | Backend
+REP-012 | Implement Expense Breakdown Chart                              | 🟡       | ⬜     | All
+
+
+10. EMPLOYEE MANAGEMENT (Sprint 6)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+EMP-001 | Implement Employee List screen                                 | 🟠       | ⬜     | All
+EMP-002 | Implement Add Employee form                                    | 🟠       | ⬜     | All
+EMP-003 | Implement Role-Based Access Control (RBAC)                     | 🟠       | ⬜     | Backend
+EMP-004 | Implement Attendance Tracking (Clock-in/Out)                   | 🟡       | ⬜     | Mobile
+EMP-005 | Implement Attendance Report                                    | 🟡       | ⬜     | Backend
+EMP-006 | Implement Payroll Management                                   | 🟡       | ⬜     | Backend
+EMP-007 | Implement Payslip Generation (PDF)                             | 🟢       | ⬜     | Backend
+
+
+11. PAYMENTS & INTEGRATIONS (Sprint 6)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+PAY-001 | Integrate Razorpay SDK (Android)                               | 🟠       | ⬜     | Mobile
+PAY-002 | Integrate Razorpay SDK (iOS)                                   | 🟠       | ⬜     | Mobile
+PAY-003 | Implement Payment Order Creation API                           | 🟠       | ⬜     | Backend
+PAY-004 | Implement Razorpay Webhook Handler                             | 🟠       | ⬜     | Backend
+PAY-005 | Implement Payment Verification Logic                           | 🟠       | ⬜     | Backend
+PAY-006 | Implement Invoice Mark as Paid                                 | 🟠       | ⬜     | Backend
+PAY-007 | Implement WhatsApp Business API integration                    | 🟠       | ⬜     | Backend
+PAY-008 | Implement Twilio SMS integration                               | 🟠       | ⬜     | Backend
+PAY-009 | Implement UPI Payment Link generation                          | 🟡       | ⬜     | Backend
+
+
+12. OFFLINE SYNC & BACKUP (Sprint 4 & 6)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+SYNC-001| Implement Offline Queue                                        | 🔴       | ⬜     | Backend
+SYNC-002| Implement CRDT Conflict Resolution Engine                      | 🔴       | ⬜     | Backend
+SYNC-003| Implement Automatic Sync on Network Reconnect                  | 🔴       | ⬜     | Backend
+SYNC-004| Implement Manual Sync (Force Sync button)                      | 🟠       | ⬜     | All
+SYNC-005| Implement Delta Sync                                           | 🟠       | ⬜     | Backend
+SYNC-006| Implement Automatic Backup (Daily, to Cloud)                   | 🟠       | ⬜     | Backend
+SYNC-007| Implement Manual Backup (User-initiated)                       | 🟠       | ⬜     | All
+SYNC-008| Implement Restore from Backup                                  | 🟠       | ⬜     | All
+SYNC-009| Implement Sync Status UI                                       | 🟠       | ⬜     | All
+
+
+13. UI/UX & DESIGN IMPLEMENTATION (All Sprints)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+UI-001  | Implement Design System                                        | 🔴       | ⬜     | All
+UI-002  | Implement Component Library                                    | 🔴       | ⬜     | All
+UI-003  | Implement Dark Mode support                                    | 🟠       | ⬜     | All
+UI-004  | Implement Responsive Layouts                                   | 🔴       | ⬜     | All
+UI-005  | Implement Loading States (Skeleton screens)                    | 🟠       | ⬜     | All
+UI-006  | Implement Empty States (All screens)                           | 🟠       | ⬜     | All
+UI-007  | Implement Toast Notifications                                  | 🔴       | ⬜     | All
+UI-008  | Implement Modal/Bottom Sheet Components                        | 🔴       | ⬜     | All
+UI-009  | Implement Micro-interactions                                   | 🟡       | ⬜     | All
+UI-010  | Implement Onboarding Flow                                      | 🟠       | ⬜     | All
+
+
+14. ROLE-BASED VIEWS (Sprint 5)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+RBAC-001| Implement Owner/Admin View (Full Access)                       | 🔴       | ⬜     | All
+RBAC-002| Implement Sales Rep View (Invoicing only)                      | 🟠       | ⬜     | All
+RBAC-003| Implement Accountant View (Finance & Reports only)             | 🟠       | ⬜     | All
+RBAC-004| Implement Manager View (Inventory & Team only)                 | 🟡       | ⬜     | All
+RBAC-005| Implement Viewer View (Read-Only)                              | 🟡       | ⬜     | All
+RBAC-006| Implement Role-Based Permission Checks                         | 🔴       | ⬜     | Backend
+RBAC-007| Implement Role-Based UI Component Visibility                   | 🔴       | ⬜     | All
+
+
+15. SECURITY & COMPLIANCE (Sprint 7)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+SEC-001 | Implement AES-256 Encryption for Local DB                      | 🔴       | ⬜     | Security
+SEC-002 | Implement TLS 1.3 for All Network Calls                        | 🔴       | ⬜     | DevOps
+SEC-003 | Implement Secure Key Management                                | 🔴       | ⬜     | Security
+SEC-004 | Implement OWASP Top 10 Security Practices                      | 🔴       | ⬜     | Security
+SEC-005 | Conduct Security Audit                                         | 🟠       | ⬜     | Security
+SEC-006 | Implement DPDP Act Compliance for Indian Users                 | 🟠       | ⬜     | Legal
+SEC-007 | Implement GDPR Compliance (EU users)                           | 🟢       | ⬜     | Legal
+SEC-008 | Implement Audit Logs for All Critical Actions                  | 🟠       | ⬜     | Backend
+SEC-009 | Implement Data Retention Policy                                | 🟠       | ⬜     | Backend
+SEC-010 | Implement Privacy Policy & Terms of Service in app             | 🔴       | ⬜     | Legal
+
+
+16. TESTING & QA (All Sprints)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+QA-001  | Write Unit Tests for Core Business Logic                       | 🔴       | ⬜     | All
+QA-002  | Write Integration Tests for Database Operations                | 🟠       | ⬜     | Backend
+QA-003  | Write UI Tests for Critical User Journeys                      | 🟠       | ⬜     | QA
+QA-004  | Write E2E Tests (Invoice creation, Sync)                       | 🟠       | ⬜     | QA
+QA-005  | Conduct Performance Testing                                    | 🟠       | ⬜     | QA
+QA-006  | Conduct Compatibility Testing                                  | 🟠       | ⬜     | QA
+QA-007  | Conduct Accessibility Testing                                  | 🟡       | ⬜     | QA
+QA-008  | Conduct Localization Testing                                   | 🟡       | ⬜     | QA
+QA-009  | Beta Testing with 100-500 external users                       | 🟠       | ⬜     | QA
+QA-010  | Implement Automated Regression Testing                         | 🟠       | ⬜     | DevOps
+
+
+17. DEPLOYMENT & DEVOPS (Sprint 7)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+DEP-001 | Set up Production Environment (Firebase, GCS)                  | 🔴       | ⬜     | DevOps
+DEP-002 | Configure Production CI/CD Pipeline                            | 🔴       | ⬜     | DevOps
+DEP-003 | Build Android AAB for Google Play                              | 🔴       | ⬜     | DevOps
+DEP-004 | Build iOS IPA for App Store                                    | 🔴       | ⬜     | DevOps
+DEP-005 | Deploy Web App to Production                                   | 🟠       | ⬜     | DevOps
+DEP-006 | Build Desktop Installers (Windows .msi, macOS .dmg)            | 🟡       | ⬜     | DevOps
+DEP-007 | Set up Monitoring (Firebase Crashlytics, Performance)          | 🔴       | ⬜     | DevOps
+DEP-008 | Set up Alerts (PagerDuty/Opsgenie)                             | 🟠       | ⬜     | DevOps
+DEP-009 | Create Google Play Store Listing                               | 🟠       | ⬜     | Marketing
+DEP-010 | Create Apple App Store Listing                                 | 🟠       | ⬜     | Marketing
+DEP-011 | Submit to Google Play (Production Track)                       | 🔴       | ⬜     | DevOps
+DEP-012 | Submit to Apple App Store (Production)                         | 🔴       | ⬜     | DevOps
+
+
+18. POST-MVP ENHANCEMENTS (Future)
+
+ID      | Task                                                           | Priority | Status | Owner
+--------|----------------------------------------------------------------|----------|--------|----------
+FUT-001 | Multi-Business Support                                         | 🟢       | ⬜     | Backend
+FUT-002 | Shopify/WooCommerce Integration                                | 🟢       | ⬜     | Backend
+FUT-003 | Advanced Marketing Automation                                  | 🟢       | ⬜     | Backend
+FUT-004 | Customer Portal                                                | 🟢       | ⬜     | All
+FUT-005 | POS Hardware Integration                                       | 🟢       | ⬜     | Mobile
+FUT-006 | Advanced AI Features                                           | 🟢       | ⬜     | ML Engineer
+FUT-007 | Custom Invoice Designer                                        | 🟢       | ⬜     | All
+FUT-008 | SMS/WhatsApp Broadcasting                                      | 🟢       | ⬜     | Backend
+
+
+SUMMARY DASHBOARD
+
+CATEGORY                        | TOTAL TASKS | COMPLETED | IN PROGRESS | NOT STARTED
+--------------------------------|-------------|-----------|-------------|-------------
+Project Setup & Infrastructure  | 15          | 0         | 0           | 15
+Authentication                  | 12          | 0         | 0           | 12
+Core Data Layer                 | 12          | 0         | 0           | 12
+Customer Management             | 16          | 0         | 0           | 16
+Invoicing & Billing             | 19          | 0         | 0           | 19
+Inventory Management            | 14          | 0         | 0           | 14
+Accounting & Expenses           | 6           | 0         | 0           | 6
+AI & Intelligence               | 10          | 0         | 0           | 10
+Reports & Analytics             | 12          | 0         | 0           | 12
+Employee Management             | 7           | 0         | 0           | 7
+Payments & Integrations         | 9           | 0         | 0           | 9
+Offline Sync & Backup           | 9           | 0         | 0           | 9
+UI/UX & Design                  | 10          | 0         | 0           | 10
+Role-Based Views                | 7           | 0         | 0           | 7
+Security & Compliance           | 10          | 0         | 0           | 10
+Testing & QA                    | 10          | 0         | 0           | 10
+Deployment & DevOps             | 12          | 0         | 0           | 12
+Post-MVP Enhancements           | 8           | 0         | 0           | 8
+--------------------------------|-------------|-----------|-------------|-------------
+TOTAL                           | 210         | 0         | 0           | 210
+
+
+HOW TO USE THIS TO-DO LIST
+
+1. Assign Owners: Each task needs a responsible team member.
+2. Update Status: Use the status icons (⬜, 🔄, ✅, ⚠️, ❌).
+3. Track Sprint by Sprint: Focus on Critical/High priority tasks first.
+4. Weekly Review: Review progress every Monday.
+5. Link to GitHub Issues: Create GitHub issues for each task and link back.

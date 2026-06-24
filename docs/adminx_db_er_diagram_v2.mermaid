@@ -1,0 +1,83 @@
+erDiagram
+    USERS ||--o{ BUSINESSES : "manages"
+    USERS ||--o{ EMPLOYEES : "hires"
+    
+    BUSINESSES ||--o{ CUSTOMERS : "has"
+    BUSINESSES ||--o{ PRODUCTS : "sells"
+    BUSINESSES ||--o{ INVOICES : "generates"
+    BUSINESSES ||--o{ TRANSACTIONS : "records"
+    BUSINESSES ||--o{ EMPLOYEES : "employs"
+    
+    CUSTOMERS ||--o{ TRANSACTIONS : "has"
+    CUSTOMERS ||--o{ INVOICES : "receives"
+    
+    INVOICES ||--|{ INVOICE_ITEMS : "contains"
+    PRODUCTS ||--o{ INVOICE_ITEMS : "listed_in"
+    
+    CUSTOMERS {
+        string id PK
+        string business_id FK
+        string name
+        string phone
+        string email
+        string address
+        float balance
+        integer created_at
+        integer updated_at
+        boolean synced
+    }
+    
+    TRANSACTIONS {
+        string id PK
+        string customer_id FK
+        string business_id FK
+        float amount
+        string type "CREDIT or DEBIT"
+        string description
+        integer date
+        string invoice_id FK
+        boolean synced
+    }
+    
+    INVOICES {
+        string id PK
+        string business_id FK
+        string customer_id FK
+        string invoice_number UK
+        string items JSON
+        float subtotal
+        float gst
+        float total
+        string status "DRAFT/SENT/PAID/OVERDUE"
+        integer created_at
+        integer due_date
+        boolean synced
+    }
+    
+    PRODUCTS {
+        string id PK
+        string business_id FK
+        string name
+        string sku UK
+        string barcode
+        float price
+        float cost
+        int quantity
+        int reorder_level
+        integer expiry_date
+        boolean synced
+    }
+    
+    EMPLOYEES {
+        string id PK
+        string business_id FK
+        string user_id FK
+        string name
+        string role
+        string phone
+        string email
+        string permissions JSON
+        integer salary
+        string attendance JSON
+        boolean synced
+    }

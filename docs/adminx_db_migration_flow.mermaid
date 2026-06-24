@@ -1,0 +1,48 @@
+flowchart TD
+    A[🚀 App Starts<br>Version 2.0.0] --> B[🔍 Check Local DB Version<br>PRAGMA user_version;]
+    
+    B --> C{Compare Versions}
+    
+    C -->|DB Version == App Version| D[✅ Load Database Normally<br>No Migration Needed]
+    
+    C -->|DB Version < App Version| E[⚙️ Start Migration Engine<br>with Room SQLiteOpenHelper]
+    
+    subgraph MIGRATION_PIPELINE[🛠️ Migration Pipeline]
+        direction TB
+        M1[📋 Get Current Version: v1]
+        M1 --> M2{Check Upgrade Path}
+        
+        M2 -->|v1 → v2| Step1[🔧 Run: Migration_1_to_2]
+        M2 -->|v2 → v3| Step2[🔧 Run: Migration_2_to_3]
+        M2 -->|v1 → v3| Step3[🔧 Run: Migration_1_to_3<br>(Cumulative)]
+        
+        Step1 --> S1[📝 SQL: ALTER TABLE customers<br>ADD COLUMN credit_limit REAL DEFAULT 0;]
+        Step2 --> S2[📝 SQL: CREATE TABLE invoice_items<br>...; ALTER TABLE invoices ADD ...;]
+        Step3 --> S3[📝 Data Transformation<br>Java/Kotlin loop to populate new columns]
+        
+        S1 --> V1[📌 Update PRAGMA user_version = 2]
+        S2 --> V2[📌 Update PRAGMA user_version = 3]
+        S3 --> V3[📌 Update PRAGMA user_version = 3]
+    end
+    
+    D --> F[✅ Database Ready]
+    V1 --> F
+    V2 --> F
+    V3 --> F
+    
+    C -->|DB Version > App Version| E1[❌ Fatal Error<br>Downgrade not allowed<br>Must re-install or restore backup]
+
+    subgraph SAFETY_NET[🛡️ Safety / Rollback]
+        N1[📤 Before Migration:<br>Export full DB to /backups/]
+        N2[🧪 Run Migration in Transaction<br>BEGIN TRANSACTION; ...; COMMIT;]
+        N3[❌ If Exception occurs:<br>ROLLBACK; Restore from backup]
+    end
+
+    E -.-> N1
+    M1 -.-> N2
+    Step3 -.-> N3
+
+    style MIGRATION_PIPELINE fill:#e3f2fd,stroke:#0d47a1
+    style SAFETY_NET fill:#fff3e0,stroke:#e65100,stroke-dasharray: 5 5
+    style A fill:#e8f5e9,stroke:#1b5e20
+    style E1 fill:#ffcdd2,stroke:#b71c1c

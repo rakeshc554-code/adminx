@@ -1,0 +1,14 @@
+stateDiagram-v2
+    [*] --> Draft: 🆕 Create Invoice
+    
+    Draft --> Sent: ✉️ Share / Send Invoice
+    Draft --> Cancelled: 🗑️ User Deletes Draft
+    
+    Sent --> Paid: ✅ Payment Received (Full Amount)
+    Sent --> Overdue: ⏰ Due Date Passes (Auto-Transition)
+    Sent --> Cancelled: 🗑️ User Cancels Sent Invoice
+    
+    Overdue --> Paid: 💵 Partial/Late Payment Received
+    Overdue --> Overdue_Reminder: 🔔 Reminder Sent (Auto)
+    Overdue_Reminder --> Overdue: ⏳ No Action (Loop)
+    Overdue_Reminder

@@ -1,0 +1,545 @@
+markdown
+
+# ADMINX — Technical Design Document
+
+**Version:** 1.0  
+**Date:** June 2026  
+**Document Type:** Technical Design Document
+
+---
+
+## 1. Project Overview
+
+### 1.1 Purpose
+
+This Technical Design Document describes the architecture, technology stack, and implementation approach for **AdminX** — a cross-platform business management application with on-device AI capabilities.
+
+### 1.2 Goals
+
+- Deliver a unified experience across Mobile, Web, and Desktop
+- Enable offline-first functionality with automatic sync
+- Implement on-device AI for privacy and zero operating costs
+- Ensure scalability for millions of users
+- Maintain high performance and reliability
+
+---
+
+## 2. System Architecture
+
+### 2.1 High-Level Architecture
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ Presentation Layer │
+├───────────────┬───────────────┬───────────────┬───────────────────┤
+│ Android │ iOS │ Web │ Desktop (Win/Mac) │
+│ (KMP) │ (KMP) │ (KMP/JS) │ (KMP) │
+├───────────────┴───────────────┴───────────────┴───────────────────┤
+│ Shared Business Logic │
+│ (Kotlin Multiplatform) │
+├─────────────────────────────────────────────────────────────────────┤
+│ Data Layer │
+├───────────────┬───────────────┬───────────────┬───────────────────┤
+│ Local SQLite │ On-Device AI │ Sync Engine │ Cloud Backup │
+│ (Room/KMM) │ (SLM) │ (KMP) │ (Firebase) │
+└───────────────┴───────────────┴───────────────┴───────────────────┘
+text
+
+
+### 2.2 Architecture Layers
+
+| Layer | Description | Technology |
+| :--- | :--- | :--- |
+| **Presentation** | UI for each platform | Compose Multiplatform, SwiftUI (iOS), React (Web) |
+| **Business Logic** | Shared application logic | Kotlin Multiplatform (KMP) |
+| **Data** | Local storage, AI, sync | SQLite, On-Device SLM, Firebase |
+| **Infrastructure** | Cloud services | Firebase, AWS/GCP |
+
+### 2.3 Technology Stack
+
+| Component | Technology | Rationale |
+| :--- | :--- | :--- |
+| **Cross-Platform Framework** | Kotlin Multiplatform (KMP) with Compose Multiplatform | Single codebase for Android, iOS, Desktop; excellent performance |
+| **Web** | Kotlin/JS or React | Separate web frontend or KMP/JS compilation |
+| **Local Database** | SQLite with Room/KMM | Lightweight, reliable, cross-platform |
+| **On-Device AI** | ONNX Runtime + Quantized SLM | Optimized for edge deployment; supports multiple model formats |
+| **AI Model** | Phi-3-mini (3.8B) or Llama 3.2 3B | 4-bit quantized; ~2GB memory; runs on modern devices |
+| **Sync Engine** | Custom KMP + Firebase Realtime | Offline-first with conflict resolution |
+| **Authentication** | Firebase Auth | Multi-platform, secure |
+| **Push Notifications** | Firebase Cloud Messaging | Cross-platform notifications |
+| **Backup** | Firebase Firestore / Google Drive | Secure cloud backup with user consent |
+| **Payment Integration** | Razorpay SDK | Indian payment gateway |
+| **Communication** | WhatsApp Business API, Twilio SMS | Send invoices and reminders |
+
+---
+
+## 3. Component Design
+
+### 3.1 Core Modules
+
+adminx/
+├── shared/ # Shared KMP code
+│ ├── src/commonMain/kotlin/
+│ │ ├── data/ # Data models and repositories
+│ │ ├── domain/ # Business logic and use cases
+│ │ ├── ai/ # On-device AI integration
+│ │ ├── sync/ # Sync engine
+│ │ └── utils/ # Utilities
+│ ├── src/androidMain/ # Android-specific implementations
+│ ├── src/iosMain/ # iOS-specific implementations
+│ └── src/desktopMain/ # Desktop-specific implementations
+├── mobile/ # Mobile app (Android/iOS)
+│ ├── androidApp/ # Android app
+│ └── iosApp/ # iOS app
+├── desktop/ # Desktop app (Windows/macOS)
+├── web/ # Web application
+├── backend/ # Cloud backend services
+│ ├── auth/ # Authentication
+│ ├── sync/ # Sync service
+│ ├── backup/ # Backup service
+│ └── notifications/ # Notification service
+└── models/ # AI models
+└── phi-3-mini-4bit/ # Quantized SLM
+text
+
+
+### 3.2 Data Layer
+
+**Entities:**
+
+```kotlin
+// Shared data models
+data class User(
+    val id: String,
+    val name: String,
+    val email: String,
+    val phone: String,
+    val businessId: String
+)
+
+data class Business(
+    val id: String,
+    val name: String,
+    val gst: String?,
+    val address: String,
+    val bankDetails: BankDetails?
+)
+
+data class Customer(
+    val id: String,
+    val businessId: String,
+    val name: String,
+    val phone: String,
+    val email: String?,
+    val address: String?,
+    val balance: Double,
+    val createdAt: Long,
+    val updatedAt: Long
+)
+
+data class Transaction(
+    val id: String,
+    val customerId: String,
+    val businessId: String,
+    val amount: Double,
+    val type: TransactionType, // CREDIT, DEBIT
+    val description: String,
+    val date: Long,
+    val invoiceId: String?,
+    val synced: Boolean
+)
+
+data class Product(
+    val id: String,
+    val businessId: String,
+    val name: String,
+    val sku: String,
+    val barcode: String?,
+    val price: Double,
+    val cost: Double,
+    val quantity: Int,
+    val reorderLevel: Int,
+    val expiryDate: Long?,
+    val synced: Boolean
+)
+
+data class Invoice(
+    val id: String,
+    val businessId: String,
+    val customerId: String,
+    val invoiceNumber: String,
+    val items: List<InvoiceItem>,
+    val subtotal: Double,
+    val gst: Double,
+    val total: Double,
+    val status: InvoiceStatus,
+    val createdAt: Long,
+    val dueDate: Long?,
+    val synced: Boolean
+)
+
+3.3 On-Device AI Integration
+
+Model Selection:
+
+    Primary Model: Phi-3-mini (3.8B) with 4-bit quantization
+
+        Memory: ~2GB
+
+        Performance: 15-25 tokens/sec on modern laptops
+
+        Use case: Chat, categorization, search
+
+    Mobile Model: Llama 3.2 3B or Gemma 2 2B
+
+        Memory: ~1-1.5GB
+
+        Performance: 12+ tokens/sec on modern phones
+
+Implementation:
+kotlin
+
+// AI Module Interface
+interface AIService {
+    suspend fun categorizeTransaction(description: String): Category
+    suspend fun answerQuestion(query: String, context: String): String
+    suspend fun suggestProducts(input: String): List<ProductSuggestion>
+    suspend fun forecastCashFlow(history: List<Transaction>): Forecast
+}
+
+// ONNX Runtime implementation
+class OnDeviceAIService(
+    private val modelPath: String,
+    private val tokenizer: Tokenizer
+) : AIService {
+    
+    private val session: InferenceSession = 
+        InferenceSession(modelPath, OrtSession.SessionOptions().apply {
+            setOptimizationLevel(OrtSession.SessionOptions.OptLevel.ALL_OPT)
+            setExecutionMode(OrtSession.SessionOptions.ExecutionMode.SEQUENTIAL)
+        })
+    
+    override suspend fun categorizeTransaction(description: String): Category {
+        // Tokenize input, run inference, parse result
+        val input = tokenizer.encode(description)
+        val output = session.run(mapOf("input_ids" to input))
+        return parseCategory(output)
+    }
+    
+    // ... other implementations
+}
+
+Model Packaging:
+
+    Models bundled with app download (~2GB additional)
+
+    Optional download for users with limited storage
+
+    Progressive loading: core model first, advanced features later
+
+3.4 Sync Engine
+
+Architecture:
+
+    Local First: All writes go to local SQLite first
+
+    Conflict-Free Replicated Data Types (CRDTs): For automatic conflict resolution
+
+    Background Sync: Syncs when network is available
+
+    Delta Sync: Only syncs changes, not full datasets
+
+Sync Flow:
+text
+
+┌──────────┐     ┌──────────┐     ┌──────────┐
+│  Device  │────▶│  Local   │────▶│  Cloud   │
+│  Action  │     │  DB      │     │  Sync    │
+└──────────┘     └──────────┘     └──────────┘
+     │                │                 │
+     │  1. Write      │  2. Queue      │  3. Upload
+     │  to local      │  for sync      │  changes
+     ▼                ▼                 ▼
+┌──────────┐     ┌──────────┐     ┌──────────┐
+│  Local   │     │  Sync    │     │  Cloud   │
+│  Storage │     │  Queue   │     │  DB      │
+└──────────┘     └──────────┘     └──────────┘
+
+3.5 Security Architecture
+Layer	Security Measure
+Data at Rest	AES-256 encryption for local database
+Data in Transit	TLS 1.3 for all network communication
+Authentication	Firebase Auth with MFA support
+Authorization	Role-Based Access Control (RBAC)
+AI Data	All AI processing on-device; no data leaves device
+Backup	End-to-end encrypted cloud backup
+Audit	Comprehensive audit logs for all actions
+4. Third-Party Integrations (API References)
+
+Service	Purpose	API Type
+Firebase Auth	Authentication	REST/SDK
+WhatsApp Business API	Notifications	REST
+Twilio	SMS notifications	REST/SDK
+Razorpay	Payment collection	SDK
+Google Drive	Backup storage	REST/SDK
+
+Note: Full API endpoints are documented in the **API Specification** file.
+5. Database Design
+5.1 Local Schema (SQLite)
+sql
+
+-- Users
+CREATE TABLE users (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    phone TEXT UNIQUE,
+    business_id TEXT,
+    created_at INTEGER,
+    updated_at INTEGER
+);
+
+-- Businesses
+CREATE TABLE businesses (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    gst TEXT,
+    address TEXT,
+    bank_details TEXT, -- JSON
+    created_at INTEGER,
+    updated_at INTEGER
+);
+
+-- Customers
+CREATE TABLE customers (
+    id TEXT PRIMARY KEY,
+    business_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    phone TEXT,
+    email TEXT,
+    address TEXT,
+    balance REAL DEFAULT 0,
+    created_at INTEGER,
+    updated_at INTEGER,
+    synced INTEGER DEFAULT 0,
+    FOREIGN KEY (business_id) REFERENCES businesses(id)
+);
+
+-- Transactions
+CREATE TABLE transactions (
+    id TEXT PRIMARY KEY,
+    customer_id TEXT NOT NULL,
+    business_id TEXT NOT NULL,
+    amount REAL NOT NULL,
+    type TEXT NOT NULL, -- 'CREDIT' or 'DEBIT'
+    description TEXT,
+    date INTEGER NOT NULL,
+    invoice_id TEXT,
+    synced INTEGER DEFAULT 0,
+    FOREIGN KEY (customer_id) REFERENCES customers(id),
+    FOREIGN KEY (business_id) REFERENCES businesses(id)
+);
+
+-- Products
+CREATE TABLE products (
+    id TEXT PRIMARY KEY,
+    business_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    sku TEXT UNIQUE,
+    barcode TEXT,
+    price REAL NOT NULL,
+    cost REAL,
+    quantity INTEGER DEFAULT 0,
+    reorder_level INTEGER DEFAULT 0,
+    expiry_date INTEGER,
+    synced INTEGER DEFAULT 0,
+    FOREIGN KEY (business_id) REFERENCES businesses(id)
+);
+
+-- Invoices
+CREATE TABLE invoices (
+    id TEXT PRIMARY KEY,
+    business_id TEXT NOT NULL,
+    customer_id TEXT NOT NULL,
+    invoice_number TEXT UNIQUE NOT NULL,
+    items TEXT NOT NULL, -- JSON array
+    subtotal REAL NOT NULL,
+    gst REAL DEFAULT 0,
+    total REAL NOT NULL,
+    status TEXT NOT NULL, -- 'DRAFT', 'SENT', 'PAID', 'OVERDUE'
+    created_at INTEGER,
+    due_date INTEGER,
+    synced INTEGER DEFAULT 0,
+    FOREIGN KEY (business_id) REFERENCES businesses(id),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+-- Employees
+CREATE TABLE employees (
+    id TEXT PRIMARY KEY,
+    business_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL,
+    phone TEXT,
+    email TEXT,
+    attendance TEXT, -- JSON
+    salary REAL,
+    synced INTEGER DEFAULT 0,
+    FOREIGN KEY (business_id) REFERENCES businesses(id)
+);
+
+5.2 Indices for Performance
+sql
+
+CREATE INDEX idx_transactions_customer ON transactions(customer_id);
+CREATE INDEX idx_transactions_date ON transactions(date);
+CREATE INDEX idx_transactions_business ON transactions(business_id);
+CREATE INDEX idx_products_business ON products(business_id);
+CREATE INDEX idx_customers_business ON customers(business_id);
+CREATE INDEX idx_invoices_business ON invoices(business_id);
+CREATE INDEX idx_invoices_customer ON invoices(customer_id);
+
+6. Deployment & DevOps
+6.1 CI/CD Pipeline
+text
+
+┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐
+│  Code    │────▶│  Build   │────▶│  Test    │────▶│  Deploy  │
+│  Commit  │     │  (Gradle)│     │  (Unit/  │     │  (Staging│
+│  (Git)   │     │          │     │   UI)    │     │   /Prod) │
+└──────────┘     └──────────┘     └──────────┘     └──────────┘
+
+Tools:
+
+    Version Control: GitHub/GitLab
+
+    CI/CD: GitHub Actions / GitLab CI
+
+    Testing: JUnit (unit), Compose UI Test (UI), Detekt (lint)
+
+    Distribution: Google Play, App Store, Website (Web/Desktop)
+
+6.2 Monitoring
+Tool	Purpose
+Firebase Analytics	User behavior and engagement
+Firebase Crashlytics	Crash reporting
+Custom Logging	Debug and performance logs
+Performance Monitoring	App startup time, frame rate, network
+6.3 Release Strategy
+Phase	Timeline	Deliverables
+Alpha	Month 6-7	Internal testing; core features (ledger, invoicing)
+Beta	Month 8-9	Limited external testing; all core features
+MVP Launch	Month 10-12	Public release; Android, iOS, Web
+Phase 2	Month 13-18	Desktop apps; AI features
+Phase 3	Month 19-24	Advanced AI; enterprise features
+7. Performance Targets
+Metric	Target
+App Startup Time	< 2 seconds
+Screen Load Time	< 1 second
+AI Inference (simple)	< 500ms
+AI Inference (complex)	< 5 seconds
+Sync Latency	< 5 seconds
+Offline Functionality	100% core features
+Battery Impact	< 5% per hour active use
+Storage (Mobile)	< 100 MB
+Storage (Desktop)	< 500 MB
+8. Security & Compliance
+8.1 Data Privacy
+
+    On-Device Processing: All sensitive business data processed locally
+
+    User Consent: Explicit consent required for cloud backup
+
+    Data Minimization: Only essential data stored in cloud
+
+    Right to Delete: Users can delete all data at any time
+
+8.2 Compliance
+Regulation	Requirement
+DPDP Act 2023	Data protection and privacy for Indian users
+GST	Tax-compliant invoicing and reporting
+OWASP Top 10	Security best practices
+9. Development Guidelines
+9.1 Coding Standards
+
+    Language: Kotlin (shared), Swift (iOS-specific), TypeScript (Web)
+
+    Style: Kotlin Coding Conventions, Swift Style Guide
+
+    Testing: Minimum 80% code coverage
+
+    Documentation: KDoc for all public APIs
+
+9.2 Git Workflow
+text
+
+main
+  └── develop
+        ├── feature/feature-name
+        ├── bugfix/bug-name
+        └── release/v1.0
+
+9.3 Code Review Process
+
+    Developer creates pull request
+
+    At least 2 reviewers approve
+
+    All CI checks pass
+
+    PR is merged to develop
+
+    Release branch cut for production
+
+10. Risk Mitigation
+Risk	Mitigation
+On-device AI too slow	Model quantization; fallback to simpler models; progressive loading
+Cross-platform bugs	Extensive automated testing; platform-specific testing
+Sync conflicts	CRDT-based conflict resolution; user notification on conflicts
+Data loss	Automatic backup; export/import functionality
+Security breach	Regular security audits; OWASP compliance; encryption
+11. Glossary
+Term	Definition
+KMP	Kotlin Multiplatform
+CRDT	Conflict-Free Replicated Data Type
+SLM	Small Language Model
+ONNX	Open Neural Network Exchange
+RBAC	Role-Based Access Control
+MVP	Minimum Viable Product
+12. Version History
+Version	Date	Author	Changes
+1.0	June 2026	Product Team	Initial technical design document
+text
+
+
+---
+
+## 📥 How to Save These Files
+
+1. **SRS.md** — Copy all content from the first code block and save as `SRS.md`
+2. **Technical_Design.md** — Copy all content from the second code block and save as `Technical_Design.md`
+
+---
+
+## ✅ Next Steps Checklist
+
+| Task | Status |
+| :--- | :--- |
+| Register `AdminX.com` domain | ⬜ |
+| Register `AdminX.app` domain | ⬜ |
+| Create GitHub repository | ⬜ |
+| Set up project structure | ⬜ |
+| Set up Firebase project | ⬜ |
+| Begin MVP development | ⬜ |
+| Register on Google Play Console | ⬜ |
+| Register on Apple Developer Program | ⬜ |
+
+---
+
+Would you like me to provide additional documents such as:
+- **API Specification** (OpenAPI/Swagger)
+- **UI/UX Design Guidelines**
+- **Test Plan Document**
+- **Deployment Guide**
+- **User Manual**
+
+Let me know! 🚀

@@ -1,0 +1,43 @@
+{
+  "global": {
+    "pre_execution": [
+      "echo '📖 Reading relevant documentation...'",
+      "cat docs/SRS.txt | grep -A 20 '{{task_id}}' || true",
+      "cat docs/Technical_Design.txt | grep -A 20 '{{task_id}}' || true",
+      "cat docs/API_Specification.txt | grep -A 20 '{{task_id}}' || true",
+      "cat docs/UI_UX_Design_Guidelines.txt | grep -A 10 '{{task_id}}' || true",
+      "cat docs/Test_Plan.txt | grep -A 10 '{{task_id}}' || true"
+    ],
+    "quality_gates": {
+      "unit_tests": true,
+      "integration_tests": true,
+      "e2e_tests": true,
+      "sonarqube_pass": true,
+      "require_coverage": 80
+    },
+    "post_execution": [
+      "echo '🧪 Running tests...'",
+      "./gradlew test || { echo '❌ Tests failed. Fixing...'; exit 1; }",
+      "echo '📊 Running SonarQube analysis...'",
+      "/sonar analyze || { echo '❌ SonarQube quality gate failed. Fixing...'; exit 1; }",
+      "echo '✅ All checks passed. Marking task complete.'"
+    ]
+  },
+  "agents": {
+    "api-engineer": {
+      "documents": ["docs/SRS.txt", "docs/Technical_Design.txt", "docs/API_Specification.txt"]
+    },
+    "ui-designer": {
+      "documents": ["docs/SRS.txt", "docs/UI_UX_Design_Guidelines.txt", "docs/Microcopy_A11Y_Specs.txt"]
+    },
+    "db-specialist": {
+      "documents": ["docs/SRS.txt", "docs/Technical_Design.txt"]
+    },
+    "devops": {
+      "documents": ["docs/Deployment_Guide.txt", "docs/DevOps_Guide.txt"]
+    },
+    "qa": {
+      "documents": ["docs/Test_Plan.txt", "docs/SRS.txt"]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant User
+    participant App
+    participant LocalDB
+    participant SyncQueue
+    participant Cloud
+
+    User->>App: Performs action (Add Invoice)
+    App->>LocalDB: Write data locally
+    App->>User: Show success (immediate)
+    App->>SyncQueue: Add change to queue
+    Note over App,LocalDB: Offline complete
+    SyncQueue->>Cloud: Wait for internet
+    Cloud->>SyncQueue: Acknowledge
+    SyncQueue->>LocalDB: Mark as synced

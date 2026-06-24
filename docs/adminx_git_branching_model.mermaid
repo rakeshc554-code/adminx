@@ -1,0 +1,71 @@
+flowchart TD
+    subgraph REPO[📦 Repository: adminx]
+        Main[🔵 main<br>Production-Ready Code]
+        Develop[🟢 develop<br>Integration Branch]
+        
+        subgraph FEATURES[🆕 Feature Branches]
+            F1[🌿 feature/invoicing-gst]
+            F2[🌿 feature/ai-chat]
+            F3[🌿 feature/offline-sync]
+        end
+        
+        subgraph RELEASES[📦 Release Branches]
+            R1[🌿 release/v1.0.0]
+            R2[🌿 release/v1.1.0]
+        end
+        
+        subgraph HOTFIXES[🔥 Hotfix Branches]
+            H1[🌿 hotfix/crash-on-startup]
+            H2[🌿 hotfix/sync-conflict]
+        end
+    end
+
+    F1 --> Develop
+    F2 --> Develop
+    F3 --> Develop
+    
+    Develop --> R1
+    R1 --> Main
+    R1 --> Develop
+    
+    Develop --> R2
+    R2 --> Main
+    R2 --> Develop
+    
+    Main --> H1
+    H1 --> Main
+    H1 --> Develop
+    
+    Main --> H2
+    H2 --> Main
+    H2 --> Develop
+    
+    note right of Main
+        🔵 main = Production
+        🚫 No direct commits
+        ✅ Only from releases/hotfixes
+    end note
+    
+    note right of Develop
+        🟢 develop = Integration
+        🔄 All features merge here
+        🧪 CI runs on every push
+    end note
+    
+    note right of R1
+        📦 release/v* = Staging
+        🧪 QA testing
+        🐛 Bug fixes only
+    end note
+    
+    note right of H1
+        🔥 hotfix/* = Emergency
+        ⚡ Critical bugs only
+        🚀 Fast-track to production
+    end note
+
+    style Main fill:#2196f3,color:#fff,stroke:#0d47a1,stroke-width:2px
+    style Develop fill:#4caf50,color:#fff,stroke:#1b5e20,stroke-width:2px
+    style F1,F2,F3 fill:#ff9800,color:#fff,stroke:#e65100,stroke-width:1px
+    style R1,R2 fill:#9c27b0,color:#fff,stroke:#4a148c,stroke-width:1px
+    style H1,H2 fill:#f44336,color:#fff,stroke:#b71c1c,stroke-width:1px

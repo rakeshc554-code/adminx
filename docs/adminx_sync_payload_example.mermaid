@@ -1,0 +1,19 @@
+flowchart LR
+    subgraph SYNC_PAYLOAD[🔥 POST /sync/push - Full Request Body]
+        direction TB
+        A1["{<br>  'userId': 'usr_123',<br>  'businessId': 'biz_456',<br>  'deviceId': 'device_789',<br>  'changes': [<br>    {<br>      'entity': 'CUSTOMER',<br>      'action': 'UPDATE',<br>      'data': {<br>        'id': 'cust_001',<br>        'name': 'Ramesh Gupta',<br>        'phone': '+919876543210',<br>        'version': 5<br>      },<br>      'timestamp': 1718000000000,<br>      'transactionId': 'txn_abc123'<br>    },<br>    {<br>      'entity': 'TRANSACTION',<br>      'action': 'CREATE',<br>      'data': {<br>        'customerId': 'cust_001',<br>        'amount': 15000.00,<br>        'type': 'DEBIT',<br>        'description': 'Goods sold'<br>      },<br>      'timestamp': 1718000001000<br>    }<br>  ]<br>}"]
+    end
+
+    subgraph SYNC_RESPONSE[📨 POST /sync/push - Full Response]
+        direction TB
+        B1["{<br>  'accepted': true,<br>  'newTimestamp': 1718000002000,<br>  'conflicts': [<br>    {<br>      'entity': 'CUSTOMER',<br>      'id': 'cust_001',<br>      'localVersion': 5,<br>      'remoteVersion': 6,<br>      'resolvedData': {<br>        'name': 'Ramesh Kumar Gupta',<br>        'version': 7<br>      }<br>    }<br>  ],<br>  'rejected': []<br>}"]
+    end
+
+    subgraph INVOICE_PAYLOAD[📄 POST /invoice/create - Full Request]
+        direction TB
+        C1["{<br>  'businessId': 'biz_456',<br>  'customerId': 'cust_001',<br>  'invoiceNumber': 'INV-2026-001',<br>  'items': [<br>    {<br>      'productId': 'prod_789',<br>      'productName': 'Wheat Flour',<br>      'hsnCode': '110100',<br>      'quantity': 5,<br>      'unitPrice': 200.00,<br>      'taxRate': 5.0,<br>      'discountPercent': 0.0<br>    }<br>  ],<br>  'subtotal': 1000.00,<br>  'gstAmount': 50.00,<br>  'totalAmount': 1050.00,<br>  'dueDate': 1720780800000,<br>  'paymentTerms': 'NET_30',<br>  'isRecurring': false<br>}"]
+    end
+
+    style SYNC_PAYLOAD fill:#e3f2fd,stroke:#0d47a1
+    style SYNC_RESPONSE fill:#e8f5e9,stroke:#1b5e20
+    style INVOICE_PAYLOAD fill:#fff3e0,stroke:#e65100

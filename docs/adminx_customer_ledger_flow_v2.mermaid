@@ -1,0 +1,33 @@
+flowchart TD
+    A[🏠 Start: Dashboard] --> B[👥 Open 'Customers' Tab]
+    B --> C[🔍 Search Customer Name]
+    C --> D[📖 Open Customer Ledger]
+    
+    D --> E{Action}
+    E -->|Record Payment| F[➕ Click 'Add Transaction']
+    E -->|Send Reminder| K
+    
+    F --> G{Select Type}
+    G -->|Credit (Received)| H[💰 Enter Amount Received]
+    G -->|Debit (Given Credit)| I[📝 Enter Amount & Description]
+    
+    H --> J[🧠 AI Auto-Categorizes<br>e.g., 'Rent' -> 'Expense']
+    I --> J
+    
+    J --> L[💾 Save Transaction]
+    L --> M[🔄 Balance Updates Instantly]
+    M --> N{Check Outstanding Balance}
+    
+    N -->|Overdue / Pending| O[🔔 Click 'Send Reminder']
+    N -->|Cleared| P[✅ End of Flow]
+    
+    O --> Q{Choose Channel}
+    Q -->|WhatsApp| R[📲 Template Message with Balance]
+    Q -->|SMS| S[✉️ Text Message with Balance]
+    
+    R --> T[📱 Customer Receives Reminder]
+    S --> T
+    T --> P
+    
+    style M fill:#fff59d,stroke:#f57f17
+    style T fill:#ef9a9a,stroke:#c62828

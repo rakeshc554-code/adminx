@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant User
+    participant App
+    participant Router
+    participant LocalSLM as 🧠 Local SLM<br>(Phi-3/Llama)
+    participant LocalDB
+
+    User->>App: 💬 "Show Ramesh's pending balance"
+    App->>Router: Route query
+    Note over Router: 🔍 Analyzes: Simple lookup vs Complex reasoning?
+    
+    alt Simple Query (Data Retrieval)
+        Router->>LocalSLM: Execute local inference
+        LocalSLM->>LocalDB: Query database
+        LocalDB-->>LocalSLM: Return balance (₹15,000)
+        LocalSLM-->>App: Formatted response
+    end
+    
+    alt Complex Query (Forecasting)
+        Router->>LocalSLM: Execute complex inference
+        LocalSLM->>LocalDB: Fetch 6 months history
+        LocalSLM->>LocalSLM: Analyze & Predict
+        LocalSLM-->>App: 📈 "Cash flow may dip in July"
+    end
+    
+    App->>User: 📱 Display answer (0 server calls made!)
+    
+    Note over User,LocalDB: 🔒 Data stays on device. No API costs.

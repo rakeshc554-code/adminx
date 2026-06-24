@@ -1,0 +1,273 @@
+================================================================================
+DOCUMENT 6: Deployment_Guide.txt
+================================================================================
+
+# ADMINX — Deployment Guide
+
+**Version:** 1.0  
+**Date:** June 2026  
+**Document Type:** Deployment Guide
+
+---
+
+## 1. Introduction
+
+This guide provides step-by-step instructions for deploying AdminX to production across all platforms: Android (Google Play), iOS (App Store), Web (Vercel/Netlify), and Desktop (Windows/macOS).
+
+---
+
+## 2. Prerequisites
+
+### 2.1 Accounts & Credentials
+- Google Play Console account ($25 one-time fee)
+- Apple Developer account ($99/year)
+- Firebase project (Blaze plan recommended for production)
+- Domain: adminx.app (or chosen domain)
+- SSL certificate (provided by hosting platform)
+- GitHub/GitLab repository with CI/CD configured
+- Sentry or Firebase Crashlytics for error monitoring
+
+### 2.2 Build Tools
+- Android Studio (latest) with Gradle
+- Xcode 15+ (for iOS)
+- Node.js 18+ (for web)
+- Kotlin Multiplatform toolchain
+- ONNX Runtime libraries for AI
+
+---
+
+## 3. Build Process
+
+### 3.1 Shared Code (KMP)
+
+# Build shared library for all platforms
+./gradlew assemble
+
+### 3.2 Android (APK/AAB)
+
+# Generate signed release APK
+./gradlew assembleRelease
+
+# Generate Android App Bundle (recommended for Play Store)
+./gradlew bundleRelease
+
+Key configuration:
+- android/app/build.gradle: Set versionCode and versionName.
+- Sign with keystore (store in CI secrets).
+
+### 3.3 iOS (IPA)
+- Open iosApp.xcodeproj in Xcode.
+- Set bundle identifier and version.
+- Archive -> Distribute App -> App Store Connect.
+- Automate with fastlane or GitHub Actions.
+
+### 3.4 Web (Static Build)
+
+# Build web assets
+./gradlew web:build
+# Output in web/build/distributions/
+
+Deploy to Vercel/Netlify or Firebase Hosting.
+
+### 3.5 Desktop (Windows/macOS)
+
+# Build desktop installers
+./gradlew packageRelease
+
+- Windows: .msi or .exe (use WiX or Inno Setup).
+- macOS: .dmg (use create-dmg).
+
+---
+
+## 4. CI/CD Pipeline (GitHub Actions Example)
+
+Place .github/workflows/deploy.yml:
+
+name: Deploy AdminX
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Build Android
+        run: ./gradlew bundleRelease
+      - name: Upload to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
+          packageName: app.adminx
+          releaseFiles: android/app/build/outputs/bundle/release/*.aab
+          track: production
+
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build iOS
+        run: |
+          cd iosApp
+          xcodebuild -workspace iosApp.xcworkspace -scheme iosApp -configuration Release archive
+      - name: Upload to App Store
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: iosApp/build/ios/ipa/*.ipa
+
+  deploy-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build web
+        run: ./gradlew web:build
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT }}
+          vercel-args: '--prod'
+
+  deploy-desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build desktop
+        run: ./gradlew packageRelease
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-installers
+          path: desktop/build/compose/binaries/main/*
+
+---
+
+## 5. Database & Backend Setup
+
+### 5.1 Firebase Configuration
+1. Create a Firebase project.
+2. Enable Firestore (for sync) and Firebase Auth.
+3. Set up security rules:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    match /businesses/{businessId} {
+      allow read, write: if request.auth.uid in resource.data.members;
+    }
+  }
+}
+
+4. Enable Firebase Cloud Messaging for push notifications.
+5. Download google-services.json (Android) and GoogleService-Info.plist (iOS) and include them in the projects.
+
+### 5.2 Cloud Functions (Optional)
+For advanced features (e.g., sending WhatsApp messages), deploy Node.js cloud functions.
+
+### 5.3 Backup Storage
+- Set up Google Cloud Storage bucket for encrypted backups.
+- Configure lifecycle policies (e.g., delete backups older than 30 days).
+
+---
+
+## 6. Environment Variables
+
+| Variable | Purpose | Source |
+| :--- | :--- | :--- |
+| FIREBASE_API_KEY | Firebase configuration | Firebase console |
+| WHATSAPP_API_TOKEN | WhatsApp Business API | Meta Developers |
+| TWILIO_ACCOUNT_SID | SMS gateway | Twilio |
+| SENTRY_DSN | Error tracking | Sentry |
+| BACKUP_ENCRYPTION_KEY | Encrypt cloud backups | Generate with openssl |
+
+---
+
+## 7. Release Checklist
+
+| Step | Description | Status |
+| :--- | :--- | :--- |
+| 1 | Code freeze on release branch | ⬜ |
+| 2 | All automated tests pass (unit, integration, UI) | ⬜ |
+| 3 | Manual regression testing on all platforms | ⬜ |
+| 4 | Update version code/string in all builds | ⬜ |
+| 5 | Update release notes (changelog) | ⬜ |
+| 6 | Build all artifacts (APK, AAB, IPA, Web, Desktop) | ⬜ |
+| 7 | Upload to Google Play (internal track) for pre-release testing | ⬜ |
+| 8 | Upload to App Store for TestFlight | ⬜ |
+| 9 | Deploy web to production | ⬜ |
+| 10 | Deploy desktop installers to download page | ⬜ |
+| 11 | Monitor crash rates and performance for 24 hours | ⬜ |
+| 12 | Promote to production on Google Play and App Store | ⬜ |
+| 13 | Announce release (social media, email) | ⬜ |
+
+---
+
+## 8. Rollback Plan
+
+### 8.1 Android
+- In Google Play Console, rollback to previous version by uploading an older APK with higher version code.
+- Or unpublish the app temporarily.
+
+### 8.2 iOS
+- Revert to previous build using App Store Connect's "Release" control (can take 24 hours).
+
+### 8.3 Web
+- Revert to previous deployment on Vercel/Netlify via dashboard or git revert.
+
+### 8.4 Desktop
+- Provide a downgrade installer or instruct users to reinstall previous version from website.
+
+### 8.5 Database
+- Use Firestore point-in-time recovery (if enabled) or restore from backup.
+
+---
+
+## 9. Post-Deployment Monitoring
+
+| Metric | Tool | Alert Threshold |
+| :--- | :--- | :--- |
+| Crash-free users | Firebase Crashlytics | < 98% |
+| App startup time | Firebase Performance | > 3 seconds |
+| Sync latency | Custom logs | > 10 seconds |
+| AI inference time | Custom logs | > 2 seconds (simple) |
+| API error rate | API monitoring | > 5% |
+| User satisfaction | In-app rating prompt | < 4.0 stars |
+
+---
+
+## 10. Support & On-Call
+
+- Primary support: product@adminx.app (business hours)
+- Emergency on-call: developer rotation (24/7 for critical issues)
+- Monitoring: PagerDuty or Opsgenie integrated with error logs
+
+---
+
+## 11. Maintenance Schedule
+
+| Task | Frequency |
+| :--- | :--- |
+| OS compatibility updates | Quarterly |
+| Security patch updates | Monthly |
+| AI model updates | When new SLM versions are released |
+| Firebase/backend updates | As needed |
+| Full regression test suite | Before each major release |
+
+---
+
+## 12. Changelog
+
+| Version | Date | Changes |
+| :--- | :--- | :--- |
+| 1.0.0 | July 2026 | Initial production release |

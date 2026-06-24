@@ -1,0 +1,105 @@
+flowchart TB
+    %% ==========================================
+    %% 1. PRESENTATION LAYER (User Devices)
+    %% ==========================================
+    subgraph CLIENTS[📱 User Devices — Presentation Layer]
+        direction LR
+        MobileApp[📲 Mobile App<br><small>Android / iOS</small><br>Compose Multiplatform]
+        WebApp[🌐 Web App<br><small>Kotlin/JS or React</small>]
+        DesktopApp[💻 Desktop App<br><small>Windows / macOS</small><br>Compose Multiplatform]
+    end
+
+    %% ==========================================
+    %% 2. SHARED BUSINESS LOGIC (KMP)
+    %% ==========================================
+    subgraph KMP[🧠 AdminX Core — Shared Logic Layer]
+        direction TB
+        
+        subgraph LOGIC[⚙️ Core Business Modules]
+            Ledger[📒 Ledger & Khata<br>Credit/Debit Tracking]
+            Invoicing[📄 Invoicing & GST<br>Templates & Compliance]
+            Inventory[📦 Inventory Management<br>Barcodes & Expiry]
+            Finance[💰 Accounting & Finance<br>Expenses & Reconciliation]
+            HR[👥 Employee Management<br>Attendance & Payroll]
+            Reports[📊 Analytics & Reporting<br>P&L, Balance Sheet, GST]
+        end
+
+        subgraph AI_ENGINE[🧠 On-Device AI Engine]
+            Router[🤖 AI Task Router<br>Query Classifier]
+            SLM[📦 Small Language Model<br><small>Phi-3 3.8B / Llama 3.2 (4-bit)</small>]
+            Embeddings[🔢 Local Embeddings<br>for Search & Suggestions]
+        end
+
+        subgraph SYNC[🔄 Sync & Security Engine]
+            CRDT[📌 Conflict Resolution<br><small>CRDT / Timestamp</small>]
+            Queue[📤 Offline Queue<br>Background Sync Manager]
+            Encryption[🔐 Local Encryption<br>AES-256]
+            Auth[🔑 Auth Client<br>Firebase Integration]
+        end
+    end
+
+    %% ==========================================
+    %% 3. LOCAL DATA LAYER (Device)
+    %% ==========================================
+    subgraph LOCAL_DATA[💾 Local Data Layer — On-Device]
+        SQLite[(🗄️ SQLite Database<br><small>Room / KMM</small>)]
+        ModelCache[(📁 Model Cache<br><small>SLM Weights (~2GB)</small>)]
+        FileStore[(📂 File Storage<br><small>PDFs / Receipts / CSVs</small>)]
+    end
+
+    %% ==========================================
+    %% 4. CLOUD & INFRASTRUCTURE LAYER
+    %% ==========================================
+    subgraph CLOUD[☁️ Cloud & Backend Infrastructure]
+        Firebase[(🔥 Firebase<br><small>Auth / Firestore / FCM</small>)]
+        Backup[(💾 Encrypted Backup<br><small>GCS / AWS S3</small>)]
+        subgraph EXTERNAL[🌐 External Service Gateways]
+            WhatsApp[💬 WhatsApp Business API]
+            SMS[✉️ SMS Gateway<br><small>Twilio / Gupshup</small>]
+            Payments[💳 Payment Gateway<br><small>Razorpay / UPI</small>]
+        end
+    end
+
+    %% ==========================================
+    %% 5. CONNECTIONS & DATA FLOW
+    %% ==========================================
+    %% Clients to Shared Logic
+    MobileApp --> LOGIC
+    WebApp --> LOGIC
+    DesktopApp --> LOGIC
+
+    %% Logic to Data Layer
+    LOGIC --> SQLite
+    LOGIC --> FileStore
+    AI_ENGINE --> ModelCache
+    Router --> SLM
+
+    %% AI to DB (for query execution)
+    SLM --> SQLite
+
+    %% Logic to Sync Engine
+    LOGIC --> Queue
+    Queue --> CRDT
+    CRDT --> Encryption
+
+    %% Sync to Cloud
+    Encryption --> Firebase
+    Encryption --> Backup
+
+    %% Cloud to External
+    Firebase --> WhatsApp
+    Firebase --> SMS
+    LOGIC --> Payments
+
+    %% Bi-Directional Sync Arrows for Offline-First
+    Queue <--> Firebase
+
+    %% Styling
+    style CLIENTS fill:#e3f2fd,stroke:#0d47a1,stroke-width:2px
+    style KMP fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    style LOGIC fill:#f8f9fa,stroke:#6c757d,stroke-width:1px
+    style AI_ENGINE fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    style SYNC fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style LOCAL_DATA fill:#e0f7fa,stroke:#006064,stroke-width:2px
+    style CLOUD fill:#ffebee,stroke:#b71c1c,stroke-width:2px
+    style EXTERNAL fill:#fff9c4,stroke:#f57f17,stroke-width:1px

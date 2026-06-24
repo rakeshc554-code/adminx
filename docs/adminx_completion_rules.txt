@@ -1,0 +1,214 @@
+================================================================================
+DOCUMENT 11: Completion_Docs.txt
+================================================================================
+
+ADMINX — Completion & Business Rules Specification
+
+Version: 1.0
+Date: June 2026
+Document Type: Business Rules & UX Specifications
+
+
+1. ROLE-BASED ACCESS CONTROL (RBAC) — PERMISSION MATRIX
+
+This matrix defines exactly what each user role can Read (R), Write (W), Delete (D), and Export (E).
+Note: The Owner role is the highest privilege; Viewer is the lowest.
+
+MODULE / FEATURE                 | OWNER  | ADMIN  | ACCOUNTANT | MANAGER | SALES REP | VIEWER
+---------------------------------|--------|--------|------------|---------|-----------|--------
+Dashboard                        | R,W    | R,W    | R,W        | R,W     | R         | R
+Customers (Khata)                | R,W,D,E| R,W,D,E| R,W,E      | R,W,E   | R,W       | R
+Customer Ledger (Transactions)   | R,W,D  | R,W,D  | R,W        | R,W     | R,W       | R
+Invoices (Create/Send)           | R,W,D,E| R,W,D,E| R,W,E      | R,W,E   | R,W       | R
+Invoice Status (Paid/Overdue)    | R,W    | R,W    | R,W        | R       | R         | R
+Products / Inventory             | R,W,D  | R,W,D  | R,E        | R,W,E   | R         | R
+Product Cost Price               | R,W    | R,W    | R          | HIDDEN  | HIDDEN    | HIDDEN
+Expenses & P&L                   | R,W,D,E| R,W,D,E| R,W,E      | R       | HIDDEN    | HIDDEN
+Employee Data & Payroll          | R,W,D,E| R,W    | HIDDEN     | R       | HIDDEN    | HIDDEN
+Reports (Balance Sheet, GST)     | R,E    | R,E    | R,E        | R       | R         | R
+Business Settings / GST          | R,W    | R,W    | R          | HIDDEN  | HIDDEN    | HIDDEN
+User Management (Invite/Roles)   | R,W,D  | R,W    | HIDDEN     | HIDDEN  | HIDDEN    | HIDDEN
+Backup & Restore                 | R,W,D  | R      | HIDDEN     | HIDDEN  | HIDDEN    | HIDDEN
+
+RULES OF THE MATRIX:
+- "HIDDEN" means the menu option or button is completely invisible to that role.
+- "D" (Delete) always requires a secondary confirmation modal.
+- "E" (Export) is disabled for users on the Free Plan (available only in Paid tiers).
+
+
+2. INVOICE TEMPLATE SPECIFICATIONS
+
+AdminX will ship with two distinct templates to cater to "Small Retail" and "Modern Corporate" styles.
+
+TEMPLATE A: "CLASSIC GST" (Default)
+Layout: Full-width, top-to-bottom traditional table.
+
++----------------------------------------------------------------------------+
+| [LOGO - Top Left, max 120px width]                [Your GSTIN: 22AA...]    |
+|                                                    [Invoice #: INV-1023]    |
+|  Your Business Name                                                         |
+|  Address Line 1, City, State - PIN                                         |
++----------------------------------------------------------------------------+
+|  Bill To:                         |  Invoice Date: 12/06/2026              |
+|  Ramesh Gupta                     |  Due Date: 12/07/2026                  |
+|  +91 98765 43210                  |  Payment Terms: NET 30                 |
+|  Address...                       |                                        |
++----------------------------------------------------------------------------+
+| # | Description   | HSN/SAC | Qty | Unit Price | Tax % | Amount           |
+|---|---------------|--------|-----|------------|-------|------------------|
+| 1 | Wheat Flour   | 110100 | 5   | ₹200.00    | 5%    | ₹1,050.00        |
+| 2 | Sugar         | 170199 | 2   | ₹80.00     | 5%    | ₹168.00          |
++----------------------------------------------------------------------------+
+| Subtotal: ₹1,160.00                                                        |
+| CGST (2.5%): ₹29.00    SGST (2.5%): ₹29.00    Total GST: ₹58.00           |
++----------------------------------------------------------------------------+
+| Grand Total: ₹1,218.00 (Rupees One Thousand Two Hundred Eighteen Only)    |
++----------------------------------------------------------------------------+
+| [Terms: Goods once sold cannot be returned.]                               |
+| [Digital Signature]  [QR Code for UPI Payment]                             |
++----------------------------------------------------------------------------+
+
+TEMPLATE B: "MINIMAL MODERN" (Optional)
+Layout: Clean, lighter borders, right-aligned totals, no HSN column.
+
++----------------------------------------------------------------------------+
+| [LOGO]                              Invoice #: INV-1023                    |
+| Your Business Name                  Date: 12/06/2026                       |
++----------------------------------------------------------------------------+
+| Customer: Ramesh Gupta (+91 98765 43210)                                   |
+| Due Date: 12/07/2026                                                       |
++----------------------------------------------------------------------------+
+| Item              | Qty          | Price          | Total (incl. Tax)     |
+|-------------------|--------------|----------------|-----------------------|
+| Wheat Flour       | 5 kg         | ₹200.00        | ₹1,050.00             |
+| Sugar             | 2 kg         | ₹80.00         | ₹168.00               |
++----------------------------------------------------------------------------+
+| Subtotal: ₹1,160.00   GST: ₹58.00   Total: ₹1,218.00                      |
++----------------------------------------------------------------------------+
+| [Thank you for your business!]                                             |
++----------------------------------------------------------------------------+
+
+IMPLEMENTATION NOTES:
+- Both templates must render identically in HTML-to-PDF (using a library like iText or PDFBox).
+- Logo: User uploads a PNG (max 2MB). Stored locally, attached to the PDF dynamically.
+- Barcodes: The Invoice QR code encodes: UPI://pay?pa=...&am=...&tn=INV-1023.
+
+
+3. DATA RETENTION & ARCHIVING POLICY
+
+AdminX follows the Indian Income Tax Act (1961) guidelines, which mandate retaining financial records for 8 years from the end of the relevant assessment year.
+
+3.1 Local Device Retention
+- Active Data: All data (Customers, Transactions, Invoices) remains on the device indefinitely unless the user manually deletes it.
+- Performance Optimization: If the device exceeds 50,000 transactions, the app will prompt: "Archive older than 2 years?"
+
+3.2 Automatic Archiving (Cloud)
+- What: Invoices older than 3 years will be compressed into .zip archives.
+- How: Monthly batch job runs on the 1st of every month.
+- Impact: Archived data is removed from the main invoices table and moved to an archived_invoices bucket. It is still searchable via the "Advanced Search" toggle (with a 2-3 second delay).
+
+3.3 User-Initiated Purging
+- Soft Delete: Customers/Invoices deleted by the user are moved to a "Trash" folder for 30 days.
+- Hard Delete: After 30 days, or if the user clicks "Empty Trash", the data is irreversibly purged from SQLite and the cloud backup.
+
+3.4 Backup Retention
+- Daily Backups: Stored for 30 days.
+- Weekly Backups: Stored for 6 months.
+- Monthly Backups: Stored for 7 years (Compliance).
+
+
+4. DASHBOARD CUSTOMIZATION SPECIFICATIONS
+
+The dashboard is fully customizable. Users can drag, drop, and toggle widgets.
+
+4.1 Default Layout (Mobile View - Portrait)
+
++------------------------------------------------------------------+
+| [🔍 Search]                              [🔔] [👤]              |
++------------------------------------------------------------------+
+| KPI ROW (Horizontal Scroll)                                      |
+| [💰 Sales] [💵 O/S] [⚠️ Stock]  <- Default: Always visible      |
++------------------------------------------------------------------+
+| Sales Trend Chart (Line)  <- Default Widget (2 rows high)        |
+| ████████████░░░░░░░░░░░                                         |
++------------------------------------------------------------------+
+| Recent Activity (List)  <- Default Widget (3 rows high)          |
+| ▶️ Invoice #1023 - Ramesh                                       |
+| ▶️ Payment - Priya                                              |
++------------------------------------------------------------------+
+| AI Insight Card  <- Default: Visible (Can be disabled)           |
+| "Send reminder to Amit?"                                         |
++------------------------------------------------------------------+
+| [+] Add more widgets                                             |
++------------------------------------------------------------------+
+
+4.2 Available Widgets (Catalog)
+
+WIDGET NAME                 | DEFAULT STATE | CAN REMOVE? | DESCRIPTION
+----------------------------|---------------|-------------|---------------------------------------------
+KPI Cards (Sales/O/S/Stock) | On            | NO          | Core metrics. Cannot be removed.
+Sales Trend Chart           | On            | YES         | 30-day sales line graph.
+Recent Activity             | On            | YES         | Last 10 actions (invoices, payments).
+AI Insight Card             | On            | YES         | Proactive AI suggestions.
+Quick Actions (Buttons)     | On            | YES         | New Invoice, Add Customer.
+Low Stock List              | Off           | YES         | Shows products below reorder.
+Top Customers               | Off           | YES         | List of highest value customers.
+Expense Breakdown (Pie)     | Off           | YES         | Spending by category.
+Cash Flow Forecast          | Off           | YES         | 3-month projection.
+
+4.3 Persistence (State)
+- User Session: The dashboard layout (which widgets are active and their order) is saved locally in Settings.json and synced to the cloud.
+- Sync: If a user logs in on a new device, their preferred dashboard layout is downloaded within 5 seconds.
+
+
+5. ROLE-BASED WORKFLOWS (SUMMARY)
+
+5.1 Sales Rep Workflow (The "Invoice Creator")
+Goal: Create and share an invoice as fast as possible, with zero access to costs or payroll.
+
+Step 1: Log In -> Dashboard (Sees: Sales KPI, Customers, Products)
+Step 2: Click 'Create Invoice'
+Step 3: Search / Select Customer (or Add New with Name + Phone only)
+Step 4: Add Products and Quantities
+Step 5: System Calculates Total (Cost Price is HIDDEN)
+Step 6: Share via WhatsApp/Email
+Step 7: Invoice Marked as 'Sent'. End of flow.
+
+5.2 Accountant Workflow (The "Financial Controller")
+Goal: Reconcile bank statements, file GST, and run P&L reports.
+
+Step 1: Log In -> Dashboard (Sees: Expenses, Reports, Bank Rec.)
+Step 2: Choose Action:
+  - Reconcile Bank: Upload CSV -> AI Auto-Matches -> Manually Review Unmatched
+  - GST Filing: Open GST Reports -> View GSTR-1, 3B, 9 -> Export JSON for CA
+  - P&L / Balance Sheet: Select Date Range -> View -> Export PDF
+Step 3: End of flow.
+
+5.3 Manager Workflow (The "Operations Lead")
+Goal: Oversee inventory, manage low stock, and ensure team performance.
+
+Step 1: Log In -> Dashboard (Sees: Inventory, Stock Alerts, Team Activity)
+Step 2: Choose Action:
+  - Check Inventory: View Product List -> Low Stock Badge -> Create Purchase Order
+  - Track Team: View Employee List -> View Attendance/Performance -> Assign Task
+Step 3: End of flow.
+
+5.4 Admin Workflow (The "Super User")
+Goal: Manage users, assign roles, handle payroll, and manage backups.
+
+Step 1: Log In -> Dashboard (Sees: ALL features + Settings menu)
+Step 2: Choose Action:
+  - Manage Users: Go to 'Manage Users' -> Invite New User -> Assign Role
+  - Run Payroll: Open Payroll Module -> Select Month -> Calculate Salaries -> Generate Payslips
+  - Backup: Open Settings > Backup -> Create Full Backup or Restore
+Step 3: End of flow.
+
+5.5 Viewer Workflow (The "Read-Only" Auditor)
+Goal: View data only. Used for external CAs or investors. Zero write permissions.
+
+Step 1: Log In -> Dashboard (All Widgets Visible, Buttons Greyed Out)
+Step 2: Navigate:
+  - Check Ledger: Open Customers -> View Ledger (Add Transaction button is DISABLED)
+  - Check Reports: Open Reports -> View P&L / Balance Sheet -> Export PDF (Allowed)
+  - Check Inventory: Open Products -> View Stock & Prices (Add Product button is DISABLED)
+Step 3: End of flow.

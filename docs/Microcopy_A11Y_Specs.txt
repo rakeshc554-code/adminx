@@ -1,0 +1,436 @@
+================================================================================
+DOCUMENT 9: Microcopy_A11Y_Specs.txt
+================================================================================
+
+# ADMINX — Microcopy, Validation & Accessibility (A11Y) Specifications
+
+**Version:** 1.0  
+**Date:** June 2026  
+**Document Type:** UX Writing & Accessibility Guidelines
+
+---
+
+## 1. Microcopy & Label Specifications
+
+### 1.1 Global Navigation
+
+| Element | Label | Tooltip (Desktop) | Screen Reader (aria-label) |
+| :--- | :--- | :--- | :--- |
+| Home Tab | Home | Go to Dashboard | "Home dashboard" |
+| Customers Tab | Customers | Manage your customer list | "Customers list" |
+| Invoices Tab | Invoices | View and create invoices | "Invoices" |
+| Inventory Tab | Inventory | Manage products and stock | "Inventory management" |
+| Reports Tab | Reports | View business analytics | "Reports and analytics" |
+| Employees Tab | Employees | Manage staff and payroll | "Employees management" |
+| Settings Tab | Settings | Configure your business | "Settings and preferences" |
+| AI Assistant | AI Assistant | Ask your business AI | "AI business assistant" |
+| Logout | Log Out | Sign out of your account | "Log out" |
+| Profile | Profile | View your account settings | "User profile" |
+| Notifications | Notifications | View unread alerts | "Notifications, 3 unread" |
+
+### 1.2 Action Buttons
+
+| Context | Button Label | Mobile | Desktop | Tooltip |
+| :--- | :--- | :--- | :--- | :--- |
+| General | Save | ✅ | ✅ | Save changes |
+| General | Cancel | ✅ | ✅ | Discard changes |
+| General | Delete | ✅ | ✅ | Remove permanently |
+| General | Edit | ✅ | ✅ | Modify this item |
+| General | Update | ✅ | ✅ | Apply changes |
+| General | Create | ✅ | ✅ | Create new item |
+| General | Add | ✅ | ✅ | Add new entry |
+| General | Apply | ✅ | ✅ | Apply filters |
+| General | Clear | ✅ | ✅ | Clear all fields |
+| General | Search | ✅ | ✅ | Search for items |
+| General | Close | ✅ | ✅ | Close this window |
+| General | Confirm | ✅ | ✅ | Confirm your choice |
+| General | Export | ✅ | ✅ | Export data |
+| General | Share | ✅ | ✅ | Share with others |
+| General | Download | ✅ | ✅ | Download file |
+| General | Upload | ✅ | ✅ | Upload file |
+| General | Print | ✅ | ✅ | Print this page |
+
+**Sales & Invoicing:**
+
+| Context | Button Label | Tooltip |
+| :--- | :--- | :--- |
+| Invoice | New Invoice | Create a new invoice |
+| Invoice | Send Invoice | Send invoice to customer |
+| Invoice | Save Draft | Save invoice as draft |
+| Invoice | Preview | Preview invoice before sending |
+| Invoice | Mark as Paid | Mark this invoice as paid |
+| Invoice | Duplicate | Duplicate this invoice |
+| Invoice | Pay Now | Proceed to payment |
+
+**Customer & Ledger:**
+
+| Context | Button Label | Tooltip |
+| :--- | :--- | :--- |
+| Customer | Add Customer | Add a new customer |
+| Customer | Send Reminder | Send payment reminder via WhatsApp/SMS |
+| Customer | Add Transaction | Record a credit/debit transaction |
+| Customer | View Ledger | View transaction history |
+
+**Inventory:**
+
+| Context | Button Label | Tooltip |
+| :--- | :--- | :--- |
+| Product | Add Product | Add a new product to inventory |
+| Product | Generate Barcode | Generate a barcode for this product |
+| Product | Scan Barcode | Scan a product barcode |
+| Product | Update Stock | Manually update stock quantity |
+
+### 1.3 Form Field Labels
+
+| Field | Label | Placeholder Text | Required |
+| :--- | :--- | :--- | :---: |
+| Name | Full Name | "Enter customer name" | ✅ |
+| Phone | Phone Number | "+91 98765 43210" | ✅ |
+| Email | Email Address | "customer@example.com" | ❌ |
+| Address | Address | "Street, City, State, PIN" | ❌ |
+| Password | Password | "Enter your password" | ✅ |
+| Confirm Password | Confirm Password | "Re-enter your password" | ✅ |
+| Amount | Amount (₹) | "0.00" | ✅ |
+| Description | Description | "Brief description" | ❌ |
+| Product Name | Product Name | "Wheat Flour" | ✅ |
+| SKU | SKU | "Auto-generated" | ✅ |
+| Barcode | Barcode | "Enter or scan barcode" | ❌ |
+| Price | Price (₹) | "200.00" | ✅ |
+| Cost Price | Cost Price (₹) | "150.00" | ❌ |
+| Quantity | Quantity | "25" | ✅ |
+| Reorder Level | Reorder Level | "5" | ❌ |
+| Expiry Date | Expiry Date | "DD/MM/YYYY" | ❌ |
+| GST Number | GST Number | "22AAAAA0000A1Z5" | ❌ |
+| Invoice Number | Invoice Number | "Auto-generated" | ✅ |
+| Due Date | Due Date | "DD/MM/YYYY" | ❌ |
+| Discount | Discount (%) | "0" | ❌ |
+| Tax Rate | Tax Rate (%) | "5" | ❌ |
+| Role | Role | "Select role" | ✅ |
+| Salary | Salary (₹) | "25000" | ❌ |
+| Search | Search | "Search..." | ❌ |
+
+### 1.4 Status & Badge Labels
+
+| Status | Label | Color | Icon |
+| :--- | :--- | :--- | :--- |
+| Paid | Paid | 🟢 Green | ✅ |
+| Unpaid | Unpaid | 🟠 Orange | ⏳ |
+| Overdue | Overdue | 🔴 Red | ⚠️ |
+| Draft | Draft | ⚪ Grey | 📄 |
+| Sent | Sent | 🟦 Blue | 📨 |
+| Active | Active | 🟢 Green | ● |
+| Inactive | Inactive | ⚪ Grey | ○ |
+| Low Stock | Low Stock | 🔴 Red | ⚠️ |
+| Out of Stock | Out of Stock | 🔴 Red | ✕ |
+| Expired | Expired | 🔴 Red | ⏰ |
+| Expiring Soon | Expires Soon | 🟠 Orange | 🔔 |
+| Pending | Pending | 🟠 Orange | ⏳ |
+| Approved | Approved | 🟢 Green | ✅ |
+| Rejected | Rejected | 🔴 Red | ✕ |
+
+### 1.5 Page & Section Titles
+
+| Page | Title | Subtitle/Description |
+| :--- | :--- | :--- |
+| Dashboard | Dashboard | "Your business at a glance." |
+| Customers | Customers | "Manage your customer relationships." |
+| Customer Ledger | Ledger | "Transaction history for [Customer Name]" |
+| Invoices | Invoices | "Track and manage all invoices." |
+| Create Invoice | New Invoice | "Create a professional GST invoice." |
+| Inventory | Inventory | "Manage your products and stock." |
+| Add Product | Add Product | "Add a new product to inventory." |
+| Reports | Reports | "Business analytics and financial reports." |
+| Employees | Employees | "Manage staff and payroll." |
+| Settings | Settings | "Configure your business preferences." |
+| AI Assistant | AI Assistant | "Ask questions about your business data." |
+
+---
+
+## 2. Error & Validation Messages
+
+### 2.1 Authentication & Login
+
+| Scenario | Message | Type | Action |
+| :--- | :--- | :--- | :--- |
+| Empty Email/Phone | "Please enter your email or phone number." | Error | Focus on field |
+| Empty Password | "Please enter your password." | Error | Focus on field |
+| Invalid Email | "Please enter a valid email address." | Error | Focus on field |
+| Invalid Phone | "Please enter a valid phone number with country code." | Error | Focus on field |
+| Invalid Password | "Passwords must be at least 8 characters with a number." | Error | Focus on field |
+| Wrong Credentials | "Invalid email/phone or password. Please try again." | Error | Clear password field |
+| Expired OTP | "OTP has expired. Please request a new one." | Error | Show resend button |
+| Wrong OTP | "Invalid OTP. Please try again." | Error | Clear OTP field |
+| Account Locked | "Account temporarily locked due to multiple failed attempts. Try again in 15 minutes." | Error | Disable login button |
+| Password Reset Sent | "Password reset link sent to your email." | Success | Close modal |
+| Registration Success | "Account created successfully! Welcome to AdminX." | Success | Redirect to dashboard |
+
+### 2.2 Data Entry & Forms
+
+| Scenario | Message | Type | Action |
+| :--- | :--- | :--- | :--- |
+| Generic Required | "This field is required." | Error | Highlight field |
+| Generic Invalid | "Please enter a valid value." | Error | Highlight field |
+| Email Format | "Please enter a valid email address (e.g., name@example.com)." | Error | Focus on field |
+| Phone Format | "Please enter a valid phone number with country code (e.g., +91 98765 43210)." | Error | Focus on field |
+| Amount Too High | "Amount exceeds maximum allowed limit (₹99,99,999)." | Error | Focus on field |
+| Amount Negative | "Amount cannot be negative." | Error | Focus on field |
+| Quantity Negative | "Quantity cannot be negative." | Error | Focus on field |
+| Quantity Exceeds Stock | "Quantity exceeds available stock (Available: [X])." | Error | Focus on field |
+| Price Negative | "Price cannot be negative." | Error | Focus on field |
+| Product Name Duplicate | "Product with this name already exists in your inventory." | Error | Focus on field |
+| SKU Duplicate | "SKU already exists. Please use a unique SKU." | Error | Focus on field |
+| Invoice Number Duplicate | "Invoice number already exists." | Error | Focus on field |
+| GST Invalid | "Please enter a valid 15-digit GST number." | Error | Focus on field |
+| Date Invalid | "Please enter a valid date (DD/MM/YYYY)." | Error | Focus on field |
+| Date Past | "Date cannot be in the past." | Error | Focus on field |
+| Date Future | "Date cannot be in the future." | Error | Focus on field |
+| Expiry Past | "Expiry date has already passed." | Error | Focus on field |
+| File Type Invalid | "Invalid file type. Please upload a PDF, JPG, or PNG." | Error | Clear file input |
+| File Size Exceeded | "File size exceeds 5MB limit." | Error | Clear file input |
+
+### 2.3 Business Logic & Operations
+
+| Scenario | Message | Type | Action |
+| :--- | :--- | :--- | :--- |
+| Delete Customer with Balance | "This customer has an outstanding balance of ₹[X]. Deleting will remove this balance. Continue?" | Warning | Confirm modal |
+| Delete Customer without Balance | "Are you sure you want to delete this customer? This action cannot be undone." | Warning | Confirm modal |
+| Delete Invoice | "Are you sure you want to delete this invoice? This action cannot be undone." | Warning | Confirm modal |
+| Delete Product | "Are you sure you want to delete this product? This will remove it from all existing invoices (as snapshots)." | Warning | Confirm modal |
+| Delete Transaction | "Are you sure you want to delete this transaction? This will update the customer's balance." | Warning | Confirm modal |
+| Invoice Total Zero | "Invoice total cannot be zero. Please add at least one item." | Error | Block sending |
+| Invoice No Customer | "Please select a customer before sending." | Error | Focus on customer selection |
+| Invoice No Items | "Please add at least one item to the invoice." | Error | Focus on items |
+| Low Stock Warning | "Stock for [Product] is below reorder level. Remaining: [X]." | Warning | Show alert |
+| Stock Negative | "Stock cannot be negative. Available stock: [X]." | Error | Block operation |
+| Payment Exceeds Balance | "Payment amount exceeds outstanding balance (₹[X])." | Error | Focus on amount |
+| Payment Negative | "Payment amount cannot be negative." | Error | Focus on amount |
+| Payment Successful | "Payment of ₹[X] recorded successfully!" | Success | Refresh balance |
+| Transaction Added | "Transaction of ₹[X] added to [Customer]'s ledger." | Success | Refresh ledger |
+| Product Saved | "Product '[Name]' saved successfully!" | Success | Redirect to inventory |
+| Customer Added | "Customer '[Name]' added successfully!" | Success | Redirect to customer list |
+| Invoice Sent | "Invoice #INV-XXXX sent to [Customer] successfully!" | Success | Show sharing status |
+| Invoice Saved | "Invoice #INV-XXXX saved as draft." | Success | Stay on invoice page |
+| Reminder Sent | "Reminder sent to [Customer] via [WhatsApp/SMS]." | Success | Show status |
+
+### 2.4 Sync, Network, & Backup
+
+| Scenario | Message | Type | Action |
+| :--- | :--- | :--- | :--- |
+| Offline | "You are offline. Changes will be saved locally and synced automatically when online." | Info | Show banner |
+| Back Online | "Back online. Syncing data..." | Info | Show progress |
+| Sync Success | "All data synced with cloud." | Success | Hide banner |
+| Sync Failed | "Sync failed. Tap to retry." | Error | Show retry button |
+| Backup Success | "Full backup completed successfully at [time]." | Success | Show timestamp |
+| Backup Failed | "Backup failed. Please check your internet connection and try again." | Error | Show retry button |
+| Restore Success | "Data restored successfully from backup of [date]." | Success | Refresh app |
+| Restore Failed | "Restore failed. The backup file may be corrupted." | Error | Show contact support |
+| Storage Full | "Device storage is almost full. Please free up space to continue." | Warning | Show storage settings |
+| Model Download Complete | "AI model downloaded successfully! All features are now available." | Success | Enable AI features |
+| Model Download Failed | "AI model download failed. Please check your internet and try again." | Error | Show retry button |
+
+### 2.5 Permission & Access
+
+| Scenario | Message | Type | Action |
+| :--- | :--- | :--- | :--- |
+| Access Denied | "You don't have permission to access this page." | Error | Redirect to dashboard |
+| Action Denied | "You don't have permission to perform this action." | Error | Disable action |
+| Session Expired | "Your session has expired. Please log in again." | Error | Redirect to login |
+| Account Deactivated | "Your account has been deactivated. Please contact support." | Error | Show contact info |
+| Role Not Assigned | "No role assigned. Please contact your administrator." | Error | Redirect to login |
+
+### 2.6 Empty States (Helpful Placeholders)
+
+| Page | Empty State Message | Action |
+| :--- | :--- | :--- |
+| Customers | "No customers yet. Start by adding your first customer." | Show "Add Customer" button |
+| Invoices | "No invoices created yet. Create your first invoice." | Show "Create Invoice" button |
+| Inventory | "No products in inventory. Add your first product." | Show "Add Product" button |
+| Ledger | "No transactions recorded for this customer." | Show "Add Transaction" button |
+| Reports | "No data available for the selected date range." | Show "Adjust Date Range" button |
+| Notifications | "No notifications. You're all caught up!" | None |
+| Search Results | "No results found for '[query]'. Try adjusting your search." | Show clear search button |
+| Employee | "No employees added yet. Add your first employee." | Show "Add Employee" button |
+
+---
+
+## 3. Accessibility (A11Y) Specifications
+
+### 3.1 Screen Reader Labels (aria-label)
+
+All interactive elements must have descriptive aria-label attributes for screen readers.
+
+| Element | aria-label | Notes |
+| :--- | :--- | :--- |
+| Search Icon | "Search" | |
+| Notification Bell | "Notifications, [X] unread" | Dynamic count |
+| User Avatar | "User profile for [Name]" | |
+| Close Button | "Close" | |
+| Back Button | "Go back to previous page" | |
+| Hamburger Menu | "Toggle navigation menu" | |
+| Barcode Scanner | "Scan barcode with camera" | |
+| Share Button | "Share invoice with customer" | |
+| Delete Button | "Delete this item" | |
+| Edit Button | "Edit this item" | |
+| Save Button | "Save changes" | |
+| Cancel Button | "Cancel and discard changes" | |
+| More Options | "More options menu" | |
+| Refresh | "Refresh data" | |
+| Export | "Export data" | |
+| Send Reminder | "Send payment reminder to customer" | |
+| Add Transaction | "Add new transaction" | |
+| Generate Barcode | "Generate barcode for product" | |
+| Sort Dropdown | "Sort by [selected option]" | Dynamic |
+| Filter Tabs | "Filter by [status]" | Dynamic |
+
+### 3.2 ARIA Attributes
+
+| Element | ARIA Attribute | Value | Notes |
+| :--- | :--- | :--- | :--- |
+| Modal | role | dialog | Indicates modal |
+| Modal | aria-modal | true | Traps focus inside |
+| Modal | aria-labelledby | modal-title | Links to title |
+| Toast/Alert | role | alert | For critical messages |
+| Toast/Success | role | status | For non-critical messages |
+| Loading | aria-live | polite | Announces loading state |
+| Error Summary | role | alert | Announces form errors |
+| Progress Bar | role | progressbar | Indicates progress |
+| Progress Bar | aria-valuenow | [value] | Current value |
+| Progress Bar | aria-valuemin | 0 | Minimum value |
+| Progress Bar | aria-valuemax | 100 | Maximum value |
+| Tab List | role | tablist | Container for tabs |
+| Tab | role | tab | Individual tab |
+| Tab | aria-selected | true/false | Selected state |
+| Tab Panel | role | tabpanel | Content panel |
+| Tab Panel | aria-labelledby | [tab-id] | Links to tab |
+| Dropdown | role | combobox | Searchable dropdown |
+| Dropdown | aria-expanded | true/false | Expanded state |
+| Dropdown | aria-haspopup | listbox | Indicates popup |
+| Checkbox | role | checkbox | Custom checkbox |
+| Checkbox | aria-checked | true/false/mixed | Checked state |
+| Switch/Toggle | role | switch | Dark mode toggle |
+| Switch/Toggle | aria-checked | true/false | On/Off state |
+| Menu | role | menu | Menu container |
+| MenuItem | role | menuitem | Menu item |
+| Accordion Header | aria-expanded | true/false | Expanded state |
+| Accordion Header | aria-controls | [panel-id] | Controls content |
+| Required Field | aria-required | true | Indicates required |
+| Invalid Field | aria-invalid | true | Indicates validation error |
+| Error Description | aria-describedby | [error-id] | Links error message |
+| Live Region | aria-live | polite | For dynamic updates |
+| Busy Region | aria-busy | true | During async operations |
+
+### 3.3 Focus Order (Keyboard Navigation)
+
+Desktop & Web:
+
+1. Skip to Main Content Link (hidden until focused)
+2. Sidebar (if open)
+   a. Logo/Home
+   b. Navigation Items (Dashboard -> Settings)
+   c. Logout
+3. Main Content Area (Top to Bottom)
+   a. Top Bar (Search -> Notifications -> Profile)
+   b. Page Header (Title -> Actions)
+   c. Filters & Tabs
+   d. Main Content (Table/List/Cards)
+   e. Pagination
+4. Modals & Popups
+   a. Trap focus inside modal
+   b. Close button first
+   c. Form fields
+   d. Action buttons (Cancel -> Save)
+   e. Focus returns to trigger element on close
+5. Toast Notifications (auto-dismiss, but focusable if persistent)
+
+Mobile (Touch + VoiceOver/TalkBack):
+- Natural flow: Top to bottom, left to right.
+- Focusable elements: Buttons, Inputs, Links, Interactive Cards.
+- Swipe gestures for navigation (TalkBack/VoiceOver standard).
+
+### 3.4 Semantic HTML / Compose Guidelines
+
+| Element | HTML Tag | Compose Equivalent | Notes |
+| :--- | :--- | :--- | :--- |
+| Page Title | <h1> | Text(style = MaterialTheme.typography.h1) | One per page |
+| Section Header | <h2> | Text(style = h2) | |
+| Subsection Header | <h3> | Text(style = h3) | |
+| Button | <button> | Button | Use semantic buttons, not divs |
+| Link | <a href> | ClickableText | Use for navigation |
+| Input | <input> | TextField | Always with label |
+| List | <ul> / <ol> | Column / LazyColumn | Use proper list semantics |
+| Table | <table> | Table / LazyRow | Use <th> for headers |
+| Card | <article> | Card | Use for grouped content |
+| Section | <section> | Column with heading | Group related content |
+| Navigation | <nav> | NavigationRail / BottomNavigation | Wrap navigation |
+| Main | <main> | Box / Column | Main content wrapper |
+| Aside | <aside> | Box | Sidebar content |
+| Footer | <footer> | Box | Footer information |
+
+### 3.5 Color Contrast (WCAG 2.1 AA)
+
+| Element | Foreground | Background | Ratio | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| Primary Text | #0F172A | #FFFFFF | 16.0:1 | ✅ Pass |
+| Secondary Text | #475569 | #FFFFFF | 8.6:1 | ✅ Pass |
+| Muted Text | #94A3B8 | #FFFFFF | 4.8:1 | ✅ Pass |
+| Primary Button | #FFFFFF | #2563EB | 5.9:1 | ✅ Pass |
+| Primary Button Hover | #FFFFFF | #3B82F6 | 4.8:1 | ✅ Pass |
+| Success Button | #FFFFFF | #16A34A | 4.8:1 | ✅ Pass |
+| Danger Button | #FFFFFF | #DC2626 | 5.1:1 | ✅ Pass |
+| Primary Text on Primary | #FFFFFF | #2563EB | 5.9:1 | ✅ Pass |
+| Link Text | #2563EB | #FFFFFF | 5.9:1 | ✅ Pass |
+| Error Text | #DC2626 | #FFFFFF | 5.1:1 | ✅ Pass |
+| Disabled Button | #94A3B8 | #F1F5F9 | 2.1:1 | ⚠️ Disabled by design |
+| Border | #E2E8F0 | #FFFFFF | 1.8:1 | ⚠️ Not required for text |
+
+### 3.6 Touch Targets (Mobile)
+
+| Element | Minimum Size | Recommended Size |
+| :--- | :--- | :--- |
+| Buttons | 44x44 pt | 48x48 pt |
+| List Items | 44x44 pt | 56x56 pt |
+| Input Fields | 44x44 pt | 48x48 pt |
+| Checkbox/Radio | 44x44 pt | 48x48 pt |
+| Navigation Tab | 44x44 pt | 48x48 pt |
+| Icon Button | 44x44 pt | 48x48 pt |
+| FAB (Floating Action) | 48x48 pt | 56x56 pt |
+| Bottom Sheet Handles | 44x44 pt | 48x48 pt |
+| Swipe Actions | 44x44 pt | 48x48 pt |
+
+### 3.7 Keyboard Shortcuts (Desktop)
+
+| Shortcut | Action | Notes |
+| :--- | :--- | :--- |
+| Ctrl + / or Cmd + / | Focus Search Bar | Global shortcut |
+| Ctrl + N or Cmd + N | New Invoice | On Invoice page |
+| Ctrl + C or Cmd + C | New Customer | On Customer page |
+| Ctrl + P or Cmd + P | Add Product | On Inventory page |
+| Ctrl + S or Cmd + S | Save Draft | On Invoice page |
+| Ctrl + Enter or Cmd + Enter | Send Invoice | On Invoice page |
+| Esc | Close Modal / Cancel | Global |
+| Ctrl + , or Cmd + , | Open Settings | Global |
+| Tab | Navigate to next element | Standard |
+| Shift + Tab | Navigate to previous element | Standard |
+| Space | Activate button / Toggle checkbox | Standard |
+| Enter | Submit form / Confirm action | Standard |
+| Alt + 1 | Navigate to Dashboard | Quick access |
+| Alt + 2 | Navigate to Customers | Quick access |
+| Alt + 3 | Navigate to Invoices | Quick access |
+| Alt + 4 | Navigate to Inventory | Quick access |
+
+### 3.8 Accessibility Testing Checklist
+
+| Check | Status | Notes |
+| :--- | :--- | :--- |
+| 1. Keyboard Navigation | ⬜ | All interactive elements reachable by Tab |
+| 2. Focus Indicators | ⬜ | Visible outline on focus |
+| 3. Color Contrast | ⬜ | All text >= 4.5:1 |
+| 4. Screen Reader Labels | ⬜ | All icons have aria-label |
+| 5. Semantic HTML | ⬜ | Appropriate tags used |
+| 6. ARIA Attributes | ⬜ | Proper roles and states |
+| 7. Focus Trapping | ⬜ | Modals trap focus |
+| 8. Skip Links | ⬜ | "Skip to main content" |
+| 9. Touch Targets | ⬜ | >= 44x44 pt |
+| 10. Reduced Motion | ⬜ | Respect prefers-reduced-motion |
+| 11. Dynamic Content | ⬜ | aria-live regions for updates |
+| 12. Error Handling | ⬜ | Accessible error summaries |

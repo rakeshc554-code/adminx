@@ -1,0 +1,89 @@
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-deploy/
+
+# === TypeScript / Build Output ===
+dist/
+build/
+*.tsbuildinfo
+
+# === Kotlin / Gradle ===
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+*.iml
+.idea/
+.kotlin/
+kotlin-js-store/
+
+# === React / Frontend ===
+.next/
+.cache/
+public/build/
+
+# === Environment Files ===
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# === OS Files ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# === Coverage / Testing ===
+coverage/
+.nyc_output/
+*.lcov
+
+# === Logs ===
+*.log
+logs/
+
+# === Firebase ===
+google-services.json
+GoogleService-Info.plist
+firebase-export*.json
+
+# === AI Models ===
+models/*.onnx
+models/*.gguf
+models/*.bin
+
+# === Docker ===
+.docker/
+
+# === Graphify ===
+graphify-out/
+
+# === External Tools (submodules) ===
+workflow-guard/
+
+# === Misc ===
+*.pem
+*.crt
+*.key
+secrets/
+tmp/
+temp/

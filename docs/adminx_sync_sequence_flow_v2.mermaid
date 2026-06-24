@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant User
+    participant App
+    participant LocalDB
+    participant SyncQueue
+    participant Cloud
+
+    User->>App: 📝 Performs action (Add Invoice/Customer)
+    App->>LocalDB: ✍️ Write data locally (Immediate)
+    LocalDB-->>App: ✅ Success
+    App->>User: 🎉 Show success (Instant, offline)
+    
+    App->>SyncQueue: 📤 Add change to queue (with timestamp)
+    
+    Note over App,LocalDB: 🔌 USER IS OFFLINE (Works perfectly)
+
+    SyncQueue->>SyncQueue: ⏳ Waiting for network...
+    SyncQueue->>Cloud: 🌐 Internet detected - Upload changes
+    Cloud-->>SyncQueue: ✅ Acknowledge receipt
+    SyncQueue->>LocalDB: 📌 Mark changes as "synced"
+    LocalDB-->>App: Sync complete

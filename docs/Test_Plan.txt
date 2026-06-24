@@ -1,0 +1,220 @@
+================================================================================
+DOCUMENT 5: Test_Plan.txt
+================================================================================
+
+# ADMINX — Test Plan Document
+
+**Version:** 1.0  
+**Date:** June 2026  
+**Document Type:** Test Plan
+
+---
+
+## 1. Introduction
+
+This document defines the testing strategy for AdminX across all platforms (Android, iOS, Web, Desktop). The goal is to ensure high quality, reliability, and performance before each release.
+
+---
+
+## 2. Test Objectives
+
+- Verify all functional requirements are correctly implemented.
+- Ensure the app works seamlessly across platforms.
+- Validate on-device AI performance and accuracy.
+- Confirm offline-first functionality with reliable sync.
+- Ensure security and data privacy (no data leakage).
+- Achieve > 80% automated test coverage.
+- Identify and resolve critical bugs before launch.
+
+---
+
+## 3. Scope
+
+### 3.1 In-Scope
+
+- All features listed in the SRS (sections 2.1 to 2.11).
+- Cross-platform compatibility (Android, iOS, Web, Windows, macOS).
+- Offline mode and sync.
+- On-device AI features.
+- UI/UX consistency.
+- Performance and load testing.
+- Security testing.
+- Localization (multi-language support).
+
+### 3.2 Out-of-Scope (Phase 1)
+
+- Performance testing with > 10,000 concurrent users.
+- Integration with third-party accounting software (Tally, QuickBooks).
+- Hardware integration (barcode printers, POS terminals).
+
+---
+
+## 4. Test Types
+
+| Test Type | Description | Tools |
+| :--- | :--- | :--- |
+| Unit Testing | Validate individual functions and classes. | JUnit, Kotlin Test (shared), XCTest (iOS) |
+| Integration Testing | Test interactions between modules (e.g., sync engine, database). | JUnit, Mockito, KMP test framework |
+| UI Testing | Validate user interface and navigation. | Compose UI Test, Espresso (Android), XCTest (iOS), Cypress (Web) |
+| End-to-End (E2E) | Full user journeys (login -> create invoice -> share -> sync). | Appium, Detox (mobile), Cypress (web) |
+| Performance Testing | App startup, screen load, AI inference time. | Firebase Performance Monitoring, custom profilers |
+| Security Testing | OWASP Top 10, data encryption, authentication. | OWASP ZAP, Burp Suite |
+| Localization Testing | Verify UI in Hindi, Tamil, Telugu, and English. | Manual testing with translators |
+| Accessibility Testing | Screen reader, contrast, keyboard navigation. | VoiceOver, TalkBack, axe (web) |
+| Compatibility Testing | Run on supported OS versions and device types. | BrowserStack, Firebase Test Lab, physical devices |
+
+---
+
+## 5. Test Environment
+
+| Environment | Description |
+| :--- | :--- |
+| Development | Local machines; builds from develop branch. |
+| Staging | Cloud-hosted (Firebase) with mock data; builds from release branch. |
+| Production | Live environment; builds from main branch (only smoke testing after deployment). |
+
+---
+
+## 6. Test Data
+
+| Data Type | Source |
+| :--- | :--- |
+| Synthetic Data | Generated for unit and integration tests (e.g., 1000 customers, 5000 transactions). |
+| Anonymized Production-like Data | Used for performance and E2E tests (scrambled real data). |
+| Edge Cases | Empty states, large text, special characters, conflicting sync scenarios. |
+
+---
+
+## 7. Test Cases (High-Level Summary)
+
+### 7.1 Authentication
+- TC-AUTH-01: User can register with email/phone.
+- TC-AUTH-02: User can log in with valid credentials.
+- TC-AUTH-03: User cannot log in with invalid credentials.
+- TC-AUTH-04: Multi-device sync works (login on second device reflects data).
+
+### 7.2 Ledger
+- TC-LEDGER-01: Create a customer account.
+- TC-LEDGER-02: Add a credit transaction; balance updates.
+- TC-LEDGER-03: Add a debit transaction; balance updates.
+- TC-LEDGER-04: View ledger with correct running balance.
+- TC-LEDGER-05: Send payment reminder via WhatsApp/SMS.
+
+### 7.3 Invoicing
+- TC-INV-01: Create a GST invoice with items.
+- TC-INV-02: Select from multiple invoice templates.
+- TC-INV-03: Share invoice via WhatsApp, email, SMS.
+- TC-INV-04: Set up recurring invoice; auto-generated on schedule.
+- TC-INV-05: Create progress invoice with milestone percentage.
+
+### 7.4 Inventory
+- TC-INV-01: Add product with SKU and price.
+- TC-INV-02: Generate barcode and scan it.
+- TC-INV-03: Low stock alert triggers when quantity falls below reorder level.
+- TC-INV-04: Track batch expiry; alert when approaching expiry.
+
+### 7.5 Accounting & AI
+- TC-FIN-01: Record expense with category.
+- TC-FIN-02: AI categorizes expense automatically.
+- TC-FIN-03: Bank reconciliation highlights mismatches.
+- TC-FIN-04: AI cash flow forecast (requires 6+ months data).
+- TC-FIN-05: Set reserve fund target; progress tracking.
+
+### 7.6 AI Assistant
+- TC-AI-01: Ask "How much is Ramesh's pending balance?" -> returns correct amount.
+- TC-AI-02: Ask "What were my sales last week?" -> returns accurate sum.
+- TC-AI-03: AI suggests product when typing in invoice.
+- TC-AI-04: Verify all AI processing is on-device (no network calls).
+
+### 7.7 Reports & Analytics
+- TC-REP-01: Dashboard shows correct metrics.
+- TC-REP-02: P&L statement for selected date range.
+- TC-REP-03: Balance sheet as of given date.
+- TC-REP-04: GST report (GSTR-1, 3B, 9) summaries.
+- TC-REP-05: Export reports to PDF/Excel.
+
+### 7.8 Sync & Offline
+- TC-SYNC-01: Create data offline; sync when online.
+- TC-SYNC-02: Conflict resolution: two devices edit same customer -> CRDT resolves.
+- TC-SYNC-03: Full data backup and restore.
+
+### 7.9 Security & Privacy
+- TC-SEC-01: Data encrypted at rest (AES-256).
+- TC-SEC-02: No sensitive data sent to cloud without explicit consent.
+- TC-SEC-03: Role-based access: employee can't see admin features.
+- TC-SEC-04: Audit log tracks all modifications.
+
+### 7.10 UI/UX
+- TC-UI-01: All screens match design guidelines.
+- TC-UI-02: Dark mode works as expected.
+- TC-UI-03: Responsive layout on mobile, tablet, desktop.
+- TC-UI-04: Touch targets >= 44px on mobile.
+
+---
+
+## 8. Test Execution Strategy
+
+| Phase | Timing | Focus | Tester |
+| :--- | :--- | :--- | :--- |
+| Unit / Integration | Continuous (CI/CD) | Code correctness | Developers |
+| UI / E2E | Before release branches | User journeys | QA Team |
+| Performance | Monthly | Speed, memory, battery | QA + Dev |
+| Security | Quarterly | Vulnerability scan | Security Team |
+| Beta Testing | 2 weeks before launch | Real-world usage, feedback | External beta users (100-500) |
+| Regression | After every bug fix | Ensure no new issues | QA Team |
+
+---
+
+## 9. Defect Management
+
+- Tool: GitHub Issues or Jira
+- Severity Levels:
+  - Critical: App crash, data loss, security breach -> fix immediately
+  - High: Feature non-functional, major UX break -> fix before next release
+  - Medium: Minor UX issue, cosmetic bug -> fix in upcoming sprint
+  - Low: Trivial typo, improvement -> backlog
+
+- Defect Lifecycle: New -> In Progress -> Fixed -> Verified -> Closed
+
+---
+
+## 10. Entry & Exit Criteria
+
+### 10.1 Entry Criteria for QA Testing
+- Code is merged to release branch.
+- All unit tests pass.
+- Build is stable (no critical crashes).
+- Test environment (staging) is ready with test data.
+
+### 10.2 Exit Criteria for QA Testing
+- All test cases executed with 100% pass rate or known issues documented.
+- No critical/high severity open bugs.
+- Performance metrics meet targets.
+- Security scan passes (no high vulnerabilities).
+- Sign-off from product owner.
+
+---
+
+## 11. Responsibilities
+
+| Role | Responsibility |
+| :--- | :--- |
+| Development Team | Write unit tests; fix bugs; provide test builds. |
+| QA Team | Execute manual & automated tests; report bugs; regression testing. |
+| Product Owner | Prioritize bugs; sign-off on releases. |
+| DevOps | Maintain CI/CD pipeline; manage test environments. |
+
+---
+
+## 12. Tools Summary
+
+| Tool | Purpose |
+| :--- | :--- |
+| JUnit | Unit testing (shared Kotlin) |
+| Espresso / XCTest | Android/iOS UI testing |
+| Cypress | Web UI testing |
+| Appium | Cross-platform E2E |
+| Firebase Test Lab | Device compatibility |
+| BrowserStack | Web browser testing |
+| OWASP ZAP | Security scanning |
+| Firebase Performance | Performance monitoring |

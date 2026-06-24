@@ -1,0 +1,28 @@
+flowchart TD
+    A[📱 Sales Rep Logs In] --> B[🏠 Dashboard<br>Sees Only: Sales KPI, Customers, Products]
+    
+    B --> C[➕ Click 'Create Invoice']
+    
+    C --> D[👤 Search / Select Customer]
+    D --> E{Is Customer New?}
+    E -->|Yes| F[✍️ Add Customer<br>Name + Phone Only]
+    E -->|No| G[✅ Select Existing]
+    
+    F --> H[📦 Add Products to Invoice]
+    G --> H
+    
+    H --> I[🔢 Enter Quantity]
+    I --> J[💰 System Calculates Total<br>Cost Price is HIDDEN]
+    J --> K[📨 Share via WhatsApp/Email]
+    
+    K --> L[✅ Invoice Marked as 'Sent']
+    L --> M[🔚 End: Sales Rep logs out]
+    
+    note right of I
+        ❌ Cannot see Profit Margin (Cost Price)
+        ❌ Cannot Delete Customers
+        ❌ Cannot see Reports
+    end note
+    
+    style J fill:#fff59d,stroke:#f57f17
+    style K fill:#81c784,stroke:#1b5e20

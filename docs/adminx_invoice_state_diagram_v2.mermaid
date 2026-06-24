@@ -1,0 +1,41 @@
+stateDiagram-v2
+    [*] --> Draft: 🆕 Create Invoice
+    
+    Draft --> Sent: ✉️ Share / Send Invoice
+    Draft --> Cancelled: 🗑️ User Deletes Draft
+    
+    Sent --> Paid: ✅ Payment Received (Full Amount)
+    Sent --> Overdue: ⏰ Due Date Passes (Auto-Transition)
+    Sent --> Cancelled: 🗑️ User Cancels Sent Invoice
+    
+    Overdue --> Paid: 💵 Partial/Late Payment Received
+    Overdue --> Overdue_Reminder: 🔔 Reminder Sent (Auto)
+    Overdue_Reminder --> Overdue: ⏳ No Action (Loop)
+    Overdue_Reminder --> Paid: 💵 Payment Made
+    
+    Paid --> Paid_Partial: 💸 Partial Payment Received
+    Paid_Partial --> Paid: ✅ Remaining Amount Received
+    Paid_Partial --> Overdue: ⏰ Balance Due Date Passes
+    
+    Cancelled --> [*]: 🗑️ End of Life
+    
+    note right of Draft
+        🧠 AI Suggests items & prices
+        💾 Auto-saved locally
+    end note
+    
+    note right of Sent
+        📨 WhatsApp/Email sent to customer
+        📊 Added to outstanding balance
+    end note
+    
+    note right of Overdue
+        🔔 Auto-sends reminders at 3, 7, 15 days
+        📈 Shows in dashboard alerts
+    end note
+    
+    note right of Paid
+        ✅ Removed from outstanding balance
+        📄 E-receipt auto-generated
+        🧾 GST return data updated
+    end note

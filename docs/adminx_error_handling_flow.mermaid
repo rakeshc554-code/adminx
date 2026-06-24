@@ -1,0 +1,56 @@
+flowchart TD
+    subgraph CLIENT[Client Application]
+        A[💥 Error Occurs<br>Crash / Network / Sync Failure]
+        A --> B{Error Type}
+        
+        B -->|Recoverable| C1[🔄 Retry Logic<br>Exponential Backoff]
+        C1 --> C2{Retry Success?}
+        C2 -->|Yes| C3[✅ Continue Operation]
+        C2 -->|No| C4[📱 Show User-Friendly Message<br>"Please try again later"]
+        
+        B -->|Non-Recoverable| C5[📝 Log Error Locally<br>With Stack Trace & Context]
+        C5 --> C6[📤 Upload to Monitoring Service<br>Firebase Crashlytics / Sentry]
+    end
+
+    subgraph MONITORING[☁️ Monitoring & Alerting Stack]
+        Crashlytics[🔥 Firebase Crashlytics<br>Crash Reports / Breadcrumbs]
+        Performance[📈 Firebase Performance<br>Slow Rendering / Network]
+        CustomLogs[📋 Custom Logging Service<br>Business Logic Errors]
+        
+        Aggregator[🧠 Log Aggregator<br>Error Grouping / Deduplication]
+        Dashboard[📊 Monitoring Dashboard<br>Grafana / Firebase Console]
+    end
+
+    subgraph ALERTS[🚨 Alerting & Response]
+        AlertRules{🚨 Alert Rules}
+        AlertRules -->|Critical > 5% crash rate| PagerDuty[📱 PagerDuty / Opsgenie<br>On-Call Engineer Notified]
+        AlertRules -->|High Severity| Slack[💬 Slack / Teams Channel<br>#alerts-critical]
+        AlertRules -->|Medium Severity| Email[📧 Email to Engineering Team]
+        AlertRules -->|Low Severity| Jira[📝 Auto-Create Jira Ticket<br>Backlog]
+    end
+
+    subgraph RESPONSE[🔧 Engineer Response]
+        PagerDuty --> Engineer[👨‍💻 On-Call Engineer]
+        Engineer --> Fix[🔨 Investigate & Fix]
+        Fix --> Deploy[🚀 Deploy Hotfix]
+        Deploy --> Resolve[✅ Issue Resolved]
+    end
+
+    C6 --> Crashlytics
+    C6 --> CustomLogs
+    
+    Crashlytics --> Aggregator
+    Performance --> Aggregator
+    CustomLogs --> Aggregator
+    
+    Aggregator --> Dashboard
+    Aggregator --> AlertRules
+    AlertRules --> Slack
+    AlertRules --> Email
+    AlertRules --> Jira
+    AlertRules --> PagerDuty
+    
+    style CLIENT fill:#e3f2fd,stroke:#0d47a1,stroke-width:2px
+    style MONITORING fill:#f1f8e9,stroke:#1b5e20,stroke-width:2px
+    style ALERTS fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style RESPONSE fill:#fce4ec,stroke:#b71c1c,stroke-width:2px

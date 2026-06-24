@@ -1,0 +1,31 @@
+flowchart TD
+    A[💻 Accountant Logs In] --> B[🏠 Dashboard<br>Sees: Expenses, Reports, Bank Rec.]
+    
+    B --> C{Choose Action}
+    
+    C -->|Reconcile Bank| D1[📤 Upload Bank CSV]
+    D1 --> D2[🧠 AI Auto-Matches Transactions]
+    D2 --> D3[🔍 Manually Review Unmatched]
+    D3 --> D4[✅ Reconciliation Complete]
+    
+    C -->|GST Filing| E1[📊 Open GST Reports]
+    E1 --> E2[📋 View GSTR-1, 3B, 9]
+    E2 --> E3[📤 Export JSON/Excel for CA]
+    
+    C -->|P&L / Balance Sheet| F1[📈 Select Date Range]
+    F1 --> F2[📉 View Profit & Loss]
+    F2 --> F3[📤 Export as PDF for Management]
+    
+    D4 --> G[🔚 End]
+    E3 --> G
+    F3 --> G
+    
+    note right of D1
+        ✅ Can see Product Costs
+        ✅ Can Delete Expenses
+        ❌ Cannot Create Invoices
+        ❌ Cannot see Employee Payroll
+    end note
+    
+    style D2 fill:#e1f5fe,stroke:#01579b
+    style E2 fill:#fce4ec,stroke:#b71c1c

@@ -1,0 +1,33 @@
+flowchart TD
+    A[🚀 Start: Open AdminX] --> B[📊 Dashboard]
+    B --> C{Choose Action}
+    C -->|Quick Action| D[➕ Click 'Create Invoice']
+    
+    D --> E[👤 Select Customer]
+    E --> F{Is Customer New?}
+    F -->|Yes| G[✍️ Add New Customer<br>Name, Phone, Address]
+    F -->|No| H[🔍 Search & Select]
+    
+    G --> I[📦 Add Items]
+    H --> I
+    
+    I --> J{Add Product Method}
+    J -->|Manual| K[🔢 Enter Name, Qty, Price]
+    J -->|Barcode| L[📷 Scan Barcode]
+    L --> K
+    
+    K --> M[🧠 AI Suggests Prices/Descriptions]
+    M --> N[💰 System Auto-Calculates<br>Subtotal + GST = Grand Total]
+    
+    N --> O[👀 Review Invoice]
+    O --> P{Action}
+    P -->|Save Draft| Q[📄 Saved to Drafts]
+    P -->|Finalize| R[✅ Generate Invoice PDF]
+    
+    R --> S[📨 Share Options]
+    S --> T[💬 WhatsApp / ✉️ Email / 📱 SMS]
+    T --> U[📱 Customer Receives Notification]
+    U --> V[💵 Invoice Marked as 'Sent'<br>Recorded in Ledger]
+    
+    style R fill:#a5d6a7,stroke:#2e7d32
+    style U fill:#90caf9,stroke:#1565c0

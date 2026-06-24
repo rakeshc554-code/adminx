@@ -1,0 +1,57 @@
+flowchart TD
+    subgraph INTERNET[🌐 Internet]
+        User[👤 End Users]
+        CDN[🌍 Cloudflare / CDN<br>Static Assets Cache]
+    end
+
+    subgraph GCP[☁️ Google Cloud Platform (us-central1)]
+        subgraph NAMESPACE[📦 Namespace: prod-adminx]
+            Ingress[🚪 Ingress Controller<br>Nginx / GCE Ingress<br>SSL Termination]
+            Ingress --> APIGateway[⚡ API Gateway<br>Envoy Proxy / JWT Validation<br>Rate Limiting: 100 req/sec per user]
+
+            subgraph SERVICES[Microservices Deployments]
+                API_PODS[🔄 API Server<br>Replicas: 3<br>HPA: CPU > 70%]
+                SYNC_PODS[🔄 Sync Service<br>Replicas: 2<br>HPA: CPU > 60%]
+                PAYMENT_PODS[🔄 Payment Worker<br>Replicas: 2<br>Queue: PubSub]
+                NOTIF_PODS[🔄 Notification Worker<br>Replicas: 2<br>Queue: PubSub]
+                AI_DIST_PODS[🔄 AI Model Distributor<br>Replicas: 1<br>Serves Model Files]
+            end
+
+            subgraph STATE[Stateful Sets / Persistent Volumes]
+                MySQL_PVC[(🗄️ MySQL - Firestore)<br>StatefulSet: 1 Primary + 1 Read-Replica<br>SSD Persistent Disk 100GB]
+                Redis_PVC[(⚡ Redis Cache)<br>StatefulSet: 1 Sentinel<br>In-memory 8GB / Session Store]
+                Backup_PVC[(💾 Backup Bucket<br>GCS Persistent Volume<br>Encrypted - Customer Managed Keys)]
+            end
+
+            subgraph CONFIG[ConfigMaps / Secrets]
+                EnvVars[⚙️ ConfigMap<br>ENV: PROD, LOG_LEVEL: INFO]
+                Secrets[🔐 Secrets (KMS)<br>Razorpay Keys, Twilio Keys, JWT Secret]
+            end
+        end
+
+        subgraph NAMESPACE_MONITOR[📊 Namespace: prod-monitoring]
+            Prometheus[📈 Prometheus<br>Metric Collection]
+            Grafana[📉 Grafana<br>Dashboards]
+            Loki[📋 Loki<br>Log Aggregation]
+            Tempo[⏱️ Tempo<br>Distributed Tracing]
+        end
+    end
+
+    API_PODS --> MySQL_PVC
+    API_PODS --> Redis_PVC
+    SYNC_PODS --> MySQL_PVC
+    SYNC_PODS --> Backup_PVC
+    PAYMENT_PODS --> MySQL_PVC
+    NOTIF_PODS --> Redis_PVC
+
+    API_PODS -.->|Metrics| Prometheus
+    SYNC_PODS -.->|Logs| Loki
+    API_PODS -.->|Traces| Tempo
+    
+    Secrets --> API_PODS
+    Secrets --> PAYMENT_PODS
+    EnvVars --> API_PODS
+    
+    style INTERNET fill:#e3f2fd,stroke:#0d47a1
+    style NAMESPACE fill:#e8f5e9,stroke:#1b5e20
+    style NAMESPACE_MONITOR fill:#fce4ec,stroke:#b71c1c

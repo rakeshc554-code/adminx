@@ -1,0 +1,30 @@
+flowchart TD
+    A[👀 Viewer Logs In] --> B[🏠 Dashboard<br>All Widgets Visible, Buttons Greyed Out]
+    
+    B --> C{Navigate}
+    
+    C -->|Check Ledger| D1[👥 Open Customers]
+    D1 --> D2[📖 View Ledger]
+    D2 --> D3[❌ 'Add Transaction' Button is DISABLED]
+    
+    C -->|Check Reports| E1[📊 Open Reports]
+    E1 --> E2[📈 View P&L / Balance Sheet]
+    E2 --> E3[📤 Export PDF (Download Allowed)]
+    
+    C -->|Check Inventory| F1[📦 Open Products]
+    F1 --> F2[📋 View Stock & Prices]
+    F2 --> F3[❌ 'Add Product' Button is DISABLED]
+    
+    D3 --> G[🔚 End]
+    E3 --> G
+    F3 --> G
+    
+    note right of D2
+        🚫 All + / Edit / Delete buttons are hidden.
+        🚫 Cannot change settings.
+        🚫 Cannot send reminders.
+        ✅ Can only view and export reports.
+    end note
+    
+    style D3 fill:#ffcdd2,stroke:#b71c1c
+    style F3 fill:#ffcdd2,stroke:#b71c1c

@@ -1,0 +1,75 @@
+flowchart TB
+    subgraph CLIENTS[Client Applications]
+        Mobile[📱 Mobile Apps<br>Android / iOS]
+        Web[🌐 Web App]
+        Desktop[💻 Desktop Apps]
+    end
+
+    subgraph GATEWAY[🚪 API Gateway / Load Balancer]
+        AuthGW[🔐 Authentication Gateway<br>JWT Validation / Rate Limiting]
+        Router[🔄 Request Router<br>Path-based Routing]
+    end
+
+    subgraph SERVICES[⚙️ Backend Microservices]
+        direction TB
+        
+        subgraph CORE[Core Services]
+            UserSvc[👤 User Service<br>Profiles / Roles / Permissions]
+            BizSvc[🏢 Business Service<br>Business Profiles / GST / Settings]
+        end
+
+        subgraph DATA[Data Services]
+            SyncSvc[🔄 Sync Service<br>CRDT Merge / Delta Sync]
+            BackupSvc[💾 Backup Service<br>Encrypted Backups / Restore]
+            ExportSvc[📤 Export Service<br>PDF / Excel / CSV Generation]
+        end
+
+        subgraph COMM[Communication Services]
+            NotifSvc[🔔 Notification Service<br>Push / Email / In-App]
+            WhatsAppSvc[💬 WhatsApp Service<br>Template Messages / Status]
+            SMSSvc[✉️ SMS Service<br>OTP / Reminders]
+        end
+
+        subgraph PAY[Payment Services]
+            PaymentSvc[💳 Payment Service<br>Order Creation / Verification]
+            WebhookSvc[📨 Webhook Service<br>Razorpay / UPI Callbacks]
+        end
+
+        subgraph AI[AI & Analytics Services]
+            AISvc[🧠 AI Model Service<br>Model Updates / Distribution]
+            AnalyticsSvc[📊 Analytics Service<br>Usage Metrics / Insights]
+        end
+    end
+
+    subgraph STORAGE[🗄️ Data Storage Layer]
+        UserDB[(🗄️ User DB<br>Firestore)]
+        BackupDB[(💾 Backup Storage<br>GCS / S3)]
+        Cache[(⚡ Redis Cache<br>Session / Rate Limiting)]
+        Queue[(📨 Message Queue<br>RabbitMQ / PubSub)]
+    end
+
+    CLIENTS --> GATEWAY
+    GATEWAY --> SERVICES
+    
+    SyncSvc --> UserDB
+    SyncSvc --> Cache
+    BackupSvc --> BackupDB
+    UserSvc --> UserDB
+    
+    NotifSvc --> Queue
+    WhatsAppSvc --> Queue
+    SMSSvc --> Queue
+    
+    WebhookSvc --> PaymentSvc
+    PaymentSvc --> UserDB
+    
+    AISvc --> BackupDB
+    AnalyticsSvc --> UserDB
+
+    style GATEWAY fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style CORE fill:#e3f2fd,stroke:#0d47a1,stroke-width:1px
+    style DATA fill:#e8f5e9,stroke:#1b5e20,stroke-width:1px
+    style COMM fill:#fce4ec,stroke:#b71c1c,stroke-width:1px
+    style PAY fill:#fff9c4,stroke:#f57f17,stroke-width:1px
+    style AI fill:#f3e5f5,stroke:#4a148c,stroke-width:1px
+    style STORAGE fill:#e0f7fa,stroke:#006064,stroke-width:2px

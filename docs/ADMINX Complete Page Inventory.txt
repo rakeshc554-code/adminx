@@ -1,0 +1,899 @@
+ADMINX — Complete Page Inventory & Content Specification
+
+Version: 1.0
+Date: June 2026
+Document Type: UI/UX Content Specification
+1. Navigation Structure Comparison
+Mobile Navigation (Bottom Tab Bar - 5 Tabs)
+text
+
++------------------------------------------+
+|  [🏠]  [👥]  [📄]  [📦]  [⚙️]           |
+|  Home  Cust  Inv   Stock  More            |
++------------------------------------------+
+
+Tab	Label	Icon	Description
+1	Home	🏠	Dashboard with KPIs, charts, and AI insights
+2	Customers	👥	Customer list, ledger, and management
+3	Invoices	📄	Invoice list, creation, and tracking
+4	Inventory	📦	Product list, stock management, barcode
+5	More	⚙️	Reports, Employees, Settings, AI Chat, Logout
+Desktop Navigation (Sidebar - Collapsible)
+text
+
++================================================+
+|  [Logo] AdminX                                  |
+|  ─────────────────────────────────────────────── |
+|  🏠 Dashboard                                   |
+|  👥 Customers                                   |
+|  📄 Invoices                                    |
+|  📦 Inventory                                   |
+|  📊 Reports                                     |
+|  👤 Employees                                   |
+|  🤖 AI Assistant                                |
+|  ─────────────────────────────────────────────── |
+|  ⚙️ Settings                                    |
+|  🚪 Logout                                      |
++================================================+
+
+Section	Items	Description
+Main	Dashboard, Customers, Invoices, Inventory	Core business operations
+Analytics	Reports	All financial and operational reports
+Management	Employees	Staff, attendance, payroll
+Tools	AI Assistant	Floating chat for natural language queries
+System	Settings, Logout	App configuration and user management
+2. Page List & Content Specification
+Page 1: Onboarding / Welcome
+
+Mobile:
+text
+
++------------------------------------------+
+|  [App Logo - Large]                       |
+|                                            |
+|  Welcome to AdminX                        |
+|  Your business, smarter.                  |
+|                                            |
+|  [💼 Start Free Trial]                    |
+|  [🔐 I already have an account]          |
+|                                            |
+|  Trusted by 10,000+ businesses            |
+|  ⭐⭐⭐⭐⭐ 4.8/5 (2,500+ reviews)         |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  [Left Panel - 50%]  |  [Right Panel - 50%]   |
+|                       |                         |
+|  [Logo - Large]      |  ⭐⭐⭐⭐⭐ 4.8/5       |
+|                       |  "Best business app!"   |
+|  Welcome to AdminX   |  - Ramesh, Shopkeeper   |
+|  Your business,      |                         |
+|  smarter.            |  ✅ Free forever tier   |
+|                       |  ✅ No credit card     |
+|  [💼 Start Free]     |  ✅ GST compliant      |
+|  [🔐 Login]         |  ✅ Offline-first      |
++================================================+
+
+Page 2: Login
+
+Mobile:
+text
+
++------------------------------------------+
+|  [App Logo]                               |
+|                                            |
+|  Welcome Back                             |
+|  Log in to manage your business.          |
+|                                            |
+|  📞 Phone / Email                         |
+|  [___________________________]            |
+|                                            |
+|  🔒 Password                              |
+|  [___________________________]            |
+|                                            |
+|  [🔑 Login]                               |
+|                                            |
+|  Forgot password? [Reset]                 |
+|                                            |
+|  Don't have an account? [Sign Up]         |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  [Left Panel - 40%]  |  [Right Panel - 60%]   |
+|  ------------------  |  -------------------    |
+|  [App Logo]          |  Welcome Back           |
+|                       |                         |
+|  📞 Phone / Email    |  Log in to manage your  |
+|  [____________]      |  business seamlessly.   |
+|                       |                         |
+|  🔒 Password         |  ✅ 100% on-device      |
+|  [____________]      |  ✅ GDPR compliant      |
+|                       |                         |
+|  [🔑 Login]          |  ✅ 24/7 support        |
+|                       |                         |
+|  [Sign Up] [Reset]   |                         |
++================================================+
+
+Page 3: Dashboard (Home)
+
+Mobile:
+text
+
++------------------------------------------+
+|  🔍 Search...    [🔔] [👤]              |
++------------------------------------------+
+|  Good morning, Rajesh! 👋                |
+|  +12% this month                         |
++------------------------------------------+
+|  💰 ₹1.24L  💵 ₹32K  📦 4               |
+|  Sales      O/S       Low Stock          |
++------------------------------------------+
+|  Quick Actions                            |
+|  [➕ New Invoice] [➕ Add Customer]       |
+|  [💳 Record Payment]                     |
++------------------------------------------+
+|  Recent Activity                          |
+|  ▶️ INV-1023  Ramesh    ₹5,200          |
+|  ▶️ Payment   Priya     ₹2,000          |
+|  ▶️ Alert     Low Stock: Wheat Flour    |
++------------------------------------------+
+|  🤖 AI: Ramesh's payment is overdue.     |
+|  [Send Reminder]                         |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  🔍 Search...              🔔  [👤 Rajesh]     |
++================================================+
+|  +--------------------------------------------+ |
+|  |  Good morning, Rajesh! 👋                  | |
+|  |  Your business is up 12% this month.       | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +------+ +------+ +------+ +------+            |
+|  | 💰    | | 💵    | | 📦    | | 📈    |        |
+|  | Sales  | | O/S   | | Low   | | Profit |        |
+|  | ₹1.24L | | ₹32K  | | 4     | | +12%  |        |
+|  +------+ +------+ +------+ +------+            |
+|                                                   |
+|  +------------------------+ +------------------+  |
+|  | 📈 Sales Trend        | | 📋 Recent Activity| |
+|  |  ████████░░░░░░░░░░  | | ▶️ INV-1023      | |
+|  |  ████████████░░░░░░  | | ▶️ Payment       | |
+|  |  ████████████████░░  | | ▶️ Low Stock     | |
+|  +------------------------+ +------------------+  |
+|                                                   |
+|  +--------------------------------------------+  |
+|  | 🤖 AI Insight: Ramesh's payment is 3d     |  |
+|  |    overdue. Send reminder? [Send] [Dismiss]|  |
+|  +--------------------------------------------+  |
++================================================+
+
+Content Details:
+Element	Content	Notes
+Welcome Message	"Good morning/afternoon/evening, [Name]! 👋"	Time-based greeting
+KPI Cards	Sales (30d), Outstanding Balance, Low Stock Count, Profit %	Tappable → drill-down
+Quick Actions	New Invoice, Add Customer, Record Payment	Role-based visibility
+Recent Activity	Last 10 transactions/invoices/alerts	Chronological scroll
+AI Insight Card	Proactive suggestion	Optional; can be dismissed
+Page 4: Customer List
+
+Mobile:
+text
+
++------------------------------------------+
+|  👥 Customers          [🔍] [➕]         |
++------------------------------------------+
+|  Search customers...                       |
++------------------------------------------+
+|  Filter: [All] [Due] [Paid]              |
++------------------------------------------+
+|  ▶️ Ramesh Gupta                          |
+|     📞 +91 98765 43210                   |
+|     ₹12,500 🔴 Outstanding               |
++------------------------------------------+
+|  ▶️ Priya Sharma                          |
+|     📞 +91 87654 32109                   |
+|     ₹0 🟢 Cleared                        |
++------------------------------------------+
+|  ▶️ Amit Singh                            |
+|     📞 +91 76543 21098                   |
+|     -₹3,200 🟠 Credit Balance            |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  👥 Customers       [🔍] [➕ Add Customer]     |
++================================================+
+|  +--------------------------------------------+ |
+|  | 🔍 Search customers...                      | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [All] [Due] [Paid]  🔻 Sort: By Balance       |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | ▶️ Ramesh Gupta     📞 +91 98765 43210    | |
+|  |    Balance: ₹12,500  🔴 Outstanding       | |
+|  |    Last Transaction: 12/06/2026            | |
+|  +--------------------------------------------+ |
+|  | ▶️ Priya Sharma     📞 +91 87654 32109    | |
+|  |    Balance: ₹0       🟢 Cleared           | |
+|  |    Last Transaction: 10/06/2026            | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  Showing 1-10 of 245 customers  [1] [2] [3]...  |
++================================================+
+
+Content Details:
+Element	Content	Notes
+Search	Search by name, phone, or email	AI-powered suggestions
+Filters	All, Due (balance > 0), Paid (balance = 0)	Tab-based
+Sort Options	By Balance (High-Low), Name (A-Z), Recent	Dropdown
+Customer Item	Avatar (initials), Name, Phone, Balance, Status Badge	Tappable → Ledger
+Swipe Actions	Send Reminder, Delete (mobile)	Left swipe
+Pagination	Page numbers or infinite scroll	Desktop: pagination; Mobile: infinite
+Page 5: Customer Ledger
+
+Mobile:
+text
+
++------------------------------------------+
+|  ← Back          [🔔 Send Reminder]      |
++------------------------------------------+
+|  👤 Ramesh Gupta                          |
+|  📞 +91 98765 43210                      |
+|  💰 ₹12,500 Outstanding 🔴               |
++------------------------------------------+
+|  [Send Reminder] [➕ Add Transaction]    |
++------------------------------------------+
+|  12/06/26  Invoice #1023    -₹5,200     |
+|  10/06/26  Payment received +₹2,000     |
+|  08/06/26  Goods sold       -₹7,500     |
+|  05/06/26  Opening balance  -₹2,000     |
+|  ...                                     |
++------------------------------------------+
+|  Total Outstanding: ₹12,500              |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  ← Back to Customers   [🔔 Send Reminder]     |
++================================================+
+|  +--------------------------------------------+ |
+|  | 👤 Ramesh Gupta                             | |
+|  | 📞 +91 98765 43210  💰 ₹12,500 🔴        | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [📥 Send Reminder] [➕ Add Transaction]          |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | 📅 Date    Description         Amount  Type| |
+|  | 12/06/26  Invoice #1023       -₹5,200  💳 | |
+|  | 10/06/26  Payment received    +₹2,000  💰 | |
+|  | 08/06/26  Goods sold          -₹7,500  📦 | |
+|  | 05/06/26  Opening balance     -₹2,000  📋 | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  Total Outstanding: ₹12,500                      |
+|  [📤 Export Ledger]                              |
++================================================+
+
+Content Details:
+Element	Content	Notes
+Customer Header	Name, Phone, Balance with color indicator	Red for due, Green for credit
+Action Buttons	Send Reminder, Add Transaction	Role-based visibility
+Transaction List	Date, Description, Amount, Type (Credit/Debit)	Chronological; running balance
+Footer	Total Outstanding, Export button	Desktop: additional export
+
+Add Transaction Modal:
+text
+
++--------------------------------------------------+
+|  ✕  Add Transaction                              |
+|                                                   |
+|  Amount                                           |
+|  [₹  ___________ ]                               |
+|                                                   |
+|  Type                                             |
+|  [● Credit]  [○ Debit]                           |
+|                                                   |
+|  Description (Optional)                           |
+|  [_____________________________]                  |
+|                                                   |
+|  [Cancel]  [💾 Save Transaction]                 |
++--------------------------------------------------+
+
+Page 6: Create Invoice (Wizard)
+
+Mobile:
+text
+
++------------------------------------------+
+|  ✕ New Invoice        [Save Draft]       |
++------------------------------------------+
+|  Step 1 of 3: Customer                    |
+|  [Search or select...]                    |
+|  ▶️ Ramesh Gupta  📞 +91 98765 43210    |
+|  [➕ New Customer]                        |
++------------------------------------------+
+|  Step 2 of 3: Items                      |
+|  [Search product...]                      |
+|  Wheat Flour    5kg  ₹200  ₹1,000 [✕]  |
+|  Sugar          2kg  ₹80   ₹160   [✕]  |
+|  [➕ Add Item]                            |
++------------------------------------------+
+|  Step 3: Summary                          |
+|  Subtotal: ₹1,160.00                     |
+|  GST (12%): ₹139.20                      |
+|  Total: ₹1,299.20                        |
+|  [← Back] [📨 Send Invoice]             |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  📄 New Invoice    [Cancel] [💾 Save Draft]   |
++================================================+
+|  [● Step 1] ─── [○ Step 2] ─── [○ Step 3]   |
+|                                                   |
+|  +--------------------------------------------+ |
+|  |  Step 1: Select Customer                    | |
+|  |  [Search or select customer...]             | |
+|  |  ▶️ Ramesh Gupta  📞 +91 98765 43210     | |
+|  |  [➕ New Customer]                          | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +--------------------------------------------+ |
+|  |  Step 2: Add Items                          | |
+|  |  [Search product or add custom]            | |
+|  |  ▶️ Wheat Flour  5kg  ₹200  ₹1,000 [✕]  | |
+|  |  ▶️ Sugar        2kg  ₹80   ₹160   [✕]  | |
+|  |  [➕ Add Item]                              | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +--------------------------------------------+ |
+|  |  Step 3: Summary                            | |
+|  |  Subtotal: ₹1,160.00                       | |
+|  |  GST (12%): ₹139.20                        | |
+|  |  Total: ₹1,299.20                          | |
+|  |  [← Back]  [📨 Send Invoice]               | |
+|  +--------------------------------------------+ |
++================================================+
+
+Content Details:
+Element	Content	Notes
+Step Indicator	3 steps: Customer, Items, Summary	Visual progress dots/numbers
+Customer Selection	Search existing or create new	Auto-suggest as typing
+Item Entry	Search products or add custom	Barcode scanner option
+Summary	Subtotal, GST, Grand Total	Auto-calculated
+Actions	Save Draft, Send Invoice	Send opens share sheet
+Page 7: Invoice List
+
+Mobile:
+text
+
++------------------------------------------+
+|  📄 Invoices          [🔍] [➕]          |
++------------------------------------------+
+|  Search invoices...                        |
++------------------------------------------+
+|  [All] [Draft] [Sent] [Paid] [Overdue]  |
++------------------------------------------+
+|  INV-1023  Ramesh Gupta    ₹5,200       |
+|  12/06/2026                🟢 Paid      |
++------------------------------------------+
+|  INV-1022  Priya Sharma    ₹2,000       |
+|  10/06/2026                🟠 Sent      |
++------------------------------------------+
+|  INV-1021  Amit Singh      ₹7,500       |
+|  08/06/2026                🔴 Overdue   |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  📄 Invoices       [🔍] [➕ New Invoice]      |
++================================================+
+|  +--------------------------------------------+ |
+|  | 🔍 Search invoices...                       | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [All] [Draft] [Sent] [Paid] [Overdue]         |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | INV-1023  Ramesh Gupta   ₹5,200  🟢 Paid | |
+|  |           12/06/2026    Due: 12/07/2026    | |
+|  +--------------------------------------------+ |
+|  | INV-1022  Priya Sharma   ₹2,000  🟠 Sent | |
+|  |           10/06/2026    Due: 10/07/2026    | |
+|  +--------------------------------------------+ |
+|  | INV-1021  Amit Singh     ₹7,500  🔴 Overdue| |
+|  |           08/06/2026    Due: 08/07/2026    | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  Showing 1-10 of 50 invoices  [1] [2] [3]...    |
++================================================+
+
+Content Details:
+Element	Content	Notes
+Search	Search by invoice number or customer name	Real-time filtering
+Status Tabs	All, Draft, Sent, Paid, Overdue	Quick filtering
+Invoice Item	Invoice #, Customer, Amount, Date, Status Badge	Tappable → Invoice Detail
+Swipe Actions	Share, Duplicate, Delete (mobile)	Left swipe
+Pagination	Page numbers	Desktop only
+Page 8: Invoice Detail
+
+Mobile:
+text
+
++------------------------------------------+
+|  ← Back            [Share] [Delete]      |
++------------------------------------------+
+|  Invoice #INV-1023                        |
+|  Date: 12/06/2026                         |
+|  Due: 12/07/2026                         |
+|  Status: 🟢 Paid                         |
++------------------------------------------+
+|  Bill To:                                 |
+|  Ramesh Gupta                             |
+|  +91 98765 43210                          |
++------------------------------------------+
+|  Items                                    |
+|  Wheat Flour  5kg  ₹200    ₹1,000       |
+|  Sugar        2kg  ₹80     ₹160         |
++------------------------------------------+
+|  Subtotal: ₹1,160.00                     |
+|  GST (12%): ₹139.20                      |
+|  Total: ₹1,299.20                        |
++------------------------------------------+
+|  [📤 Download PDF] [💳 Pay Now]         |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  ← Back to Invoices   [📤 PDF] [✉️ Share]     |
++================================================+
+|  +--------------------------------------------+ |
+|  | Invoice #INV-1023   Date: 12/06/2026      | |
+|  | Status: 🟢 Paid      Due: 12/07/2026      | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | Bill To:                      | Amount      | |
+|  | Ramesh Gupta                  | ₹1,299.20  | |
+|  | +91 98765 43210               |             | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | Item        Qty  Price  Tax  Total         | |
+|  | Wheat Flour  5kg  ₹200  5%   ₹1,050        | |
+|  | Sugar        2kg  ₹80   5%   ₹168          | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  Subtotal: ₹1,160.00   GST: ₹139.20   Total: ₹1,299.20 |
+|                                                   |
+|  [💳 Pay Now] [📤 Download PDF]                   |
++================================================+
+
+Page 9: Inventory / Product List
+
+Mobile:
+text
+
++------------------------------------------+
+|  📦 Inventory        [🔍] [➕]          |
++------------------------------------------+
+|  Search products...   [📷 Scan]          |
++------------------------------------------+
+|  [All] [Low Stock] [Expiring]            |
++------------------------------------------+
+|  Wheat Flour    SKU: WF001               |
+|  ₹200/kg   📦 15 units  🔴 Low Stock    |
++------------------------------------------+
+|  Sugar          SKU: SUG002              |
+|  ₹80/kg    📦 50 units  🟢 OK          |
++------------------------------------------+
+|  Cooking Oil    SKU: OIL003              |
+|  ₹180/L    📦 8 units   🟠 Expires Soon |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  📦 Inventory       [🔍] [➕ Add Product]     |
++================================================+
+|  +--------------------------------------------+ |
+|  | 🔍 Search products...   [📷 Scan Barcode] | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [All] [Low Stock] [Expiring]                    |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | ▶️ Wheat Flour  SKU: WF001   ₹200/kg      | |
+|  |    📦 15 units  🔴 Low Stock  Exp: 12/25  | |
+|  |    Barcode: [██████████]                   | |
+|  +--------------------------------------------+ |
+|  | ▶️ Sugar        SKU: SUG002   ₹80/kg      | |
+|  |    📦 50 units  🟢 OK          Exp: 06/26 | |
+|  |    Barcode: [██████████]                   | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  Showing 1-10 of 45 products  [1] [2] [3]...    |
++================================================+
+
+Content Details:
+Element	Content	Notes
+Search	Search by name, SKU, or barcode	Barcode scanner integration
+Filters	All, Low Stock, Expiring	Tab-based filtering
+Product Item	Name, SKU, Price, Quantity, Status Badge, Expiry	Tappable → Product Detail
+Barcode Display	Visual barcode representation	Click to enlarge/print
+Page 10: Add Product
+
+Mobile:
+text
+
++------------------------------------------+
+|  ✕ Add Product          [Save]          |
++------------------------------------------+
+|  Product Name                             |
+|  [___________________________]            |
+|                                            |
+|  SKU (Auto-generated)                     |
+|  [WF-0012____________________]            |
+|                                            |
+|  Barcode                                  |
+|  [Generate] [██████████]                 |
+|                                            |
+|  Price (₹)                                |
+|  [200.00___________________]              |
+|                                            |
+|  Cost Price (₹) (Admin only)              |
+|  [150.00___________________]              |
+|                                            |
+|  Quantity                                 |
+|  [25_______________________]              |
+|                                            |
+|  Reorder Level                            |
+|  [5________________________]              |
+|                                            |
+|  Expiry Date (Optional)                   |
+|  [12/12/2026______________]              |
+|                                            |
+|  [Cancel] [💾 Save Product]              |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  ✕ Add Product                    [Cancel] [Save] |
++================================================+
+|  +--------------------------------------------+ |
+|  | Product Name                                | |
+|  | [___________________________]              | |
+|  |                                            | |
+|  | SKU (Auto-generated)  Barcode              | |
+|  | [WF-0012____________]  [Generate] [██████] | |
+|  |                                            | |
+|  | Price (₹)          Cost Price (₹)         | |
+|  | [200.00_________]  [150.00________]      | |
+|  |                                            | |
+|  | Quantity          Reorder Level            | |
+|  | [25_____________]  [5______________]      | |
+|  |                                            | |
+|  | Expiry Date (Optional)                     | |
+|  | [12/12/2026______]                         | |
+|  +--------------------------------------------+ |
++================================================+
+
+Page 11: Reports
+
+Mobile:
+text
+
++------------------------------------------+
+|  📊 Reports          [📤 Export]          |
++------------------------------------------+
+|  📅 01/06/26 - 30/06/26 [Apply]          |
++------------------------------------------+
+|  Revenue  ₹1,24,500   Expenses  ₹45,200  |
+|  Profit   ₹79,300     Margin   12%       |
++------------------------------------------+
+|  [P&L] [Balance Sheet] [GST] [Sales]    |
++------------------------------------------+
+|  📈 Sales Trend                           |
+|  ████████░░░░░░░░░░░░░░░                 |
+|  ████████████░░░░░░░░░░░                 |
+|  ████████████████░░░░░░░                 |
+|  ████████████████████░░░                 |
++------------------------------------------+
+|  📊 Expense Breakdown                     |
+|  🟦 Rent 40%  🟩 Salary 35%  🟧 Other 25% |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  📊 Reports          [📤 Export Excel]         |
++================================================+
+|  📅 01/06/2026  ──  30/06/2026  [Apply]       |
+|                                                   |
+|  +------+ +------+ +------+ +------+            |
+|  |Revenue| |Expense| |Profit | |Margin|          |
+|  |₹1.24L | |₹45.2K | |₹79.3K | | 12%  |        |
+|  +------+ +------+ +------+ +------+            |
+|                                                   |
+|  [P&L] [Balance Sheet] [GST] [Sales] [Expenses] |
+|                                                   |
+|  +------------------------+ +------------------+  |
+|  | 📈 Revenue vs Expenses  | | 📊 Expense Pie  |  |
+|  |  ████████████░░░░░░░░  | | 🟦 40% Rent    |  |
+|  |  ████████████████░░░░  | | 🟩 35% Salary  |  |
+|  |  ████████████████████  | | 🟧 25% Other   |  |
+|  +------------------------+ +------------------+  |
+|                                                   |
+|  +--------------------------------------------+  |
+|  | 📋 Detailed P&L Statement                   |  |
+|  | Revenue: ₹1,24,500                         |  |
+|  |  - Sales: ₹1,10,000                        |  |
+|  |  - Services: ₹14,500                       |  |
+|  | Expenses: ₹45,200                          |  |
+|  | Net Profit: ₹79,300 (↑ 12%)               |  |
+|  +--------------------------------------------+  |
++================================================+
+
+Page 12: AI Chat Assistant
+
+Mobile (Floating Chat Bubble):
+text
+
+              +----------------------------------+
+              |  🤖 AI Assistant      [✕]       |
+              |  +------------------------------+ |
+              |  | Hello! I'm your business AI. | |
+              |  | Ask me anything about your   | |
+              |  | data.                        | |
+              |  +------------------------------+ |
+              |  +------------------------------+ |
+              |  | You: How much is Ramesh's   | |
+              |  |      balance?               | |
+              |  | AI: Ramesh has ₹12,500      | |
+              |  |     outstanding. Need help?  | |
+              |  +------------------------------+ |
+              |  [Type your question...] [📤]    |
+              +----------------------------------+
+
+Desktop (Sidebar Panel):
+text
+
++================================================+
+|  🤖 AI Assistant                    [✕]       |
++================================================+
+|  +--------------------------------------------+ |
+|  | Hello! I'm your business AI.               | |
+|  | Ask me anything about your data.           | |
+|  +--------------------------------------------+ |
+|  +--------------------------------------------+ |
+|  | You: How much is Ramesh's balance?        | |
+|  | AI: Ramesh has ₹12,500 outstanding.       | |
+|  |     Would you like to send a reminder?    | |
+|  |     [✅ Send Reminder]                     | |
+|  +--------------------------------------------+ |
+|  +--------------------------------------------+ |
+|  | You: What were my sales last week?        | |
+|  | AI: Your sales from 14/06 to 20/06 were   | |
+|  |     ₹34,200. That's a 8% increase.        | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [Type your question...]  [📎] [📤]             |
+|                                                   |
+|  Quick Suggestions:                               |
+|  [Top Customers] [Expenses] [GST Due]           |
++================================================+
+
+Page 13: Settings
+
+Mobile:
+text
+
++------------------------------------------+
+|  ⚙️ Settings          [👤 Profile]       |
++------------------------------------------+
+|  Account                                   |
+|  ▶️ Business Profile                      |
+|  ▶️ Manage Users                          |
+|  ▶️ Backup & Restore                      |
++------------------------------------------+
+|  Preferences                               |
+|  ▶️ Invoice Settings                      |
+|  ▶️ Notifications                         |
+|  ▶️ Language    English ▼                |
+|  ▶️ Dark Mode   ● ○                      |
++------------------------------------------+
+|  AI & Privacy                              |
+|  ▶️ AI Model Status  ✅ Downloaded        |
+|  ▶️ Privacy Settings                       |
++------------------------------------------+
+|  Support                                   |
+|  ▶️ Help Center                            |
+|  ▶️ About AdminX                           |
++------------------------------------------+
+|  [🚪 Log Out]                             |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  ⚙️ Settings          [👤 Profile]             |
++================================================+
+|  +--------------------------------------------+ |
+|  | Account                                    | |
+|  |  ▶️ Business Profile                       | |
+|  |  ▶️ Manage Users                           | |
+|  |  ▶️ Backup & Restore                       | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | Preferences                                | |
+|  |  ▶️ Invoice Settings                       | |
+|  |  ▶️ Notifications                          | |
+|  |  ▶️ Language           [English ▼]        | |
+|  |  ▶️ Dark Mode          [●] [○]           | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | AI & Privacy                               | |
+|  |  ▶️ AI Model Status   ✅ Downloaded (2.1GB)| |
+|  |  ▶️ Privacy Settings                        | |
+|  |  ▶️ Data Export       [📤 Export All Data] | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | Support                                    | |
+|  |  ▶️ Help Center                            | |
+|  |  ▶️ Contact Us                             | |
+|  |  ▶️ About AdminX                           | |
+|  |  ▶️ Version 1.0.0                          | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [🚪 Log Out]                                    |
++================================================+
+
+Page 14: Employee Management
+
+Mobile:
+text
+
++------------------------------------------+
+|  👤 Employees         [🔍] [➕]          |
++------------------------------------------+
+|  Search employees...                       |
++------------------------------------------+
+|  ▶️ Rajesh Kumar    🏷️ Sales Rep         |
+|     📞 +91 98765 43210                   |
+|     ⏱️ Present (12/06/26)                |
++------------------------------------------+
+|  ▶️ Priya Sharma    🏷️ Accountant        |
+|     📞 +91 87654 32109                   |
+|     ⏱️ Absent (12/06/26)                 |
++------------------------------------------+
+|  ▶️ Amit Singh      🏷️ Manager           |
+|     📞 +91 76543 21098                   |
+|     ⏱️ Present (12/06/26)                |
++------------------------------------------+
+|  [📊 Payroll] [📋 Attendance]             |
++------------------------------------------+
+
+Desktop:
+text
+
++================================================+
+|  👤 Employees       [🔍] [➕ Add Employee]     |
++================================================+
+|  +--------------------------------------------+ |
+|  | 🔍 Search employees...                      | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [All] [Present] [Absent] [On Leave]            |
+|                                                   |
+|  +--------------------------------------------+ |
+|  | ▶️ Rajesh Kumar  Sales Rep    📞 98765... | |
+|  |    ⏱️ Present    Salary: ₹25,000           | |
+|  |    Joined: 01/01/2024                      | |
+|  +--------------------------------------------+ |
+|  | ▶️ Priya Sharma  Accountant   📞 87654... | |
+|  |    ⏱️ Absent     Salary: ₹35,000           | |
+|  |    Joined: 15/06/2023                      | |
+|  +--------------------------------------------+ |
+|                                                   |
+|  [📊 Run Payroll] [📋 Attendance Report]         |
+|  Showing 1-10 of 25 employees  [1] [2] [3]...   |
++================================================+
+
+Page 15: Add Employee
+
+Mobile:
+text
+
++------------------------------------------+
+|  ✕ Add Employee          [Save]          |
++------------------------------------------+
+|  Full Name                                 |
+|  [___________________________]            |
+|                                            |
+|  Email                                     |
+|  [___________________________]            |
+|                                            |
+|  Phone                                     |
+|  [___________________________]            |
+|                                            |
+|  Role                                      |
+|  [Sales Rep ▼]                            |
+|                                            |
+|  Salary (₹)                                |
+|  [25000___________________]                |
+|                                            |
+|  Permissions                               |
+|  ☑ Can View Customers                     |
+|  ☑ Can Create Invoices                    |
+|  ☐ Can View Reports                       |
+|  ☐ Can Manage Employees                   |
+|                                            |
+|  [Cancel] [💾 Save Employee]              |
++------------------------------------------+
+
+3. Page Count Summary
+#	Page Name	Mobile	Desktop	Priority
+1	Onboarding / Welcome	✅	✅	Must
+2	Login	✅	✅	Must
+3	Dashboard (Home)	✅	✅	Must
+4	Customer List	✅	✅	Must
+5	Customer Ledger	✅	✅	Must
+6	Create Invoice	✅	✅	Must
+7	Invoice List	✅	✅	Must
+8	Invoice Detail	✅	✅	Must
+9	Inventory / Product List	✅	✅	Must
+10	Add Product	✅	✅	Must
+11	Reports	✅	✅	Should
+12	AI Chat Assistant	✅	✅	Should
+13	Settings	✅	✅	Should
+14	Employee Management	✅	✅	Could
+15	Add Employee	✅	✅	Could
+16	Backup & Restore	✅	✅	Should
+17	Profile	✅	✅	Should
+18	Manage Users (RBAC)	✅	✅	Could
+
+Total Unique Pages: 18
+4. Platform-Specific Differences
+Feature	Mobile	Desktop
+Navigation	Bottom Tab Bar (5 tabs)	Sidebar (Collapsible)
+Search	Expandable search bar	Persistent search bar
+Tables	Card-based list view	Full table with columns
+Actions	Swipe gestures, FAB	Buttons, hover states
+Modals	Bottom sheets	Center modals
+Multi-select	Long press	Checkbox selection
+Pagination	Infinite scroll	Page numbers
+Barcode Scan	Camera access	Optional external scanner
+Export	Share sheet	Download directly
+Keyboard Shortcuts	Limited	Full keyboard support
+
+This is your complete page inventory. You now have a definitive list of all 18 pages with their exact content, layout, and platform-specific behaviors.
